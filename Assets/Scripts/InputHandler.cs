@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
-   
+
     [Header("Character Input Values")]
     public Vector2 move;
     public Vector2 look;
@@ -19,10 +19,15 @@ public class InputHandler : MonoBehaviour
     public bool cursorInputForLook = true;
     
     [Header("Refs")] 
-    private MovementController _movement;
+    [SerializeField]private MovementController _movement;
+    [SerializeField]private MovementController _movement1;
+    [SerializeField]private MovementController _movement2;
+    [SerializeField]private MovementController _movement3;
     public InputAction inputAction;
-    private Player _player;
-    
+    [SerializeField]private Player _player;
+    [SerializeField] private Player player1;
+    [SerializeField] private Player player2;
+    [SerializeField] private Player player3;
     //How does a function to take input look like?
     public void OnNAMEofPart(InputValue value)
     {
@@ -42,26 +47,42 @@ public class InputHandler : MonoBehaviour
     
     private void Start()
     {
-        _movement = GetComponent<MovementController>();
-        _player = GetComponent<Player>();
+        // _movement = GetComponent<MovementController>();
+        // _player = GetComponent<Player>();
     }
     
     public void OnMove(InputValue value)
     {
         MoveInput(value.Get<Vector2>());
-        
     }
-
-    public void OnJump(InputValue value)
-    {
-        _movement.Jump();
-    }
-
     public void OnInteract(InputValue value)
     {
         _player.Interact();
     }    
-    
+    public void OnMove1(InputValue value)
+    {
+        MoveInput1(value.Get<Vector2>());
+    }
+    public void OnInteract1(InputValue value)
+    {
+        player1.Interact();
+    }  
+    public void OnMove2(InputValue value)
+    {
+        MoveInput2(value.Get<Vector2>());
+    }
+    public void OnInteract2(InputValue value)
+    {
+        player2.Interact();
+    }  
+    public void OnMove3(InputValue value)
+    {
+        MoveInput3(value.Get<Vector2>());
+    }
+    public void OnInteract3(InputValue value)
+    {
+        player3.Interact();
+    }  
     // public void OnJumpRelease(InputValue value)
     // {
     //     _movement.StopJump();
@@ -81,6 +102,51 @@ public class InputHandler : MonoBehaviour
         //Remove Y component
         newMoveDirection.y = 0;
         _movement.move = newMoveDirection;
+    }
+    public void MoveInput1(Vector2 newMoveDirection)
+    {
+        if (newMoveDirection[0] == 0 && newMoveDirection[1] == 0)
+        {
+            // sprintToggle = false;
+            // sprint = false;
+        }
+        
+        if (newMoveDirection.y > 0) _movement1.jumpButtonPressed = true;
+        else _movement1.jumpButtonPressed = false;
+        
+        //Remove Y component
+        newMoveDirection.y = 0;
+        _movement1.move = newMoveDirection;
+    }
+    public void MoveInput2(Vector2 newMoveDirection)
+    {
+        if (newMoveDirection[0] == 0 && newMoveDirection[1] == 0)
+        {
+            // sprintToggle = false;
+            // sprint = false;
+        }
+        
+        if (newMoveDirection.y > 0) _movement2.jumpButtonPressed = true;
+        else _movement2.jumpButtonPressed = false;
+        
+        //Remove Y component
+        newMoveDirection.y = 0;
+        _movement2.move = newMoveDirection;
+    }
+    public void MoveInput3(Vector2 newMoveDirection)
+    {
+        if (newMoveDirection[0] == 0 && newMoveDirection[1] == 0)
+        {
+            // sprintToggle = false;
+            // sprint = false;
+        }
+        
+        if (newMoveDirection.y > 0) _movement3.jumpButtonPressed = true;
+        else _movement3.jumpButtonPressed = false;
+        
+        //Remove Y component
+        newMoveDirection.y = 0;
+        _movement3.move = newMoveDirection;
     }
 
 

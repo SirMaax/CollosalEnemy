@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -10,18 +12,24 @@ public class Player : MonoBehaviour
     public bool objectNearby;
     public GObject carriedObject;
     
+    
     [Header("Interaction")] 
     private Console nearestConsole;
     private List<GObject> nearestObjects;
 
     [Header("Settings")] 
     [SerializeField] private float heavyMass;
+    [SerializeField] private int playerId;
     private float startMass;
+    
     
     [Header("Refs")]
     [SerializeField] private GameObject positionForCarryObject;
     private MovementController _movement;
     public Rigidbody2D rb;
+
+    [Header("Camera")] 
+    [SerializeField] private List<LayerMask> playerLayers;
     
     // Start is called before the first frame update
     void Start()
@@ -29,6 +37,10 @@ public class Player : MonoBehaviour
         nearestObjects = new List<GObject>();
         rb = transform.parent.GetComponent<Rigidbody2D>();
         startMass = rb.mass;
+
+        // int layerToAdd = (int)Mathf.Log(playerLayers[playerId].value, 2);
+        // transform.parent.GetComponentInChildren<CinemachineVirtualCamera>().gameObject.layer = layerToAdd;
+        // transform.parent.GetComponentInChildren<Camera>().cullingMask |= 1 << layerToAdd;
     }
 
     // Update is called once per frame
