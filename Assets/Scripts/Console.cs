@@ -23,6 +23,8 @@ public class Console : MonoBehaviour
     void Start()
     {
         _player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        // CircleCollider2D collder;
+        if (TryGetComponent(out CircleCollider2D collider2D)) collider2D.radius = interactionRadius;
     }
 
     // Update is called once per frame

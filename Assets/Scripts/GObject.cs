@@ -19,11 +19,13 @@ public class GObject : MonoBehaviour
     [Header("Refs")] 
     private Rigidbody2D rb;
     private BoxCollider2D physicalBoxCollider;
+    private Transform parent;
     // Start is called before the first frame update
     void Start()
     {
-        rb = transform.parent.GetComponent<Rigidbody2D>();
-        transform.parent.GetComponent<BoxCollider2D>();
+        parent = transform.parent;
+        rb = parent.GetComponent<Rigidbody2D>();
+        physicalBoxCollider = parent.GetComponent<BoxCollider2D>();
         canPickUp = true;
         
     }
@@ -64,20 +66,19 @@ public class GObject : MonoBehaviour
 
     private void DisableInfluence()
     {
-        transform.parent.gameObject.isStatic = true;
+        rb.simulated = false;
         physicalBoxCollider.enabled = false;
     }
 
     private void EnableInfluence()
     {
-        transform.parent.gameObject.isStatic = false;
+        rb.simulated = true;
         physicalBoxCollider.enabled = true;
-
     }
 
     public void SetPosition(Vector2 position)
     {
-        transform.parent.position = position;
+        parent.position = position;
     }
 
     public void UsedWithConsole(typeObjects typeConsole)
@@ -88,15 +89,15 @@ public class GObject : MonoBehaviour
                 //Nothing changes
                 break;
             case typeObjects.AmmoCrate:
-                ConsumeThis();
+                ConsumeThis(2f);
                 break;
         }
     }
 
-    private void ConsumeThis()
+    public void ConsumeThis(float time)
     {
-        Destroy(transform.parent);
-        Destroy(gameObject);
+        Destroy(parent,time);
+        Destroy(gameObject,time);
     }
     
     

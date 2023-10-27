@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceConsole : Console
+public class ResourceHoldingPlace : Console
 {
     [Header("Attributes")] 
     [SerializeField] private GObject.typeObjects typeConsole;
@@ -42,12 +42,15 @@ public class ResourceConsole : Console
 
     private void AmmoConsole()
     {
+        if (_player.carriedObject.type != GObject.typeObjects.AmmoCrate) return;
         
+        holdedObject = _player.TakeResource();
+        holdedObject.SetPosition(resourcePlace.transform.position);
+        AcceptResource();
     }
     
     private void AcceptResource()
     {
-        _player.carriedObject.SetPosition(resourcePlace.transform.position); 
         _player.carriedObject.UsedWithConsole(typeConsole);
 
     }

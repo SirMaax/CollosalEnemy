@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     [Header("Refs")]
     [SerializeField] private GameObject positionForCarryObject;
     private MovementController _movement;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     
     // Start is called before the first frame update
     void Start()
@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
 
     private void InteractWithConsole()
     {
-        //TODO this method
+        nearestConsole.Interact();
     }
 
     private void ChangeWeight()
