@@ -100,8 +100,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationForce: 0
   type: 0
+  timeTillButtonWasNotPressedAnymore: 0.5
   level: 0
   _elevator: {fileID: 0}
+  buttonWasPressed: 0
 --- !u!61 &3143532442522038675
 BoxCollider2D:
   m_ObjectHideFlags: 0

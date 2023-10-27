@@ -7,6 +7,8 @@ public class ResourceHoldingPlace : Console
 {
     [Header("Attributes")] 
     [SerializeField] private GObject.typeObjects typeConsole;
+    public bool isLoaded;
+    
     
     [Header("Refs")]
     [SerializeField] private GameObject resourcePlace;
@@ -38,6 +40,7 @@ public class ResourceHoldingPlace : Console
         AcceptResource();
         holdedObject = _player.TakeResource();
         holdedObject.SetPosition(resourcePlace.transform.position);
+        isLoaded = true;
     }
 
     private void AmmoConsole()
@@ -53,5 +56,15 @@ public class ResourceHoldingPlace : Console
     {
         _player.carriedObject.UsedWithConsole(typeConsole);
 
+    }
+
+    public void DepleteResource()
+    {
+        holdedObject.UseAndCheckIfDepleted();
+    }
+
+    public void EjectShell()
+    {
+        holdedObject.Eject();
     }
 }

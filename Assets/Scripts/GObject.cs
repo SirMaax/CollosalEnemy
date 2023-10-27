@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class GObject : MonoBehaviour
 {
     public enum typeObjects
     {
         EnergyCell,
-        AmmoCrate
+        AmmoCrate,
+        EmptyCrate,
     }
+
+    [Header("Attributes")] 
+    [SerializeField]private int uses;
     
     [Header("Status")] 
     private bool isInPickUpRange;
@@ -99,7 +104,26 @@ public class GObject : MonoBehaviour
         Destroy(parent,time);
         Destroy(gameObject,time);
     }
-    
+    /**
+     * Return yes if depleted else no
+     */
+    public void UseAndCheckIfDepleted()
+    {
+        uses -= 1;
+        if (uses <= 0) EmptyThis();
+    }
+
+    public void Eject()
+    {
+        //TODO apply random direction of ejection
+        Drop();
+    }
+
+    private void EmptyThis()
+    {
+        type = typeObjects.EmptyCrate;
+        //TODO change sprite etc.
+    }
     
 }
 

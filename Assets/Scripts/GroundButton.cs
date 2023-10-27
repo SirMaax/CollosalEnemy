@@ -8,18 +8,21 @@ public class GroundButton : MonoBehaviour
     {
         Elevator,
         Energy,
+        Shield,
     }
     
     [Header("Attributes")] 
     [SerializeField] private float activationForce;
     [SerializeField] private typeGroundButton type;
-
+    [SerializeField] private float timeTillButtonWasNotPressedAnymore;
+    
     [Header("Elevator")] 
     [SerializeField] private int level;
     [SerializeField] private Elevator _elevator;
     
     [Header("Status")] 
     private bool buttonCaBePressed;
+    public bool buttonWasPressed;
     
     [Header("Refs")] 
     protected Player _player;
@@ -62,6 +65,9 @@ public class GroundButton : MonoBehaviour
             case typeGroundButton.Energy:
                 EnergyLevel();
                 break;
+            case typeGroundButton.Shield:
+                Shield();
+                break;
         }
     }
 
@@ -72,6 +78,20 @@ public class GroundButton : MonoBehaviour
 
     private void EnergyLevel()
     {
-        
+        buttonWasPressed = true;
+    }
+
+    private void Shield()
+    {
+        StopCoroutine(ButtonReset());
+        buttonWasPressed = true;
+        StartCoroutine(ButtonReset());
+    }
+
+    private IEnumerator ButtonReset()
+    {
+        yield return new WaitForSeconds(timeTillButtonWasNotPressedAnymore);
+        buttonWasPressed = false;
+
     }
 }
