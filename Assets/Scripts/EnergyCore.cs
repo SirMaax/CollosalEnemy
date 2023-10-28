@@ -45,11 +45,20 @@ public class EnergyCore : MonoBehaviour
     {
         if (!console.isLoaded)
         {
+            Debug.Log("Refill although empty");
             //TODO bad action 
             return;
         }
-        console.DepleteResource();
+
+        if (console.DepleteResource())
+        {
         energyLevel += energyRefillAmount;
+        Debug.Log("Energy Refilled");
+        }
+        else
+        {
+            Debug.Log("Refill but no energy in");
+        }
     }
 
     private void EjectShell()
@@ -60,6 +69,8 @@ public class EnergyCore : MonoBehaviour
             return;
         }
         console.EjectShell();
+        Debug.Log("Shell ejceted");
+
     }
     
     protected IEnumerator DrainEnergy()

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Core
+  - Object
   layers:
   - Default
   - TransparentFX
@@ -17,15 +18,15 @@ TagManager:
   - ObjectLogic
   - PhysicalObjects
   - PlayerLogic
+  - Wall
+  - ButtonLogic
   - 
-  - 
-  - 
-  - 
+  - Object
   - Player1
   - Player2
   - Player3
   - Player4
-  - 
+  - GroundForPlayerOnly
   - 
   - 
   - 

@@ -14,17 +14,21 @@ public class Console : MonoBehaviour
     
     [Header("Settings")]
     [SerializeField] private float interactionRadius;
-
-    [Header("Refs")] 
-    protected Player _player;
+    [SerializeField] private bool canNotBeInteractedWith;
+ 
     
     
     // Start is called before the first frame update
     void Start()
     {
-        _player = GameObject.FindWithTag("Player").GetComponent<Player>();
         // CircleCollider2D collder;
         if (TryGetComponent(out CircleCollider2D collider2D)) collider2D.radius = interactionRadius;
+        if (canNotBeInteractedWith)
+        {
+            collider2D.enabled = false;
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
+        
     }
 
     // Update is called once per frame
@@ -35,6 +39,7 @@ public class Console : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
+        // if (canNotBeInteractedWith) return;
         if (!col.gameObject.CompareTag("Player")) return;
         Player player = col.gameObject.GetComponent<Player>();
         player.SetConsole(this);
@@ -42,12 +47,13 @@ public class Console : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
+        // if (canNotBeInteractedWith) return;
         if (!col.gameObject.CompareTag("Player")) return;
         Player player = col.gameObject.GetComponent<Player>();
         player.RemoveConsole();
     }
 
-     public virtual void Interact()
+     public virtual void Interact(Player player)
     {
         Debug.Log("Was interacted with");
     }

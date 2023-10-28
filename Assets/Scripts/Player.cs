@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
         
         //PickUp
         if (!cloestObject.canPickUp) return;
-        if (!cloestObject.PickUp()) return;
+        if (!cloestObject.PickUp(false)) return;
         carriedObject = cloestObject;
         isCarrying = true;
         ChangeWeight();
@@ -130,7 +130,7 @@ public class Player : MonoBehaviour
 
     private void InteractWithConsole()
     {
-        nearestConsole.Interact();
+        nearestConsole.Interact(this);
     }
 
     private void ChangeWeight()

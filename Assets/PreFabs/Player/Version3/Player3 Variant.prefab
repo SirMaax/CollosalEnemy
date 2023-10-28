@@ -35,9 +35,13 @@ PrefabInstance:
       propertyPath: m_Actions
       value: 
       objectReference: {fileID: -944628639613478452, guid: b357d583e761dd64e973a83b0774d1ec, type: 3}
+    - target: {fileID: 1960891839721737359, guid: 1849870f76380d54ba8664ca63ed51a5, type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 262208
+      objectReference: {fileID: 0}
     - target: {fileID: 1960891839981492070, guid: 1849870f76380d54ba8664ca63ed51a5, type: 3}
       propertyPath: m_Name
-      value: Player3
+      value: Player3 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 1960891839981492074, guid: 1849870f76380d54ba8664ca63ed51a5, type: 3}
       propertyPath: m_RootOrder

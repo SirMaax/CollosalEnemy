@@ -207,7 +207,7 @@ MonoBehaviour:
   groundCheckDistance: 0.1
   groundMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 262208
   initialJumpForce: 300
   move: {x: 0, y: 0}
   jumpButtonPressed: 0

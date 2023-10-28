@@ -9,53 +9,59 @@ public class GroundButton : MonoBehaviour
         Elevator,
         Energy,
         Shield,
+        JumpPad,
+        Activation,
+        
     }
-    
+
     [Header("Attributes")] 
     [SerializeField] private float activationForce;
+    [SerializeField] private float buttonCooldown;
+    
     [SerializeField] private typeGroundButton type;
     [SerializeField] private float timeTillButtonWasNotPressedAnymore;
-    
-    [Header("Elevator")] 
-    [SerializeField] private int level;
+    [SerializeField] private float jumpPadForce;
+
+    [Header("Elevator")] [SerializeField] private int level;
     [SerializeField] private Elevator _elevator;
-    
-    [Header("Status")] 
-    private bool buttonCaBePressed;
+
+    [Header("Status")] private bool buttonCaBePressed;
     public bool buttonWasPressed;
-    
-    [Header("Refs")] 
-    protected Player _player;
-    
-    
+
+    [Header("Refs")] protected Player _player;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        _player = GameObject.FindWithTag("Player").GetComponent<Player>();
         buttonCaBePressed = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-          
     }
-    
+
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (!col.gameObject.CompareTag("Player")) return;
-        Player player = col.gameObject.GetComponent<Player>();
-        if (-1 *player.rb.velocity.y >= activationForce && buttonCaBePressed) ButtonPressed();
+        if (col.gameObject.CompareTag("Player"))
+        {
+            Player player = col.gameObject.GetComponent<Player>();
+            if (-1 * player.rb.velocity.y >= activationForce && buttonCaBePressed) ButtonPressed(player);
+        }
+        else if (col.gameObject.CompareTag("Object"))
+        {
+            Jump(col.gameObject.GetComponentInChildren<GObject>());
+        }
     }
 
     private void OnTriggerExit2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Player")) return;
         Player player = col.gameObject.GetComponent<Player>();
-           
     }
 
-    private void ButtonPressed()
+    private void ButtonPressed(Player player)
     {
         switch (type)
         {
@@ -67,6 +73,16 @@ public class GroundButton : MonoBehaviour
                 break;
             case typeGroundButton.Shield:
                 Shield();
+                break;
+            case typeGroundButton.JumpPad:
+                Jump(player);
+                break;
+            case typeGroundButton.Activation:
+                
+                StopCoroutine(ButtonReset());
+                buttonWasPressed = true;
+                StartCoroutine(ButtonReset());
+                StartCoroutine(ButtonCooldown());
                 break;
         }
     }
@@ -92,6 +108,29 @@ public class GroundButton : MonoBehaviour
     {
         yield return new WaitForSeconds(timeTillButtonWasNotPressedAnymore);
         buttonWasPressed = false;
+    }
 
+    private void Jump(Player player)
+    {
+        Vector2 vel = player.rb.velocity;
+        vel.y = 0;
+        player.rb.velocity = vel;
+        player.rb.AddForce(Vector2.up * jumpPadForce);
+    }
+
+    private void Jump(GObject gObject)
+    {
+        
+        Vector2 vel = gObject.rb.velocity;
+        vel.y = 0;
+        gObject.rb.velocity = vel;
+        gObject.rb.AddForce(Vector2.up * jumpPadForce);
+    }
+
+    IEnumerator ButtonCooldown()
+    {
+        buttonCaBePressed = false;
+        yield return new WaitForSeconds(buttonCooldown);
+        buttonCaBePressed = true;
     }
 }
