@@ -185,6 +185,7 @@ MonoBehaviour:
   objectNearby: 0
   carriedObject: {fileID: 0}
   heavyMass: 2
+  playerId: 0
   positionForCarryObject: {fileID: 7399793997395796334}
   rb: {fileID: 0}
   playerLayers:
@@ -214,6 +215,10 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
+  _movement: {fileID: 0}
+  _movement1: {fileID: 0}
+  _movement2: {fileID: 0}
+  _movement3: {fileID: 0}
   inputAction:
     m_Name: Input
     m_Type: 0
@@ -223,6 +228,10 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  _player: {fileID: 0}
+  player1: {fileID: 0}
+  player2: {fileID: 0}
+  player3: {fileID: 0}
 --- !u!61 &7399793997734299185
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -304,7 +313,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
