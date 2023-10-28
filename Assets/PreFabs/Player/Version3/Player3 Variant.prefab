@@ -39,6 +39,10 @@ PrefabInstance:
       propertyPath: groundMask.m_Bits
       value: 262208
       objectReference: {fileID: 0}
+    - target: {fileID: 1960891839981492068, guid: 1849870f76380d54ba8664ca63ed51a5, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1960891839981492070, guid: 1849870f76380d54ba8664ca63ed51a5, type: 3}
       propertyPath: m_Name
       value: Player3 Variant

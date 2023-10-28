@@ -15,8 +15,8 @@ public class Console : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float interactionRadius;
     [SerializeField] private bool canNotBeInteractedWith;
- 
-    
+    [SerializeField] public bool buttonConsole;
+    public bool wasPressed; 
     
     // Start is called before the first frame update
     void Start()
@@ -57,8 +57,12 @@ public class Console : MonoBehaviour
     {
         Debug.Log("Was interacted with");
     }
-    /**
+
+     /**
      * Puts resource in the right place 
      */
-     
+     public void PressButton()
+     {
+         wasPressed = true;
+     }
 }

@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
         //    2.Drop
         //    1.Interact with Console/etc
         if (isCarrying && consoleNearby) InteractWithConsole();
+        else if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
         else if (isCarrying) Drop();
         else TryToPickUp();
         

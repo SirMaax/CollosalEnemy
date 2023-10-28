@@ -98,7 +98,9 @@ public class GObject : MonoBehaviour
                 //Nothing changes
                 break;
             case typeObjects.AmmoCrate:
-                ConsumeThis(2f);
+                // ConsumeThis(2f);
+                //Nothing changes
+
                 break;
         }
     }
@@ -132,7 +134,7 @@ public class GObject : MonoBehaviour
         //TODO change sprite etc.
     }
 
-    private void ApplyForceInDirection(Vector2 direction)
+    public void ApplyForceInDirection(Vector2 direction)
     {
         if (direction == Vector2.zero)
         {

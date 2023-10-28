@@ -14,6 +14,7 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] protected ResourceHoldingPlace console1;
     [SerializeField] protected ResourceHoldingPlace console2;
     [SerializeField] protected ResourceHoldingPlace console3;
+    [SerializeField] private Enemy enemy;
     private EnergyCore core;
     [SerializeField] private Door door;
     // Start is called before the first frame update
@@ -34,24 +35,29 @@ public class WeaponSystem : MonoBehaviour
         buttonShot.buttonWasPressed = false;
         if (!door.isClosed && !(console1.isLoaded||console2.isLoaded||console3.isLoaded)) return;
         if (!core.CheckIfEnoughEnergyForDrainThenDrain(activeEnergyDrain)) return;
+        int counter = 0;
         if (console1.isLoaded)
         {
-            console1.EjectShell();
+            counter += 1;
             console1.DepleteResource();
+            console1.EjectShell();
             //TODO Effect Enemy Mech
         }if (console2.isLoaded)
         {
-            console2.EjectShell();
+            counter += 1;
             console2.DepleteResource();
+            console2.EjectShell();
             //TODO Effect Enemy Mech
         }
         if (console3.isLoaded)
         {
-            console3.EjectShell();
+            counter += 1;
             console3.DepleteResource();
+            console3.EjectShell();
             //TODO Effect Enemy Mech
         }
         //TODO Animation
-        
+        enemy.DealDamage(counter);
+        Debug.Log("fired " + counter);
     }
 }

@@ -17,14 +17,20 @@ public class Elevator : MonoBehaviour
     private int nextLevel;
     private int nextnextLevel;
     private bool comingToStop;
-
     private float startSpeed;
+    
     // [Header("Energy")]
 
+    [Header("Ref")] 
+    [SerializeField] private Console upButton;    
+    [SerializeField] private Console downButton;    
+    
+    
     // Start is called before the first frame update
     void Start()
     {
         nextLevel = 0;
+        currentLevel = 0;
         startSpeed = speed;
         comingToStop = false;
         travelling = false;
@@ -34,6 +40,7 @@ public class Elevator : MonoBehaviour
     void Update()
     {
         Travel();
+        if (upButton.wasPressed || downButton.wasPressed) TravelLevelUpOrDown();
     }
 
     public void GoToLevel(int level)
@@ -67,9 +74,9 @@ public class Elevator : MonoBehaviour
         if (Mathf.Abs(currentPos.y - heightLevel[nextLevel]) < snappingPoint)
         {
             currentPos.y = heightLevel[nextLevel];
-            nextLevel = -1;
             travelling = false;
             currentLevel = nextLevel;
+            nextLevel = -1;
         }
         transform.position = currentPos;
     }
@@ -93,5 +100,25 @@ public class Elevator : MonoBehaviour
         }
 
         
+    }
+
+    private void TravelLevelUpOrDown()
+    {
+        if (upButton.wasPressed && (currentLevel > nextLevel || !travelling))
+        {
+            upButton.wasPressed = false;
+            if (currentLevel == heightLevel.Length-1) return;
+            if (travelling) nextLevel = currentLevel;
+            else nextLevel = currentLevel + 1;
+            travelling = true;
+        }
+        if (downButton.wasPressed)
+        {
+            downButton.wasPressed = false;
+            if (currentLevel == 0 && !travelling) return;
+            if (travelling) nextLevel = currentLevel;
+            else nextLevel = currentLevel - 1;
+            travelling = true;
+        }
     }
 }

@@ -10,36 +10,46 @@ public class ShieldSystems : MonoBehaviour
 
     [Header("State")] 
     private bool shieldActive;
-    
+
     [Header("Refs")] 
-    [SerializeField] GroundButton button1;
-    [SerializeField] GroundButton button2;
-    [SerializeField] GroundButton button3;
-    [SerializeField] GroundButton button4;
+    [SerializeField] private GroundButton[] buttons;
+    private GameMaster GM;
     private EnergyCore core;
+    
     // Start is called before the first frame update
     void Start()
     {
         core = GameObject.FindWithTag("Core").GetComponent<EnergyCore>();
+        for (int i = 0; i < 4; i++)
+        {
+            buttons[i].gameObject.SetActive(false);
+        }
+        for (int i = 0; i < GameMaster.AMOUNT_PLAYER; i++)
+        {
+            buttons[i].gameObject.SetActive(true);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (button1.buttonWasPressed &&
-            button2.buttonWasPressed &&
-            button3.buttonWasPressed &&
-            button4.buttonWasPressed) ToggleShield();
+        bool wasPressedCombined = true;
+        for (int i = 0; i < GameMaster.AMOUNT_PLAYER; i++)
+        {
+            wasPressedCombined = wasPressedCombined && buttons[i].buttonWasPressed;
+        }
+        if (wasPressedCombined)ToggleShield();
 
         if (shieldActive) core.CheckIfEnoughEnergyForDrainThenDrain(activeEnergyDrain);
+        if(shieldActive)Debug.Log("Shield active");
     }
 
     private void ToggleShield()
     {
-        button1.buttonWasPressed = false;
-        button2.buttonWasPressed = false;
-        button3.buttonWasPressed = false;
-        button4.buttonWasPressed = false;
+        for (int i = 0; i < GameMaster.AMOUNT_PLAYER; i++)
+        {
+             buttons[i].buttonWasPressed = false;
+        }
 
         if (shieldActive) shieldActive = false;
         else shieldActive = true;

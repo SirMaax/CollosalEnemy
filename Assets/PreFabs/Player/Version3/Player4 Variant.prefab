@@ -37,7 +37,11 @@ PrefabInstance:
       objectReference: {fileID: -944628639613478452, guid: b357d583e761dd64e973a83b0774d1ec, type: 3}
     - target: {fileID: 5609409018137672276, guid: 1ec154160a3a8224fbe2b56a5a732820, type: 3}
       propertyPath: m_Name
-      value: Player4
+      value: Player4 Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 5609409018137672278, guid: 1ec154160a3a8224fbe2b56a5a732820, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5609409018137672280, guid: 1ec154160a3a8224fbe2b56a5a732820, type: 3}
       propertyPath: m_RootOrder
