@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ResourceGiver : MonoBehaviour
@@ -11,7 +12,8 @@ public class ResourceGiver : MonoBehaviour
     [SerializeField] private ResourceHoldingPlace _ammo;
     [SerializeField] private GameObject energyPreFab;
     [SerializeField] private GameObject ammoPreFab;
-    [SerializeField] private float amountEmptyCrates;
+    [SerializeField] private int amountEmptyCrates;
+    [SerializeField] private TMP_Text cratesText;
     
     [Header("Attributes")]
     [SerializeField] private int id;
@@ -19,6 +21,7 @@ public class ResourceGiver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        UpdateText();
         if (id == 0)
         {
             StartCoroutine(SpawnNewAmmo(0));
@@ -64,6 +67,7 @@ public class ResourceGiver : MonoBehaviour
             _energy.EjectShell();
             StartCoroutine(SpawnNewEnergy(1));
         }
+        UpdateText();
     }
 
     private IEnumerator SpawnNewEnergy(float time)
@@ -85,6 +89,11 @@ public class ResourceGiver : MonoBehaviour
     public void IncreaseNumberEmptyCrates()
     {
         amountEmptyCrates += 1;
-        //TODO update anzeige
+        UpdateText();
+    }
+
+    private void UpdateText()
+    {
+        cratesText.SetText("Crates: " + amountEmptyCrates.ToString());
     }
 }

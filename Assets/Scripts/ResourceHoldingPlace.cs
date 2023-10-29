@@ -49,6 +49,8 @@ public class ResourceHoldingPlace : Console
         holdedObject = _player.TakeResource();
         holdedObject.SetPosition(resourcePlace.transform.position);
         isLoaded = true;
+        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
+
     }
 
     private void AmmoConsole(Player _player)
@@ -59,6 +61,7 @@ public class ResourceHoldingPlace : Console
         holdedObject = _player.TakeResource();
         holdedObject.SetPosition(resourcePlace.transform.position);
         isLoaded = true;
+        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
 
     }
 
@@ -67,6 +70,7 @@ public class ResourceHoldingPlace : Console
         // _player.carriedObject.UsedWithConsole(typeConsole);
         _player.carriedObject.transform.parent
             .transform.rotation = quaternion.Euler(Vector3.zero);
+
     }
 
     public bool DepleteResource()
@@ -83,7 +87,10 @@ public class ResourceHoldingPlace : Console
     private void NotHoldingAnymore()
     {
         isLoaded = false;
+        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 2;
         holdedObject = null;
+        
+        
     }
 
     public void PlaceResource(GObject newObject)
@@ -91,5 +98,6 @@ public class ResourceHoldingPlace : Console
         isLoaded = true;
         holdedObject = newObject;
         newObject.PickUp(true);
+        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
     }
 }

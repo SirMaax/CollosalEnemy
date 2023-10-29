@@ -18,7 +18,7 @@ public class GObject : MonoBehaviour
     [SerializeField] private float maxSpinForce;
     [SerializeField] private float maxForce;
     [SerializeField] private float minForce;
-    
+    [SerializeField] private Sprite empty;
 
     [Header("Status")] private bool isInPickUpRange;
     public bool canPickUp;
@@ -68,7 +68,6 @@ public class GObject : MonoBehaviour
 
     public void Drop(Vector2 velcoity)
     {
-        Debug.Log(velcoity);
         canPickUp = true;
         isCarried = false;
         EnableInfluence();
@@ -134,7 +133,7 @@ public class GObject : MonoBehaviour
     private void ChangeCrateTypeToEmpty()
     {
         type = typeObjects.EmptyCrate;
-        //TODO change sprite etc.
+        parent.GetComponent<SpriteRenderer>().sprite = empty;
     }
 
     public void ApplyForceInDirection(Vector2 direction)

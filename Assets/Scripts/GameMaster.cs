@@ -16,9 +16,10 @@ public class GameMaster : MonoBehaviour
     
     [Header("Refs")] 
     [SerializeField] public GameObject[] players;
-
     [SerializeField] private GameObject setCanvas;
     [SerializeField] private static GameObject canvas;
+    [SerializeField] private GameObject player1;
+    [Header("Other")] static bool canvasActive = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +37,7 @@ public class GameMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (canvasActive) canvas.transform.position = player1.transform.position;
     }
 
     IEnumerator LevelTime()
@@ -59,15 +60,19 @@ public class GameMaster : MonoBehaviour
     public static void ShowGui()
     {
         canvas.SetActive(true);
+        canvasActive = true;
     }
 
     public void HideGui()
     {
         canvas.SetActive(false);
+        canvasActive = false;
     }
 
     public static void ChangeScoreBy(float score)
     {
         SCORE += score;
     }
+    
+    
 }

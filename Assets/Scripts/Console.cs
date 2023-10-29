@@ -50,7 +50,7 @@ public class Console : MonoBehaviour
         // if (canNotBeInteractedWith) return;
         if (!col.gameObject.CompareTag("Player")) return;
         Player player = col.gameObject.GetComponent<Player>();
-        player.RemoveConsole();
+        player.RemoveConsole(this);
     }
 
      public virtual void Interact(Player player)

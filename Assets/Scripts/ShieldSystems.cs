@@ -9,7 +9,7 @@ public class ShieldSystems : MonoBehaviour
 
 
     [Header("State")] 
-    private bool shieldActive;
+    public bool shieldActive;
 
     [Header("Refs")] 
     [SerializeField] private GroundButton[] buttons;

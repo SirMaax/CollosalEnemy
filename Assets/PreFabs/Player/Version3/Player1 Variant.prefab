@@ -71,6 +71,10 @@ PrefabInstance:
       propertyPath: groundMask.m_Bits
       value: 262208
       objectReference: {fileID: 0}
+    - target: {fileID: 5097100559179860786, guid: a012d5e0ceccfbd4f94ee32efb0a6636, type: 3}
+      propertyPath: heavyMass
+      value: 1.2
+      objectReference: {fileID: 0}
     - target: {fileID: 5097100559179860790, guid: a012d5e0ceccfbd4f94ee32efb0a6636, type: 3}
       propertyPath: player1
       value: 

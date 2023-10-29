@@ -20,6 +20,7 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] private Enemy enemy;
     private EnergyCore core;
     [SerializeField] private Door door;
+    [SerializeField] private EventSystem eventSystem;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,7 +63,7 @@ public class WeaponSystem : MonoBehaviour
         //TODO Animation
         // enemy.DealDamage(counter);
         //TODO scoring system
-        GameMaster.ChangeScoreBy(counter * baseScore);
+        eventSystem.TargetHit(counter);
         Debug.Log("fired " + counter);
     }
 }

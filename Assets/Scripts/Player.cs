@@ -58,13 +58,17 @@ public class Player : MonoBehaviour
         //    3.Pick Up
         //    2.Drop
         //    1.Interact with Console/etc
-        if (isCarrying && consoleNearby) InteractWithConsole();
-        else if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
-        else if (isCarrying) Drop();
-        else TryToPickUp();
         
+        if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
+        else if (isCarrying && consoleNearby) InteractWithConsole();
     }
 
+    public void Use()
+    {
+        if (isCarrying) Drop();
+        else TryToPickUp();
+    }
+    
     private void Drop()
     {
         carriedObject.Drop(rb.velocity);
@@ -85,8 +89,9 @@ public class Player : MonoBehaviour
         nearestConsole = console;
         consoleNearby = true;
     }
-    public void RemoveConsole()
+    public void RemoveConsole(Console console)
     {
+        if (nearestConsole != console) return;
         consoleNearby = false;
         nearestConsole = null;
     }

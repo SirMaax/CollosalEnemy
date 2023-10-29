@@ -55,6 +55,23 @@ public class InputHandler : MonoBehaviour
     {
         MoveInput(value.Get<Vector2>());
     }
+
+    public void OnUse(InputValue value)
+    {
+        _player.Use();
+    }
+    public void OnUse1(InputValue value)
+    {
+        player1.Use();
+    }
+    public void OnUse2(InputValue value)
+    {
+        player2.Use();
+    }
+    public void OnUse3(InputValue value)
+    {
+        player3.Use();
+    }
     public void OnInteract(InputValue value)
     {
         _player.Interact();

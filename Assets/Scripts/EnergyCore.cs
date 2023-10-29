@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class EnergyCore : MonoBehaviour
@@ -8,7 +9,8 @@ public class EnergyCore : MonoBehaviour
     [SerializeField] private float energyLevel;
     [SerializeField] private float energyDrain;
     [SerializeField] private float energyRefillAmount;
-
+    private int maxEnergy;
+    
     [Header("Settings")] 
     [SerializeField] private float coolDownBetweenEnergyDrain;
 
@@ -16,10 +18,11 @@ public class EnergyCore : MonoBehaviour
     [SerializeField] GroundButton buttonFillEnergy;
     [SerializeField] GroundButton buttonEjectShell;
     [SerializeField] protected ResourceHoldingPlace console;
-    
+    [SerializeField] private TMP_Text text; 
     // Start is called before the first frame update
     void Start()
     {
+        maxEnergy = (int)energyLevel;
         StartCoroutine(DrainEnergy());
     }
 
@@ -39,6 +42,7 @@ public class EnergyCore : MonoBehaviour
 
         CheckEnergyLevel();
         UpdateSprite();
+        UpdateText();
     }
 
     private void RefilEnergy()
@@ -53,6 +57,7 @@ public class EnergyCore : MonoBehaviour
         if (console.DepleteResource())
         {
         energyLevel += energyRefillAmount;
+        if (energyLevel >= maxEnergy) energyLevel = maxEnergy;
         Debug.Log("Energy Refilled");
         }
         else
@@ -106,6 +111,10 @@ public class EnergyCore : MonoBehaviour
 
         return enoughEnergy;
     }
-    
+
+    private void UpdateText()
+    {
+        text.SetText("Energy: " +((int)energyLevel).ToString() + "/" + maxEnergy.ToString());
+    }
     
 }
