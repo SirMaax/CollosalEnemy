@@ -149,5 +149,9 @@ public class InputHandler : MonoBehaviour
         _movement3.move = newMoveDirection;
     }
 
+    public void OnEscape(InputValue value)
+    {
+        GameMaster.ShowGui();
+    }
 
 }

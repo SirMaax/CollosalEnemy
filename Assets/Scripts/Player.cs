@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -68,7 +67,7 @@ public class Player : MonoBehaviour
 
     private void Drop()
     {
-        carriedObject.Drop();
+        carriedObject.Drop(rb.velocity);
         isCarrying = false;
         ResetWeight();
         carriedObject = null;

@@ -20,6 +20,7 @@ public class MovementController : MonoBehaviour
     private bool grounded = false;
     private bool canJump = true;
     public bool jumpButtonPressed;
+    private bool facingRight;
     
     [Header("Refs")] 
     private Rigidbody2D rb;
@@ -29,7 +30,7 @@ public class MovementController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        facingRight = true;
         rb = transform.parent.GetComponent<Rigidbody2D>();
     }
 
@@ -44,6 +45,22 @@ public class MovementController : MonoBehaviour
 
     public void Jump()
     {
+        if (facingRight && move.x < 0)
+        {
+            facingRight = false;
+            Vector3 scale = transform.localScale;
+            scale.x *= -1;
+            transform.localScale = scale;   
+        }
+
+        if (!facingRight && move.x > 0)
+        {
+            facingRight = true;
+            Vector3 scale = transform.localScale;
+            scale.x *= -1;
+            transform.localScale = scale;   
+        }
+        
         if (!CanJump()) return;
         canJump = false;
         StartCoroutine(JumpAction());

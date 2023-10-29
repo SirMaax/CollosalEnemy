@@ -19,6 +19,7 @@ public class ShieldSystems : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        shieldActive = false;
         core = GameObject.FindWithTag("Core").GetComponent<EnergyCore>();
         for (int i = 0; i < 4; i++)
         {

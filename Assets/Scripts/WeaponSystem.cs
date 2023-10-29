@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class WeaponSystem : MonoBehaviour
 {
+    [Header("Score")] 
+    [SerializeField] private float baseScore;
+    
     [Header("Attributes")] 
     [SerializeField] private float activeEnergyDrain;
     
@@ -57,7 +60,9 @@ public class WeaponSystem : MonoBehaviour
             //TODO Effect Enemy Mech
         }
         //TODO Animation
-        enemy.DealDamage(counter);
+        // enemy.DealDamage(counter);
+        //TODO scoring system
+        GameMaster.ChangeScoreBy(counter * baseScore);
         Debug.Log("fired " + counter);
     }
 }

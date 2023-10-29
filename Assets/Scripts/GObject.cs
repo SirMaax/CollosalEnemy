@@ -66,11 +66,13 @@ public class GObject : MonoBehaviour
         return true;
     }
 
-    public void Drop()
+    public void Drop(Vector2 velcoity)
     {
+        Debug.Log(velcoity);
         canPickUp = true;
         isCarried = false;
         EnableInfluence();
+        rb.velocity = velcoity * 1.25f;
     }
 
     private void DisableInfluence()
@@ -83,6 +85,7 @@ public class GObject : MonoBehaviour
     {
         rb.simulated = true;
         physicalBoxCollider.enabled = true;
+        StartCoroutine(ChangeLayer());
     }
 
     public void SetPosition(Vector2 position)
@@ -124,7 +127,7 @@ public class GObject : MonoBehaviour
 
     public void Eject()
     {
-        Drop();
+        Drop(Vector2.zero);
         ApplyForceInDirection(Vector2.zero);
     }
 
@@ -150,5 +153,13 @@ public class GObject : MonoBehaviour
         }
 
         rb.AddTorque(Random.Range(minSpinForce,maxSpinForce));
+    }
+
+    private IEnumerator ChangeLayer()
+    {
+        transform.parent.gameObject.layer = 12;
+        yield return new WaitForSeconds(0.3f);
+        transform.parent.gameObject.layer = 8;
+
     }
 }
