@@ -42,12 +42,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1040030183
+    locked: 0
+  - name: Boden
+    uniqueID: 1794015699
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Other
-    uniqueID: 3463458183
-    locked: 0
   - name: UI
     uniqueID: 884193891
+    locked: 0
+  - name: Other
+    uniqueID: 3463458183
     locked: 0

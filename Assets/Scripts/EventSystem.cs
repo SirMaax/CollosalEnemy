@@ -194,8 +194,6 @@ public class EventSystem : MonoBehaviour
 
         UpdateTargetHealth();
     }
-
- 
     
     public void ShieldHit()
     {

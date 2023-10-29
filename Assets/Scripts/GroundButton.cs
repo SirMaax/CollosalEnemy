@@ -17,6 +17,7 @@ public class GroundButton : MonoBehaviour
     [Header("Attributes")] 
     [SerializeField] private float activationForce;
     [SerializeField] private float buttonCooldown;
+    [SerializeField] private float buttonMovement;
     
     [SerializeField] private typeGroundButton type;
     [SerializeField] private float timeTillButtonWasNotPressedAnymore;
@@ -29,7 +30,7 @@ public class GroundButton : MonoBehaviour
     public bool buttonWasPressed;
 
     [Header("Refs")] protected Player _player;
-
+    
 
     // Start is called before the first frame update
     void Start()
@@ -63,6 +64,7 @@ public class GroundButton : MonoBehaviour
 
     private void ButtonPressed(Player player)
     {
+        ButtonAnimation();
         switch (type)
         {
             case typeGroundButton.Elevator:
@@ -132,5 +134,17 @@ public class GroundButton : MonoBehaviour
         buttonCaBePressed = false;
         yield return new WaitForSeconds(buttonCooldown);
         buttonCaBePressed = true;
+    }
+
+    private void ButtonAnimation()
+    {
+        StartCoroutine(buttonAnimatio());
+    }
+
+    private IEnumerator buttonAnimatio()
+    {
+        transform.Translate(Vector3.down * buttonMovement);
+        yield return new WaitForSeconds(0.3f);
+        transform.Translate(Vector3.up * buttonMovement);
     }
 }

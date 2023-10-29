@@ -27,7 +27,7 @@ public class Menu : MonoBehaviour
     public void StartGameWithPlayers(int player)
     {
         Amount_Player = player;
-        SceneManager.LoadScene("FirstLevel");
+        SceneManager.LoadScene("FirstLevelV2");
     }
 
     public void MainMenu()
@@ -37,6 +37,11 @@ public class Menu : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene("FirstLevel");
+        SceneManager.LoadScene("FirstLevelV2");
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
