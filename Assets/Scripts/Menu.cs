@@ -8,6 +8,7 @@ public class Menu : MonoBehaviour
     // Start is called before the first frame update
     public static int Amount_Player;
     public int type;
+    public static bool hardMode = false;
     [SerializeField] private TMP_Text score;
     void Start()
     {
@@ -43,5 +44,11 @@ public class Menu : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void HardMode()
+    {
+        if (hardMode) hardMode = false;
+        else hardMode = true;
     }
 }

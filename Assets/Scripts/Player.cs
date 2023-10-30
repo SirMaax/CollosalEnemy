@@ -82,6 +82,7 @@ public class Player : MonoBehaviour
         isCarrying = false;
         ResetWeight();
         var temp = carriedObject;
+        RemoveGObject(carriedObject);
         carriedObject = null;
         return temp;
     }

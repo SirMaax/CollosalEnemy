@@ -56,9 +56,27 @@ public class EventSystem : MonoBehaviour
     [SerializeField] private TMP_Text targetsKilledText;
     
     // Start is called before the first frame update
+    private void HardMode()
+    {
+        minTimeBetweenAttacks /= Menu.Amount_Player;
+        maxTimeBetweenAttacks /= Menu.Amount_Player;
+        timeTillAttackArriveMin /= Menu.Amount_Player;
+        timeTillAttackArriveMax /= Menu.Amount_Player;
+            maxAttackCoordinateX /= Menu.Amount_Player;
+        minAttackCoordinateX /= Menu.Amount_Player;
+        minAttackCoordinateY /= Menu.Amount_Player;
+        maxAttackCoordinateY /= Menu.Amount_Player;
+        
+        timeTillTargetLeavesMax /= Menu.Amount_Player;
+        timeTillTargetLeavesMin /= Menu.Amount_Player;
+        timeTillNextTargetMin /= Menu.Amount_Player;
+        timeTillNextTargetMax /= Menu.Amount_Player;
+    }
+    
     void Start()
     {
         if (disableEvents) return;
+        if (Menu.hardMode) HardMode();
         //Start first Target
         
         SpawnNewTargetInRandomTime();
