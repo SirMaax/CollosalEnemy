@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +11,7 @@ public class GameMaster : MonoBehaviour
     
     [Header("Setting")] 
     [SerializeField] private int setAmountPlayer;
-    [SerializeField] private float playTime;
+    [SerializeField] private int playTime;
     [SerializeField] private bool testMode;
     [SerializeField] private bool noTime;
     
@@ -19,10 +20,15 @@ public class GameMaster : MonoBehaviour
     [SerializeField] private GameObject setCanvas;
     [SerializeField] private static GameObject canvas;
     [SerializeField] private GameObject player1;
+    [SerializeField] private TMP_Text timer;
+    [SerializeField] private TMP_Text scoreText;
+
     [Header("Other")] static bool canvasActive = false;
+    
     // Start is called before the first frame update
     void Start()
     {
+        testMode = false;
         canvas = setCanvas;
         if (testMode) AMOUNT_PLAYER = setAmountPlayer;
         else AMOUNT_PLAYER = Menu.Amount_Player;
@@ -38,11 +44,17 @@ public class GameMaster : MonoBehaviour
     void Update()
     {
         if (canvasActive) canvas.transform.position = player1.transform.position;
+        scoreText.SetText("Score " + ((int)SCORE).ToString());        
     }
 
     IEnumerator LevelTime()
     {
-        yield return new WaitForSeconds(playTime);
+        for (int i = 0; i < playTime; i++)
+        {
+            timer.SetText("Time left: " + (playTime-i).ToString());
+            yield return new WaitForSeconds(1);
+        }
+        // yield return new WaitForSeconds(playTime);
         SceneManager.LoadScene("ScoreScene");
     }
     
@@ -72,6 +84,7 @@ public class GameMaster : MonoBehaviour
     public static void ChangeScoreBy(float score)
     {
         SCORE += score;
+        
     }
     
     

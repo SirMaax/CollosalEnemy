@@ -38,7 +38,13 @@ public class WeaponSystem : MonoBehaviour
         if (!buttonShot.buttonWasPressed) return;
         buttonShot.buttonWasPressed = false;
         if (!door.isClosed && !(console1.isLoaded||console2.isLoaded||console3.isLoaded)) return;
-        if (!core.CheckIfEnoughEnergyForDrainThenDrain(activeEnergyDrain)) return;
+        if (!core.CheckIfEnoughEnergyForDrainThenDrain(activeEnergyDrain))
+        {
+            SoundManager.Play(7);
+            return;
+            
+        }
+        
         int counter = 0;
         if (console1.isLoaded)
         {

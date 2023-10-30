@@ -49,7 +49,8 @@ public class Elevator : MonoBehaviour
         if (travelling)
         {
             nextnextLevel = level;
-            StopCoroutine(SlowDown());
+            StopAllCoroutines();
+            // StopCoroutine("SlowDown");
             StartCoroutine(SlowDown());
         }
         else

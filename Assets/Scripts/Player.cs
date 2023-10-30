@@ -71,6 +71,7 @@ public class Player : MonoBehaviour
     
     private void Drop()
     {
+        SoundManager.Play(12);
         carriedObject.Drop(rb.velocity);
         isCarrying = false;
         ResetWeight();
@@ -111,7 +112,7 @@ public class Player : MonoBehaviour
     private void TryToPickUp()
     {
         if (!objectNearby) return;
-        
+        SoundManager.Play(11);
         //Get closest interactable object
         GObject cloestObject = null;
         float smallestDistance = 10000;

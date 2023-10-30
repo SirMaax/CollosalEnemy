@@ -14,11 +14,17 @@ public class EnergyCore : MonoBehaviour
     [Header("Settings")] 
     [SerializeField] private float coolDownBetweenEnergyDrain;
 
+    private bool once = true;
+    [SerializeField] private float scoreNoEnergy;
+    
     [Header("Refs")] 
     [SerializeField] GroundButton buttonFillEnergy;
     [SerializeField] GroundButton buttonEjectShell;
     [SerializeField] protected ResourceHoldingPlace console;
     [SerializeField] private TMP_Text text; 
+    [SerializeField] private TMP_Text text2; 
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +35,21 @@ public class EnergyCore : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
+        if(energyLevel==0)
+        {
+            if (once)
+            {
+                once = false;
+                SoundManager.Play(3);
+            }
+            GameMaster.ChangeScoreBy(scoreNoEnergy);
+        }
+
+        if (energyLevel >= 0 && !once)
+        {
+            SoundManager.Stop(3);
+            once = true;
+        }
         if (buttonFillEnergy.buttonWasPressed)
         {
             buttonFillEnergy.buttonWasPressed = false;
@@ -83,7 +104,8 @@ public class EnergyCore : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(coolDownBetweenEnergyDrain);
-            energyLevel -= energyDrain;
+            if (energyLevel - energyDrain > 0) energyLevel -= energyDrain;
+            else energyLevel = 0;
         }
         
     }
@@ -115,6 +137,8 @@ public class EnergyCore : MonoBehaviour
     private void UpdateText()
     {
         text.SetText("Energy: " +((int)energyLevel).ToString() + "/" + maxEnergy.ToString());
+        text2.SetText("Energy: " +((int)energyLevel).ToString() + "/" + maxEnergy.ToString());
+
     }
     
 }

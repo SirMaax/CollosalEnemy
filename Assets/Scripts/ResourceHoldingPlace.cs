@@ -29,6 +29,7 @@ public class ResourceHoldingPlace : Console
 
     public override void Interact(Player player )
     {
+        SoundManager.Play(8);
         switch (typeConsole)
         {
             case GObject.typeObjects.EnergyCell:
@@ -80,6 +81,7 @@ public class ResourceHoldingPlace : Console
 
     public void EjectShell()
     {
+        SoundManager.Play(4);
         holdedObject.Eject();
         NotHoldingAnymore();
     }

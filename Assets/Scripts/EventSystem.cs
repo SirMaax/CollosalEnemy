@@ -32,9 +32,11 @@ public class EventSystem : MonoBehaviour
     [SerializeField] private float timeTillTargetLeavesMin;
     [SerializeField] private float timeTillNextTargetMin;
     [SerializeField] private float timeTillNextTargetMax;
+    private int targetsKilled;
     private int health;
     private bool shieldActive;
     private int targetLevel;
+    private Coroutine routine;
     
     [Header("Scoree")] 
     [SerializeField] private float scoreHitDeflected;
@@ -51,6 +53,8 @@ public class EventSystem : MonoBehaviour
     [SerializeField] TMP_Text targetText;
     [SerializeField] private TMP_Text targetHealth;
     [SerializeField] private TMP_Text targetLeavestext;
+    [SerializeField] private TMP_Text targetsKilledText;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +71,7 @@ public class EventSystem : MonoBehaviour
     
     private void SpawnNewTargetInRandomTime()
     {
+        targetAvailable = false;
         float time = Random.Range(timeTillNextTargetMin, timeTillNextTargetMax);
         UpdateTargetText(-1, 0);
         StartCoroutine(CoutdownTillNewTarget(time));
@@ -78,12 +83,14 @@ public class EventSystem : MonoBehaviour
     }
     public void NewTarget()
     {
+        SoundManager.Play(14);
+        targetAvailable = true;
         int targetLevel = Random.Range(1, 4);
         int shields = Random.Range(0, 2);
         if (shields == 1 && canSpawnShieldedEnemies) shieldActive = true;
         else shieldActive = false; 
         int timeTillTargetLeaves =(int) Random.Range(timeTillTargetLeavesMin, timeTillTargetLeavesMax);
-        StartCoroutine(CountDownTargetLeave(timeTillTargetLeaves));
+        routine = StartCoroutine(CountDownTargetLeave(timeTillTargetLeaves));
         health = targetLevel;
         UpdateTargetText(targetLevel,shields);
         UpdateTargetHealth();
@@ -93,6 +100,7 @@ public class EventSystem : MonoBehaviour
         if (level == -1)
         {
             targetText.SetText("No Target available");
+            targetHealth.SetText("-");
         }
         else
         {
@@ -121,8 +129,10 @@ public class EventSystem : MonoBehaviour
 
     private void TargetLeft()
     {
+        SoundManager.Play(15);
         GameMaster.ChangeScoreBy(scoreTargetLeft);
         SpawnNewTargetInRandomTime();
+        
     }
     private IEnumerator ShieldCooldown()
     {
@@ -133,10 +143,14 @@ public class EventSystem : MonoBehaviour
 
     private void DefeatedTarget()
     {
+        targetAvailable = false;
+        targetsKilled += 1;
+        targetsKilledText.SetText("ENEMIES DEAD: " + targetsKilled.ToString());
         GameMaster.ChangeScoreBy(targetLevel * scoreTargetKilled);
+        StopCoroutine(routine);
+        StopCoroutine("ShieldCooldown");
         targetHealth.SetText("-");
-        StopCoroutine(CountDownTargetLeave(0));
-        StopCoroutine(ShieldCooldown());
+        targetLeavestext.SetText("-");
         SpawnNewTargetInRandomTime();
     }
 
@@ -145,25 +159,33 @@ public class EventSystem : MonoBehaviour
     private void Targeted()
     {
         int time = (int ) Random.Range(timeTillAttackArriveMin, timeTillAttackArriveMax);
+        Debug.Log("Attack coming in a bit");
         StartCoroutine(Attacked(time));
     }
 
     private IEnumerator Attacked(int time)
     {
         //TODO SOUND of attack
+        SoundManager.Play(0);
         for (int i = 0; i < time; i++)
         {
             UpdateIncomingAttackText(time - i);
             yield return new WaitForSeconds(1);
         }
+        SoundManager.Stop(0);
         //Check shields
-        if (shield.shieldActive) GameMaster.ChangeScoreBy(scoreHitDeflected);
+        if (shield.shieldActive)
+        {
+            GameMaster.ChangeScoreBy(scoreHitDeflected);
+            SoundManager.Play(6) ;
+        }
         else
         {
             GameMaster.ChangeScoreBy(scoreHitNotDeflected);
             float x = Random.Range(minAttackCoordinateX, maxAttackCoordinateX);
             float y = Random.Range(minAttackCoordinateY, maxAttackCoordinateY);
             _environmentController.ApplyEffectFrom(new Vector2(x, y));
+            SoundManager.Play(5);
         }
         incomingAttackText.SetText("Currently not targeted");
         float timeNew = Random.Range(minTimeBetweenAttacks, maxTimeBetweenAttacks);
@@ -180,18 +202,21 @@ public class EventSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         Targeted();
+        
     }
     // AREA INTERACTION WITH OUTSIDE
     
     public void TargetHit(int dmg)
     {
+        SoundManager.Play(1);
+        if (!targetAvailable) return;
         if (shieldActive) return;
         health -= dmg;
-        if (health == 0)
+        if (health <= 0)
         {
             DefeatedTarget();
         }
-
+        
         UpdateTargetHealth();
     }
     

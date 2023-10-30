@@ -64,6 +64,7 @@ public class GroundButton : MonoBehaviour
 
     private void ButtonPressed(Player player)
     {
+        SoundManager.Play(2);
         ButtonAnimation();
         switch (type)
         {

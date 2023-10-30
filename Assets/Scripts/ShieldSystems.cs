@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ShieldSystems : MonoBehaviour
@@ -15,9 +17,15 @@ public class ShieldSystems : MonoBehaviour
     [SerializeField] private GroundButton[] buttons;
     private GameMaster GM;
     private EnergyCore core;
+    [SerializeField] private TMP_Text shieldStatus;
     
     // Start is called before the first frame update
     void Start()
+    {
+        
+    }
+
+    private void Awake()
     {
         shieldActive = false;
         core = GameObject.FindWithTag("Core").GetComponent<EnergyCore>();
@@ -25,7 +33,7 @@ public class ShieldSystems : MonoBehaviour
         {
             buttons[i].gameObject.SetActive(false);
         }
-        for (int i = 0; i < GameMaster.AMOUNT_PLAYER; i++)
+        for (int i = 0; i < Menu.Amount_Player; i++)
         {
             buttons[i].gameObject.SetActive(true);
         }
@@ -52,7 +60,16 @@ public class ShieldSystems : MonoBehaviour
              buttons[i].buttonWasPressed = false;
         }
 
-        if (shieldActive) shieldActive = false;
-        else shieldActive = true;
+        if (shieldActive)
+        {
+            shieldStatus.SetText("Shield off");
+            shieldActive = false;
+        }
+        else
+        {
+            shieldStatus.SetText("Shield on");
+            shieldActive = true;
+        }
+        
     }
 }

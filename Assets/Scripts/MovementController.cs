@@ -102,6 +102,7 @@ public class MovementController : MonoBehaviour
     private IEnumerator JumpAction()
     {
         grounded = false;
+        SoundManager.Play(13);
         rb.AddForce(Vector2.up * initialJumpForce);
         yield return new WaitForSeconds(jumpCooldown);
         canJump = true;
