@@ -57,3 +57,6 @@ TagManager:
   - name: Other
     uniqueID: 3463458183
     locked: 0
+  - name: Mech
+    uniqueID: 2199467325
+    locked: 0
