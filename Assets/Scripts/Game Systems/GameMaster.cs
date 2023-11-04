@@ -28,7 +28,6 @@ public class GameMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        testMode = false;
         canvas = setCanvas;
         if (testMode) AMOUNT_PLAYER = setAmountPlayer;
         else AMOUNT_PLAYER = Menu.Amount_Player;

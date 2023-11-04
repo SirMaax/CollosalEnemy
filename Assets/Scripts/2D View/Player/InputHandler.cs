@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
-
-    [SerializeField] private MechMovement _mech;
+    [Header("Own Logic")] 
+    public bool PlayerIsControllingMech;
     
     [Header("Character Input Values")]
     public Vector2 move;
@@ -19,8 +19,9 @@ public class InputHandler : MonoBehaviour
     [Header("Mouse Cursor Settings")]
     public bool cursorLocked = true;
     public bool cursorInputForLook = true;
-    
+
     [Header("Refs")] 
+    [SerializeField]private MechMovement _mechMovement;
     [SerializeField]private MovementController _movement;
     [SerializeField]private MovementController _movement1;
     [SerializeField]private MovementController _movement2;
@@ -49,8 +50,7 @@ public class InputHandler : MonoBehaviour
     
     private void Start()
     {
-        // _movement = GetComponent<MovementController>();
-        // _player = GetComponent<Player>();
+            
     }
     
     public void OnMove(InputValue value)
@@ -60,7 +60,7 @@ public class InputHandler : MonoBehaviour
 
     public void OnUse(InputValue value)
     {
-        // _player.Use();
+        _player.Use();
     }
     public void OnUse1(InputValue value)
     {
@@ -76,7 +76,7 @@ public class InputHandler : MonoBehaviour
     }
     public void OnInteract(InputValue value)
     {
-        // _player.Interact();
+        _player.Interact();
     }    
     public void OnMove1(InputValue value)
     {
@@ -114,14 +114,21 @@ public class InputHandler : MonoBehaviour
             // sprintToggle = false;
             // sprint = false;
         }
+
+        if (PlayerIsControllingMech)
+        {
+            _mechMovement.move = newMoveDirection;
+        }
+        else
+        {
+            if (newMoveDirection.y > 0) _movement.jumpButtonPressed = true;
+            else _movement.jumpButtonPressed = false;
         
-        // if (newMoveDirection.y > 0) _movement.jumpButtonPressed = true;
-        // else _movement.jumpButtonPressed = false;
-        
-        //Remove Y component
-        // newMoveDirection.y = 0;
-        // _movement.move = newMoveDirection;
-        _mech.move = newMoveDirection;
+            //Remove Y component
+            newMoveDirection.y = 0;
+            _movement.move = newMoveDirection;
+            
+        }
     }
     public void MoveInput1(Vector2 newMoveDirection)
     {
@@ -174,4 +181,16 @@ public class InputHandler : MonoBehaviour
         GameMaster.ShowGui();
     }
 
+    public void TogglePlayerIsControllingMech()
+    {
+        if (PlayerIsControllingMech)
+        {
+            PlayerIsControllingMech = false;
+            _mechMovement.move = Vector2.zero;
+        }
+        else
+        {
+            PlayerIsControllingMech = true;
+        }
+    }
 }

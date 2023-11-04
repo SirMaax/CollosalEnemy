@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ResourceGiver : MonoBehaviour
@@ -17,6 +18,7 @@ public class ResourceGiver : MonoBehaviour
     
     [Header("Attributes")]
     [SerializeField] private int id;
+    [SerializeField] private bool noBoxSpawnLimit;
     
     // Start is called before the first frame update
     void Start()
@@ -25,6 +27,15 @@ public class ResourceGiver : MonoBehaviour
         if (id == 0)
         {
             StartCoroutine(SpawnNewAmmo(0));
+            StartCoroutine(SpawnNewEnergy(0));
+        }
+        else if (id == 1)
+        {
+            StartCoroutine(SpawnNewAmmo(0));
+            
+        }
+        else if (id == 2)
+        {
             StartCoroutine(SpawnNewEnergy(0));
         }
     }
@@ -37,15 +48,27 @@ public class ResourceGiver : MonoBehaviour
 
     private void ButtonPressCheck()
     {
-        if (!_button.buttonWasPressed || _lever.status == 0) return;
-        _button.buttonWasPressed = false;
-        if (_lever.status == 1) GiveResource(GObject.typeObjects.AmmoCrate);
-        if (_lever.status == -1) GiveResource(GObject.typeObjects.EnergyCell);
+        if (id != 0 && _button.buttonWasPressed)
+        {
+            if(id == 1)GiveResource(GObject.typeObjects.AmmoCrate);
+            else if (id == 2)GiveResource(GObject.typeObjects.EnergyCell);
+            _button.buttonWasPressed = false;
+        }
+        else
+        {
+            if (!_button.buttonWasPressed || _lever.status == 0) return;
+            _button.buttonWasPressed = false;
+        
+            if (_lever.status == 1 && id == 0) GiveResource(GObject.typeObjects.AmmoCrate);
+            if (_lever.status == -1 && id == 0) GiveResource(GObject.typeObjects.EnergyCell);
+        }
+        
+        
     }
 
     private void GiveResource(GObject.typeObjects type)
     {
-        if (amountEmptyCrates - 1 < 0) return;
+        if (amountEmptyCrates - 1 < 0 || noBoxSpawnLimit) return;
         amountEmptyCrates -= 1;
         if (type == GObject.typeObjects.AmmoCrate)
         {
@@ -94,6 +117,7 @@ public class ResourceGiver : MonoBehaviour
 
     private void UpdateText()
     {
+        if (cratesText.IsUnityNull()) return;
         cratesText.SetText("Crates: " + amountEmptyCrates.ToString());
     }
 }

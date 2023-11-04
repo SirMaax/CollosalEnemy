@@ -9,22 +9,25 @@ public class Console : MonoBehaviour
     {
         Energy,
         Ammo,
-
+        
     }
-    
-    [Header("Settings")]
+
+    [Header("Settings")] [SerializeField] private bool usesOtherInteractionRadius;
     [SerializeField] private float interactionRadius;
     [SerializeField] private bool canNotBeInteractedWith;
     [SerializeField] public bool buttonConsole;
+    [SerializeField] public bool controlConsole;
     public bool wasPressed; 
     
     // Start is called before the first frame update
     void Start()
     {
         // CircleCollider2D collder;
-        if (TryGetComponent(out CircleCollider2D collider2D)) collider2D.radius = interactionRadius;
-        if (canNotBeInteractedWith)
+        Collider2D collider2D = null;
+        if(!usesOtherInteractionRadius) if (TryGetComponent(out collider2D)) ((CircleCollider2D)collider2D).radius = interactionRadius;
+        if (canNotBeInteractedWith && !usesOtherInteractionRadius)
         {
+            if (collider2D == null) return;
             collider2D.enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
         }
@@ -50,6 +53,7 @@ public class Console : MonoBehaviour
         // if (canNotBeInteractedWith) return;
         if (!col.gameObject.CompareTag("Player")) return;
         Player player = col.gameObject.GetComponent<Player>();
+        PlayerLeavesConsole();
         player.RemoveConsole(this);
     }
 
@@ -64,5 +68,10 @@ public class Console : MonoBehaviour
      public void PressButton()
      {
          wasPressed = true;
+     }
+
+     public virtual void PlayerLeavesConsole()
+     {
+         
      }
 }

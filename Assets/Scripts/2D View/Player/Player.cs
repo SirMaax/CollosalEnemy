@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
+    
+    
     [Header("Status")] 
     public bool isCarrying;
     public bool consoleNearby;
@@ -24,6 +27,7 @@ public class Player : MonoBehaviour
     
     [Header("Refs")]
     [SerializeField] private GameObject positionForCarryObject;
+    private InputHandler InputHandler;
     private MovementController _movement;
     public Rigidbody2D rb;
 
@@ -33,6 +37,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InputHandler = GetComponent<InputHandler>();
         nearestObjects = new List<GObject>();
         rb = transform.parent.GetComponent<Rigidbody2D>();
         startMass = rb.mass;
@@ -54,12 +59,8 @@ public class Player : MonoBehaviour
      */
     public void Interact()
     {
-        //Which action?
-        //    3.Pick Up
-        //    2.Drop
-        //    1.Interact with Console/etc
-        
         if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
+        else if (consoleNearby && nearestConsole.controlConsole) InteractWithConsole();
         else if (isCarrying && consoleNearby) InteractWithConsole();
     }
 
@@ -155,5 +156,9 @@ public class Player : MonoBehaviour
         carriedObject.transform.parent.position = positionForCarryObject.transform.position;
     }
 
+    public void UsingControlStation(bool useStatus)
+    {
+        InputHandler.TogglePlayerIsControllingMech();
+    }
     
 } 

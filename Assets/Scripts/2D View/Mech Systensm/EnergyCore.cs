@@ -9,11 +9,13 @@ public class EnergyCore : MonoBehaviour
     [SerializeField] private float energyLevel;
     [SerializeField] private float energyDrain;
     [SerializeField] private float energyRefillAmount;
+    
     private int maxEnergy;
     
     [Header("Settings")] 
     [SerializeField] private float coolDownBetweenEnergyDrain;
-
+    [SerializeField] private bool infiteEnergy;
+    
     private bool once = true;
     [SerializeField] private float scoreNoEnergy;
     
@@ -34,7 +36,8 @@ public class EnergyCore : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   
+    {
+        if (infiteEnergy) return;
         if(energyLevel==0)
         {
             if (once)
@@ -124,6 +127,7 @@ public class EnergyCore : MonoBehaviour
      */
     public bool CheckIfEnoughEnergyForDrainThenDrain(float amountEnergy)
     {
+        if (infiteEnergy) return true;
         bool enoughEnergy = false;
         if (energyLevel - amountEnergy > 0)
         {
