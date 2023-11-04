@@ -1,24 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class ControlConsole : Console
 {
     [Header("Variables")] 
     private bool isInUse = false;
-    public override void Interact(Player player)
+    [SerializeField] private ControlStationType type;
+    
+    public enum ControlStationType
     {
-        if (!isInUse)
-        {
-            player.UsingControlStation(true);
-            isInUse = true;
-        }
-        else
-        {
-            isInUse = false;
-            player.UsingControlStation(false);
-        }
+        movement,
+        turning,
     }
     
     
+    public override void Interact(Player player)
+    {
+        switch (type )
+        {
+            case ControlStationType.movement:
+                ControlStation(player);
+                break;
+            case ControlStationType.turning:
+                TurningStation(player);
+                break;
+        }
+        
+
+    }
+
+    private void ControlStation(Player player)
+    {
+        player.inputHandler.TogglePlayerIsControllingMech();
+    }
+
+    private void TurningStation(Player player)
+    {
+        player.inputHandler.TogglePlayerIsTurningMech();
+    }
 }

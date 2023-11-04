@@ -7,7 +7,8 @@ using UnityEngine.InputSystem;
 public class InputHandler : MonoBehaviour
 {
     [Header("Own Logic")] 
-    public bool PlayerIsControllingMech;
+    private bool PlayerIsControllingMech;
+    private bool playerIsTurningMech;
     
     [Header("Character Input Values")]
     public Vector2 move;
@@ -21,7 +22,8 @@ public class InputHandler : MonoBehaviour
     public bool cursorInputForLook = true;
 
     [Header("Refs")] 
-    [SerializeField]private MechMovement _mechMovement;
+    private MechMovement _mechMovement;
+    private MechCanon _mechCanon;
     [SerializeField]private MovementController _movement;
     [SerializeField]private MovementController _movement1;
     [SerializeField]private MovementController _movement2;
@@ -50,7 +52,9 @@ public class InputHandler : MonoBehaviour
     
     private void Start()
     {
-            
+        GameObject mech = GameObject.Find("Mech");
+        _mechMovement = mech.GetComponentInChildren<MechMovement>();
+        _mechCanon = mech.GetComponentInChildren<MechCanon>();
     }
     
     public void OnMove(InputValue value)
@@ -118,6 +122,12 @@ public class InputHandler : MonoBehaviour
         if (PlayerIsControllingMech)
         {
             _mechMovement.move = newMoveDirection;
+            _movement.move = Vector2.zero;
+        }
+        else if (playerIsTurningMech)
+        {
+            _mechCanon.move = newMoveDirection;
+            _movement.move = Vector2.zero;
         }
         else
         {
@@ -191,6 +201,19 @@ public class InputHandler : MonoBehaviour
         else
         {
             PlayerIsControllingMech = true;
+        }
+    }
+
+    public void TogglePlayerIsTurningMech()
+    {
+        if (playerIsTurningMech)
+        {
+            playerIsTurningMech = false;
+            _mechCanon.move = Vector2.zero;
+        }
+        else
+        {
+            playerIsTurningMech = true;
         }
     }
 }

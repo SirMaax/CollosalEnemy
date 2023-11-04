@@ -1,11 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using Unity.Mathematics;
-using UnityEditor.UIElements;
 using UnityEngine;
-using Quaternion = UnityEngine.Quaternion;
-using Vector2 = UnityEngine.Vector2;
+
 
 public class MechMovement : MonoBehaviour
 {
@@ -25,7 +19,7 @@ public class MechMovement : MonoBehaviour
     private Vector2 slowDownInput;
     public Vector2 move;
     private int slowDown;
-    private Vector2 position;
+    public Vector3 position;
     [Header("Refs")] 
     private MechCanon _mechCanon;
 // Start is called before the first frame update

@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     
     [Header("Refs")]
     [SerializeField] private GameObject positionForCarryObject;
-    private InputHandler InputHandler;
+    public InputHandler inputHandler;
     private MovementController _movement;
     public Rigidbody2D rb;
 
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InputHandler = GetComponent<InputHandler>();
+        inputHandler = GetComponent<InputHandler>();
         nearestObjects = new List<GObject>();
         rb = transform.parent.GetComponent<Rigidbody2D>();
         startMass = rb.mass;
@@ -156,9 +156,9 @@ public class Player : MonoBehaviour
         carriedObject.transform.parent.position = positionForCarryObject.transform.position;
     }
 
-    public void UsingControlStation(bool useStatus)
+    public void Disable(bool useStatus)
     {
-        InputHandler.TogglePlayerIsControllingMech();
+        
     }
     
 } 
