@@ -6,7 +6,6 @@ using UnityEngine;
 public class ControlConsole : Console
 {
     [Header("Variables")] 
-    private bool isInUse = false;
     [SerializeField] private ControlStationType type;
     
     public enum ControlStationType

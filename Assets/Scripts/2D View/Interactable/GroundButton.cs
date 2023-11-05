@@ -14,7 +14,6 @@ public class GroundButton : MonoBehaviour
         Activation,
         
     }
-
     [Header("Attributes")] 
     [SerializeField] private float activationForce;
     [SerializeField] private float buttonCooldown;

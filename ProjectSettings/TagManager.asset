@@ -9,6 +9,7 @@ TagManager:
   - Object
   - GM
   - Mech
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -63,4 +64,10 @@ TagManager:
     locked: 0
   - name: Mech
     uniqueID: 2199467325
+    locked: 0
+  - name: 2D Background
+    uniqueID: 1116037273
+    locked: 0
+  - name: 2D Mechs
+    uniqueID: 113439431
     locked: 0

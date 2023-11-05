@@ -58,7 +58,7 @@ public class MechMovement : MonoBehaviour
         }
         
         CalculateMovementSpeed();
-        transform.parent.position = position + (currentMovementSpeed * Time.deltaTime * input);
+        transform.parent.position = (Vector2)position + (currentMovementSpeed * Time.deltaTime * input);
         // transform.Translate( currentMovementSpeed * Time.deltaTime * input);
         // _mechCanon.MechBodyRotated();
     }
