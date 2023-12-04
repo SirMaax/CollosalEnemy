@@ -14,6 +14,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private float initialJumpForce;
+
     
     [Header("Fields")] 
     public Vector2 move;
@@ -25,6 +26,7 @@ public class MovementController : MonoBehaviour
     [Header("Refs")] 
     private Rigidbody2D rb;
     [SerializeField] private Transform groundCheckTransform;
+    
     
     
     // Start is called before the first frame update
@@ -113,4 +115,6 @@ public class MovementController : MonoBehaviour
         grounded = true;
         
     }
+
+    
 }

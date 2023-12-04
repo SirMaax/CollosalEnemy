@@ -183,8 +183,7 @@ public class EventSystem : MonoBehaviour
 
     private IEnumerator Attacked(int time)
     {
-        //TODO SOUND of attack
-        SoundManager.Play(0);
+        
         for (int i = 0; i < time; i++)
         {
             UpdateIncomingAttackText(time - i);
@@ -203,7 +202,6 @@ public class EventSystem : MonoBehaviour
             float x = Random.Range(minAttackCoordinateX, maxAttackCoordinateX);
             float y = Random.Range(minAttackCoordinateY, maxAttackCoordinateY);
             _environmentController.ApplyEffectFrom(new Vector2(x, y));
-            SoundManager.Play(5);
         }
         incomingAttackText.SetText("Currently not targeted");
         float timeNew = Random.Range(minTimeBetweenAttacks, maxTimeBetweenAttacks);

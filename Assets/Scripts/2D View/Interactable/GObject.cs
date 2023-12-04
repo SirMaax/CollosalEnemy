@@ -130,6 +130,12 @@ public class GObject : MonoBehaviour
         Drop(Vector2.zero);
         ApplyForceInDirection(Vector2.zero);
     }
+    
+    public void Eject(Vector2 direction)
+    {
+        Drop(Vector2.zero);
+        ApplyForceInDirection(direction);
+    }
 
     private void ChangeCrateTypeToEmpty()
     {

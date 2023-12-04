@@ -7,10 +7,13 @@ using UnityEngine;
 
 public class ResourceHoldingPlace : Console
 {
-    [Header("Attributes")]
-    [SerializeField] private GObject.typeObjects typeConsole;
+    [Header("Attributes")] [SerializeField]
+    private GObject.typeObjects typeConsole;
+
     public bool isLoaded;
+    public bool isEjectingResource = true;
     public bool sameLoadingSpace;
+    [SerializeField] private Vector2 ejectDirection;
 
     [Header("Refs")] [SerializeField] public GameObject resourcePlace;
 
@@ -18,16 +21,14 @@ public class ResourceHoldingPlace : Console
 
     void Start()
     {
-        
     }
-    
+
     // Update is called once per frame
     void Update()
     {
-
     }
 
-    public override void Interact(Player player )
+    public override void Interact(Player player)
     {
         SoundManager.Play(8);
         switch (typeConsole)
@@ -38,7 +39,6 @@ public class ResourceHoldingPlace : Console
             case GObject.typeObjects.AmmoCrate:
                 AmmoConsole(player);
                 break;
-
         }
     }
 
@@ -51,19 +51,17 @@ public class ResourceHoldingPlace : Console
         holdedObject.SetPosition(resourcePlace.transform.position);
         isLoaded = true;
         holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
-
     }
 
     private void AmmoConsole(Player _player)
     {
         if (_player.carriedObject.type != GObject.typeObjects.AmmoCrate) return;
-    
+
         AcceptResource(_player);
         holdedObject = _player.TakeResource();
         holdedObject.SetPosition(resourcePlace.transform.position);
         isLoaded = true;
         holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
-
     }
 
     private void AcceptResource(Player _player)
@@ -71,7 +69,6 @@ public class ResourceHoldingPlace : Console
         // _player.carriedObject.UsedWithConsole(typeConsole);
         _player.carriedObject.transform.parent
             .transform.rotation = quaternion.Euler(Vector3.zero);
-
     }
 
     public bool DepleteResource()
@@ -81,8 +78,17 @@ public class ResourceHoldingPlace : Console
 
     public void EjectShell()
     {
-        SoundManager.Play(4);
-        holdedObject.Eject();
+        if (isEjectingResource)
+        {
+            SoundManager.Play(4);
+            if (ejectDirection != Vector2.zero) holdedObject.Eject(ejectDirection);
+            else holdedObject.Eject();
+        }
+        else
+        {
+            holdedObject.ConsumeThis(0);
+        }
+
         NotHoldingAnymore();
     }
 
@@ -91,8 +97,6 @@ public class ResourceHoldingPlace : Console
         isLoaded = false;
         holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 2;
         holdedObject = null;
-        
-        
     }
 
     public void PlaceResource(GObject newObject)

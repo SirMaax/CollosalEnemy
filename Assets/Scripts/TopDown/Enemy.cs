@@ -12,8 +12,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int health;
     [SerializeField] private float movementSpeed;
     
+    
     [Header("Behvaior")] 
     public BehaviorState state;
+    private bool isMoving;
     private bool acting;
 
     [Header("Transition")]
@@ -26,6 +28,8 @@ public class Enemy : MonoBehaviour
     [Header("Refs")] 
     private MechMovement _mech;
     [SerializeField] private GameObject bulletPrefab;
+
+    [Header("Other")] private Vector2 movementDirection;
     public enum BehaviorState
     {
         Walking,
@@ -41,7 +45,13 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log((_mech.position - transform.position).magnitude);
+        // Debug.Log((_mech.position - transform.position).magnitude);
+        if (isMoving)
+        {
+            transform.rotation = Quaternion.FromToRotation(transform.forward, movementDirection);
+            transform.Translate( movementSpeed * Time.deltaTime* movementDirection);
+        }
+        
         if (acting) return;
         
         switch (state)
@@ -55,7 +65,9 @@ public class Enemy : MonoBehaviour
             case BehaviorState.Attacking:
                 Attacking();
                 break;
-        }        
+        }
+
+        
     }
     
     #region Walking State    
@@ -86,30 +98,31 @@ public class Enemy : MonoBehaviour
 
     private void RandomMovement()
     {
-        float howLongMoving = Random.Range(0.5f, 3f);
+        float howLongMoving = Random.Range(3f, 3f);
         float x = Random.Range(-1f, 1f);
         float y = Random.Range(-1f, 1f);
-        StartCoroutine(MoveInDirectionForSeconds(new Vector2(x, y).normalized, howLongMoving));
+        movementDirection = new Vector2(x, y).normalized;
+        transform.rotation = Quaternion.FromToRotation(transform.forward , movementDirection);
+        StartCoroutine(MoveInDirectionForSeconds(howLongMoving));
     }
 
-    private IEnumerator MoveInDirectionForSeconds(Vector2 dir, float time)
+    private IEnumerator MoveInDirectionForSeconds(float time)
     {
         acting = true;
-        transform.rotation = Quaternion.FromToRotation(Vector3.down, dir);
-        int multiplier = 2;
-        for (int i = 0; i < time*multiplier; i++)
-        {
-            yield return new WaitForSeconds(time / multiplier);
-            transform.Translate( movementSpeed * Time.deltaTime* dir);
-        }
+        isMoving = true; 
+        yield return new WaitForSeconds(time);
         acting = false;
+        isMoving = false;
     }
 
     private void MoveTowardsTarget()
     {
         Vector2 dir = (_mech.position - transform.position).normalized;
         float howLongMoving = Random.Range(1f, 2f);
-        StartCoroutine(MoveInDirectionForSeconds(dir, howLongMoving));
+        movementDirection = dir;
+        transform.rotation = Quaternion.FromToRotation(transform.forward, dir);
+
+        StartCoroutine(MoveInDirectionForSeconds(howLongMoving));
     }
     /// <summary>
     /// Check if next state is available
@@ -177,16 +190,17 @@ public class Enemy : MonoBehaviour
     private void Attack()
     {
         Vector2 dir = (_mech.transform.position - transform.position).normalized;
-        Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector3.up, dir))
+        Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(transform.forward, dir))
             .GetComponent<Bullet>();
         bullet.SetAttributes(dir,Bullet.BulletType.enemy);
+        SoundManager.Play(SoundManager.Sounds.EnemyHit);
     }
     
     private bool CheckTransitionToStateGoingInRangeFromAttack()
     {
         if ((transform.position - _mech.position).magnitude > disitacneTillAttacking)
         {
-            state = BehaviorState.GoingInRange;
+            state = BehaviorState.GoingInRange; 
             return true;
         }
         return false;

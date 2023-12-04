@@ -25,12 +25,13 @@ public class EnvironmentController : MonoBehaviour
         if (test)
         {
             test = false; 
-            ApplyEffectFrom(Vector2.zero);
+            ApplyEffectFrom(new (10,20));
         }
     }
 
     public void ApplyEffectFrom(Vector2 origin)
     {
+        SoundManager.Play(SoundManager.Sounds.MechGotHit);
         //Players
         for (int i = 0; i < GameMaster.AMOUNT_PLAYER; i++)
         {

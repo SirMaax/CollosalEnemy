@@ -15,6 +15,9 @@ public class MechCanon : MonoBehaviour
     public Vector2 move;
 
     private Quaternion startRotation;
+
+    [Header("Refs")] 
+    [SerializeField] private GameObject bulletPrefab;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +41,12 @@ public class MechCanon : MonoBehaviour
 
     public void Shoot()
     {
-        //Play animation
+        Vector2 dir = transform.rotation * (new Vector2(0, 1));
+        dir.Normalize();
+        Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector2.up, dir))
+            .GetComponent<Bullet>();
+        bullet.SetAttributes(dir,Bullet.BulletType.player);
+        SoundManager.Play(SoundManager.Sounds.EnemyHit);
     }
 
     public void MechBodyRotated()
