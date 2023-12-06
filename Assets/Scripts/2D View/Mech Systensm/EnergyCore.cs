@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class EnergyCore : MonoBehaviour
+public class EnergyCore : MechSystem
 {
     [Header("Attributes")] 
     [SerializeField] private float energyLevel;
@@ -22,7 +22,7 @@ public class EnergyCore : MonoBehaviour
     [Header("Refs")] 
     [SerializeField] GroundButton buttonFillEnergy;
     [SerializeField] GroundButton buttonEjectShell;
-    [SerializeField] protected ResourceHoldingPlace console;
+    [SerializeField] protected ResourceConsole console;
     [SerializeField] private TMP_Text text; 
     [SerializeField] private TMP_Text text2; 
     
@@ -43,51 +43,42 @@ public class EnergyCore : MonoBehaviour
             if (once)
             {
                 once = false;
-                SoundManager.Play(3);
+                SoundManager.Play(SoundManager.Sounds.NotEnoughEnergy);
             }
             GameMaster.ChangeScoreBy(scoreNoEnergy);
         }
 
         if (energyLevel >= 0 && !once)
         {
-            SoundManager.Stop(3);
+            SoundManager.Stop(SoundManager.Sounds.NotEnoughEnergy);
             once = true;
         }
-        if (buttonFillEnergy.buttonWasPressed)
-        {
-            buttonFillEnergy.buttonWasPressed = false;
-            RefilEnergy();
-        }
-        else if (buttonEjectShell.buttonWasPressed)
-        {
-            buttonFillEnergy.buttonWasPressed = false;
-            EjectShell();
-        }
-
+        
         CheckEnergyLevel();
         UpdateSprite();
         UpdateText();
+    }
+
+    public override void Trigger(int whichMethod)
+    {
+        if (whichMethod == 0) RefilEnergy();
+        else if (whichMethod == 1) EjectShell();
     }
 
     private void RefilEnergy()
     {
         if (!console.isLoaded)
         {
-            Debug.Log("Refill although empty");
-            //TODO bad action 
+            //Negative result?
             return;
         }
 
         if (console.DepleteResource())
         {
-        energyLevel += energyRefillAmount;
-        if (energyLevel >= maxEnergy) energyLevel = maxEnergy;
-        Debug.Log("Energy Refilled");
+            energyLevel += energyRefillAmount;
+            if (energyLevel >= maxEnergy) energyLevel = maxEnergy;
         }
-        else
-        {
-            Debug.Log("Refill but no energy in");
-        }
+
     }
 
     private void EjectShell()
@@ -97,7 +88,7 @@ public class EnergyCore : MonoBehaviour
             //TODO bad action
             return;
         }
-        console.EjectShell();
+        console.EjectObject();
         Debug.Log("Shell ejceted");
 
     }
@@ -122,9 +113,7 @@ public class EnergyCore : MonoBehaviour
     {
         //TODO this
     }
-    /**
-     * Chcks if enough energy is leved for draining.
-     */
+
     public bool CheckIfEnoughEnergyForDrainThenDrain(float amountEnergy)
     {
         if (infiteEnergy) return true;
@@ -142,7 +131,6 @@ public class EnergyCore : MonoBehaviour
     {
         text.SetText("Energy: " +((int)energyLevel).ToString() + "/" + maxEnergy.ToString());
         text2.SetText("Energy: " +((int)energyLevel).ToString() + "/" + maxEnergy.ToString());
-
     }
     
 }

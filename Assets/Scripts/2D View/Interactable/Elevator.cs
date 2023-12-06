@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class Elevator : MonoBehaviour
+public class Elevator : MechSystem
 {
     [Header("Attribute")] [SerializeField] private float speed;
     [SerializeField] private float[] heightLevel;
@@ -32,6 +32,11 @@ public class Elevator : MonoBehaviour
         currentLevel = 0;
         startSpeed = speed;
         travelling = false;
+    }
+
+    public override void Trigger(int whichMethod = -1)
+    {
+        GoToLevel(whichMethod);
     }
 
     // Update is called once per frame

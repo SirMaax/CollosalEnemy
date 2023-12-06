@@ -26,8 +26,6 @@ public class ControlConsole : Console
                 TurningStation(player);
                 break;
         }
-        
-
     }
 
     private void ControlStation(Player player)

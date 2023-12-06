@@ -3,18 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundButton : MonoBehaviour
+public class GroundButton : Console
 {
-    public enum typeGroundButton
-    {
-        Elevator,
-        Energy,
-        Shield,
-        JumpPad,
-        Activation,
-        
-    }
+
+
     [Header("Attributes")] 
+    [SerializeField] private int whichTriggeredMethod = -1;
     [SerializeField] private float activationForce;
     [SerializeField] private float buttonCooldown;
     [SerializeField] private float buttonMovement;
@@ -23,27 +17,25 @@ public class GroundButton : MonoBehaviour
     [SerializeField] private float timeTillButtonWasNotPressedAnymore;
     [SerializeField] private float jumpPadForce;
 
-    [Header("Elevator")] [SerializeField] private int level;
-    [SerializeField] private Elevator _elevator;
 
-    [Header("Status")] private bool buttonCaBePressed;
+    [Header("Status")] 
+    private bool buttonCaBePressed = true;
     public bool buttonWasPressed;
 
-    [Header("Refs")] protected Player _player;
+    [Header("Refs")] 
+    [SerializeField] private MechSystem activatedSystem;
+    protected Player _player;
     
-
-    // Start is called before the first frame update
-    void Start()
+    public enum typeGroundButton
     {
-        buttonCaBePressed = true;
+        Elevator,
+        Energy,
+        Shield,
+        JumpPad,
+        Activation,
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    private void OnTriggerEnter2D(Collider2D col)
+    
+    protected override void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("Player"))
         {
@@ -52,13 +44,11 @@ public class GroundButton : MonoBehaviour
         }
         else if (col.gameObject.CompareTag("Object"))
         {
-            Jump(col.gameObject.GetComponentInChildren<GObject>());
+            Jump(col.gameObject.GetComponentInChildren<Object>());
         }
     }
-
-
-
-    private void OnTriggerExit2D(Collider2D col)
+    
+    protected override void OnTriggerExit2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Player")) return;
         Player player = col.gameObject.GetComponent<Player>();
@@ -67,41 +57,20 @@ public class GroundButton : MonoBehaviour
     private void ButtonPressed(Player player)
     {
         SoundManager.Play(2);
-        ButtonAnimation();
-        switch (type)
+        StartCoroutine(ButtonAnimation());
+        if (type == typeGroundButton.JumpPad)
         {
-            case typeGroundButton.Elevator:
-                ElevatorCall();
-                break;
-            case typeGroundButton.Energy:
-                EnergyLevel();
-                break;
-            case typeGroundButton.Shield:
-                Shield();
-                break;
-            case typeGroundButton.JumpPad:
-                Jump(player);
-                break;
-            case typeGroundButton.Activation:
-                
-                StopCoroutine(ButtonReset());
-                buttonWasPressed = true;
-                StartCoroutine(ButtonReset());
-                StartCoroutine(ButtonCooldown());
-                break;
+            Jump(player);
         }
+        else if (type == typeGroundButton.Shield)
+        {
+            ShieldSystems shields = (ShieldSystems)activatedSystem;
+            shields.Trigger(transform.gameObject);
+        }
+        else activatedSystem.Trigger(whichTriggeredMethod);
+        
     }
-
-    public void ElevatorCall()
-    {
-        _elevator.GoToLevel(level);
-    }
-
-    private void EnergyLevel()
-    {
-        buttonWasPressed = true;
-    }
-
+    
     private void Shield()
     {
         StopCoroutine(ButtonReset());
@@ -123,9 +92,8 @@ public class GroundButton : MonoBehaviour
         player.rb.AddForce(Vector2.up * jumpPadForce);
     }
 
-    private void Jump(GObject gObject)
+    private void Jump(Object gObject)
     {
-        
         Vector2 vel = gObject.rb.velocity;
         vel.y = 0;
         gObject.rb.velocity = vel;
@@ -138,13 +106,8 @@ public class GroundButton : MonoBehaviour
         yield return new WaitForSeconds(buttonCooldown);
         buttonCaBePressed = true;
     }
-
-    private void ButtonAnimation()
-    {
-        StartCoroutine(buttonAnimatio());
-    }
-
-    private IEnumerator buttonAnimatio()
+    
+    private IEnumerator ButtonAnimation()
     {
         transform.Translate(Vector3.down * buttonMovement);
         yield return new WaitForSeconds(0.3f);

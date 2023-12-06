@@ -12,12 +12,12 @@ public class Player : MonoBehaviour
     public bool isCarrying;
     public bool consoleNearby;
     public bool objectNearby;
-    public GObject carriedObject;
+    public Object carriedObject;
     
     
     [Header("Interaction")] 
     private Console nearestConsole;
-    private List<GObject> nearestObjects;
+    private List<Object> nearestObjects;
 
     [Header("Settings")] 
     [SerializeField] private float heavyMass;
@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         inputHandler = GetComponent<InputHandler>();
-        nearestObjects = new List<GObject>();
+        nearestObjects = new List<Object>();
         rb = transform.parent.GetComponent<Rigidbody2D>();
         startMass = rb.mass;
 
@@ -73,17 +73,17 @@ public class Player : MonoBehaviour
     private void Drop()
     {
         SoundManager.Play(12);
-        carriedObject.Drop(rb.velocity);
+        carriedObject.DropObject(rb.velocity);
         isCarrying = false;
         ResetWeight();
         carriedObject = null;
     }
-    public GObject TakeResource()
+    public Object TakeResource()
     {
         isCarrying = false;
         ResetWeight();
         var temp = carriedObject;
-        RemoveGObject(carriedObject);
+        ThisIsNotAnymoreInPlayerPickUpRadius(carriedObject);
         carriedObject = null;
         return temp;
     }
@@ -99,14 +99,13 @@ public class Player : MonoBehaviour
         nearestConsole = null;
     }
 
-    public void SetGOjbect(GObject gObject)
+    public void ThisIsInPlayerPickUpRadius(Object gObject)
     {
-        //Shoudlnt happen but still
         if (nearestObjects.Contains(gObject)) return; 
         nearestObjects.Add(gObject);
     }
 
-    public void RemoveGObject(GObject gObject)
+    public void ThisIsNotAnymoreInPlayerPickUpRadius(Object gObject)
     {
         nearestObjects.Remove(gObject);
     }
@@ -116,7 +115,7 @@ public class Player : MonoBehaviour
         if (!objectNearby) return;
         SoundManager.Play(11);
         //Get closest interactable object
-        GObject cloestObject = null;
+        Object cloestObject = null;
         float smallestDistance = 10000;
         foreach (var ele in nearestObjects)
         {
@@ -129,8 +128,8 @@ public class Player : MonoBehaviour
         }
         
         //PickUp
-        if (!cloestObject.canPickUp) return;
-        if (!cloestObject.PickUp(false)) return;
+        if (!cloestObject.canBePickedUp) return;
+        if (!cloestObject.PickUpObject(false)) return;
         carriedObject = cloestObject;
         isCarrying = true;
         ChangeWeight();

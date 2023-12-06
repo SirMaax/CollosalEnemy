@@ -1,148 +1,116 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
-public class GObject : MonoBehaviour
+public class Object : MonoBehaviour
 {
+    
+    [Header("State")] public typeObjects type;
+    
+    public bool canBePickedUp;
+    private bool isInPickUpRange;
+    private bool isCarried = false;
+    
+    [Header("Ejection Force")]
+    [SerializeField] private float minSpinForce;
+    [SerializeField] private float maxSpinForce;
+    [SerializeField] private float maxForce;
+    [SerializeField] private float minForce;
+
+    [Header("Refs")] 
+    public Rigidbody2D rb;
+    private BoxCollider2D physicalBoxCollider;
+    private Transform parent;
+    
     public enum typeObjects
     {
         EnergyCell,
         AmmoCrate,
         EmptyCrate,
     }
-
-    [Header("Attributes")] [SerializeField]
-    private int uses;
-    [SerializeField] private float minSpinForce;
-    [SerializeField] private float maxSpinForce;
-    [SerializeField] private float maxForce;
-    [SerializeField] private float minForce;
-    [SerializeField] private Sprite empty;
-
-    [Header("Status")] 
-    private bool isInPickUpRange;
-    public bool canPickUp;
-    private bool isCarried = false;
-    public typeObjects type;
-
-    [Header("Refs")] public Rigidbody2D rb;
-    private BoxCollider2D physicalBoxCollider;
-
-    private Transform parent;
-
-    // Start is called before the first frame update
+    
     public void Start()
     {
         parent = transform.parent;
         rb = parent.GetComponent<Rigidbody2D>();
         physicalBoxCollider = parent.GetComponent<BoxCollider2D>();
-        canPickUp = true;
+        canBePickedUp = true;
     }
-
+    
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Player") || isCarried) return;
         Player player = col.gameObject.GetComponent<Player>();
-        player.SetGOjbect(this);
+        player.ThisIsInPlayerPickUpRadius(this);
         isInPickUpRange = true;
     }
-
+    
     private void OnTriggerExit2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Player") || isCarried) return;
         Player player = col.gameObject.GetComponent<Player>();
-        player.RemoveGObject(this);
+        player.ThisIsNotAnymoreInPlayerPickUpRadius(this);
         isInPickUpRange = false;
     }
-
-    public bool PickUp(bool pickedUpByStation)
+    
+    public bool PickUpObject(bool isPickedUpByContainer)
     {
-        if (!pickedUpByStation) if ( !canPickUp) return false;
-        //TODO random rotation when picking stuff up?
-        canPickUp = false;
+        if (!isPickedUpByContainer && !canBePickedUp) return false;
+        canBePickedUp = false;
         isInPickUpRange = false;
         isCarried = true;
         DisableInfluence();
         return true;
     }
-
-    public void Drop(Vector2 velcoity)
+    
+    public void DropObject(Vector2 velcoity)
     {
-        canPickUp = true;
+        canBePickedUp = true;
         isCarried = false;
         EnableInfluence();
         rb.velocity = velcoity * 1.25f;
     }
-
+    
     private void DisableInfluence()
     {
         rb.simulated = false;
         physicalBoxCollider.enabled = false;
     }
-
+    
     private void EnableInfluence()
     {
         rb.simulated = true;
         physicalBoxCollider.enabled = true;
         StartCoroutine(ChangeLayer());
     }
-
+    
     public void SetPosition(Vector2 position)
     {
         parent.position = position;
     }
 
-    public void UsedWithConsole(typeObjects typeConsole)
-    {
-        switch (typeConsole)
-        {
-            case typeObjects.EnergyCell:
-                //Nothing changes
-                break;
-            case typeObjects.AmmoCrate:
-                // ConsumeThis(2f);
-                //Nothing changes
-
-                break;
-        }
-    }
-
-    public void ConsumeThis(float time)
+    public virtual void UsedWithConsole(){ }
+    
+    public void DestroyIn(float time)
     {
         Destroy(parent.gameObject, time);
         Destroy(gameObject, time);
     }
-
-    /**
-     * Return yes if depleted else no
-     */
-    public bool UseAndCheckIfDepleted()
-    {
-        if (uses <= 0) return false;
-        uses -= 1;
-        if (uses <= 0)  ChangeCrateTypeToEmpty();
-        return true;
-    }
-
+    
+    
+    
     public void Eject()
     {
-        Drop(Vector2.zero);
+        DropObject(Vector2.zero);
         ApplyForceInDirection(Vector2.zero);
     }
     
     public void Eject(Vector2 direction)
     {
-        Drop(Vector2.zero);
+        DropObject(Vector2.zero);
         ApplyForceInDirection(direction);
     }
-
-    private void ChangeCrateTypeToEmpty()
-    {
-        type = typeObjects.EmptyCrate;
-        parent.GetComponent<SpriteRenderer>().sprite = empty;
-    }
-
+    
     public void ApplyForceInDirection(Vector2 direction)
     {
         if (direction == Vector2.zero)
@@ -160,12 +128,12 @@ public class GObject : MonoBehaviour
 
         rb.AddTorque(Random.Range(minSpinForce,maxSpinForce));
     }
-
+    
     private IEnumerator ChangeLayer()
     {
         transform.parent.gameObject.layer = 12;
         yield return new WaitForSeconds(0.3f);
         transform.parent.gameObject.layer = 8;
-
     }
+    
 }

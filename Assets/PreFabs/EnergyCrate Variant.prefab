@@ -163,5 +163,37 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 0.5849057
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1859664853766003637, guid: 189da12d283f6cc4f97ece368271bc9b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 189da12d283f6cc4f97ece368271bc9b, type: 3}
+--- !u!50 &2982234200909384388 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 1859664852442330757, guid: 189da12d283f6cc4f97ece368271bc9b, type: 3}
+  m_PrefabInstance: {fileID: 3507703089532714049}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2982234202803758987 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1859664853766003658, guid: 189da12d283f6cc4f97ece368271bc9b, type: 3}
+  m_PrefabInstance: {fileID: 3507703089532714049}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1291747315350463465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2982234202803758987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a522264eaeef7c48a73b220c674131b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  canBePickedUp: 1
+  minSpinForce: 5
+  maxSpinForce: 5
+  maxForce: 5
+  minForce: 5
+  rb: {fileID: 2982234200909384388}
+  uses: 1
+  empty: {fileID: 21300000, guid: 428feac971fedfe4e9b2b49296f1c0ef, type: 3}

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WasteSystem : MonoBehaviour
+public class WasteSystem : MechSystem
 {
     [Header("Refs")] 
     [SerializeField]private ResourceGiver giver;
@@ -24,7 +24,7 @@ public class WasteSystem : MonoBehaviour
         if (col.gameObject.CompareTag("Object"))
         {
             giver.IncreaseNumberEmptyCrates();
-            col.GetComponentInChildren<GObject>().ConsumeThis(1f);
+            col.GetComponentInChildren<Object>().DestroyIn(1f);
         }
         
     }

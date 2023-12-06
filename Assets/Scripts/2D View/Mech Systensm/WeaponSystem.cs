@@ -4,36 +4,34 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class WeaponSystem : MonoBehaviour
+public class WeaponSystem : MechSystem
 {
-    [Header("Score")] 
-    [SerializeField] private float baseScore;
     
     [Header("Attributes")] 
     [SerializeField] private float activeEnergyDrain;
-    
-    [Header("Settings")] 
-    [SerializeField] private bool doorUsed;
 
     [Header("Refs")] 
-    [SerializeField] GroundButton buttonShot;
-    [SerializeField] private ResourceHoldingPlace[] allConsoles;
+    [SerializeField] private ResourceConsole[] allConsoles;
     [SerializeField] private TMP_Text[] consoleText;
     [SerializeField] private TMP_Text cannonReadyText;
-    [SerializeField] private Door door;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private MechCanon mechCanon;
     private EnergyCore core;
+    
     // Start is called before the first frame update
     void Start()
     {
         core = GameObject.FindWithTag("Core").GetComponent<EnergyCore>();
     }
 
+    public override void Trigger(int whichMethod=-1)
+    {
+        Shot();
+    }
+
     // Update is called once per frame
     void Update()
     {
-        Shot();
         if (!cannonReadyText.IsUnityNull())
         {
             bool atleastAmmoBoxLoaded = false;
@@ -57,9 +55,6 @@ public class WeaponSystem : MonoBehaviour
 
     private void Shot()
     {
-        if (!buttonShot.buttonWasPressed) return;
-        buttonShot.buttonWasPressed = false;
-        if (doorUsed && !door.isClosed) return;
 
         bool atleastAmmoBoxLoaded = false;
         foreach (var console in allConsoles)
@@ -71,20 +66,16 @@ public class WeaponSystem : MonoBehaviour
         
         if (!core.CheckIfEnoughEnergyForDrainThenDrain(activeEnergyDrain))
         {
-            SoundManager.Play(7);
+            SoundManager.Play(SoundManager.Sounds.NoEnergyLeft);
             return;
-            
         }
         
-        int counter = 0;
         foreach (var console in allConsoles)
         {
             if (!console.isLoaded) continue;
-            counter += 1;
             console.DepleteResource();
-            console.EjectShell();
+            console.EjectObject();
         }
-
         mechCanon.Shoot();
     }
 }

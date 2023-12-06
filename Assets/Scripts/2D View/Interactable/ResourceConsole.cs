@@ -5,69 +5,58 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ResourceHoldingPlace : Console
+public class ResourceConsole : Console
 {
     [Header("Attributes")] [SerializeField]
-    private GObject.typeObjects typeConsole;
-
+    private Object.typeObjects typeConsole;
     public bool isLoaded;
     public bool isEjectingResource = true;
     public bool sameLoadingSpace;
     [SerializeField] private Vector2 ejectDirection;
 
-    [Header("Refs")] [SerializeField] public GameObject resourcePlace;
-
-    private GObject holdedObject;
-
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
+    [Header("Refs")] 
+    [SerializeField] public GameObject resourcePlace;
+    private Resource holdedObject;
+    
     public override void Interact(Player player)
     {
-        SoundManager.Play(8);
+        if (holdedObject != null) return;
+        SoundManager.Play(SoundManager.Sounds.Interact);
         switch (typeConsole)
         {
-            case GObject.typeObjects.EnergyCell:
+            case Object.typeObjects.EnergyCell:
                 EnergyConsole(player);
                 break;
-            case GObject.typeObjects.AmmoCrate:
+            case Object.typeObjects.AmmoCrate:
                 AmmoConsole(player);
                 break;
         }
     }
-
-    private void EnergyConsole(Player _player)
+    private void EnergyConsole(Player player)
     {
-        if (_player.carriedObject.type != GObject.typeObjects.EnergyCell) return;
+        if (player.carriedObject.type != Object.typeObjects.EnergyCell) return;
 
-        AcceptResource(_player);
-        holdedObject = _player.TakeResource();
+        AcceptResource(player);
+        holdedObject = (Resource) player.TakeResource();
         holdedObject.SetPosition(resourcePlace.transform.position);
         isLoaded = true;
         holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
     }
 
-    private void AmmoConsole(Player _player)
+    private void AmmoConsole(Player player)
     {
-        if (_player.carriedObject.type != GObject.typeObjects.AmmoCrate) return;
+        if (player.carriedObject.type != Object.typeObjects.AmmoCrate) return;
 
-        AcceptResource(_player);
-        holdedObject = _player.TakeResource();
+        AcceptResource(player);
+        holdedObject = (Resource) player.TakeResource();
         holdedObject.SetPosition(resourcePlace.transform.position);
         isLoaded = true;
         holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
     }
 
-    private void AcceptResource(Player _player)
+    private void AcceptResource(Player player)
     {
-        // _player.carriedObject.UsedWithConsole(typeConsole);
-        _player.carriedObject.transform.parent
+        player.carriedObject.transform.parent
             .transform.rotation = quaternion.Euler(Vector3.zero);
     }
 
@@ -76,8 +65,9 @@ public class ResourceHoldingPlace : Console
         return holdedObject.UseAndCheckIfDepleted();
     }
 
-    public void EjectShell()
+    public void EjectObject()
     {
+        if (holdedObject == null) return;
         if (isEjectingResource)
         {
             SoundManager.Play(4);
@@ -86,7 +76,7 @@ public class ResourceHoldingPlace : Console
         }
         else
         {
-            holdedObject.ConsumeThis(0);
+            holdedObject.DestroyIn(0);
         }
 
         NotHoldingAnymore();
@@ -99,11 +89,11 @@ public class ResourceHoldingPlace : Console
         holdedObject = null;
     }
 
-    public void PlaceResource(GObject newObject)
+    public void PlaceResource(Resource newObject)
     {
         isLoaded = true;
         holdedObject = newObject;
-        newObject.PickUp(true);
+        newObject.PickUpObject(true);
         holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
     }
 }
