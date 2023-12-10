@@ -11,8 +11,8 @@ public class Console : MonoBehaviour
     [SerializeField] private bool canNotBeInteractedWith;
     [SerializeField] public bool buttonConsole;
     [SerializeField] public bool controlConsole;
-    public bool wasPressed; 
-    
+    public bool wasPressed;
+    protected Player player;
     public enum enumResource
     {
         Energy,
@@ -31,13 +31,20 @@ public class Console : MonoBehaviour
             collider2D.enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
         }
+
+        player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
+    protected virtual void PlayerEntersConsole()
+    {
+        player.SetConsole(this);
+    }
+    
     protected virtual void OnTriggerEnter2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Player")) return;
-        Player player = col.gameObject.GetComponent<Player>();
-        player.SetConsole(this);
+        PlayerEntersConsole();
+        
     }
 
     protected virtual void OnTriggerExit2D(Collider2D col)
@@ -50,7 +57,7 @@ public class Console : MonoBehaviour
 
      public virtual void Interact(Player player) { }
      
-     public virtual void PlayerLeavesConsole() { }
+     protected virtual void PlayerLeavesConsole() { }
      
      public virtual void PressButton()
      {

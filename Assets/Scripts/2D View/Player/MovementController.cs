@@ -14,54 +14,53 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private float initialJumpForce;
+    [SerializeField] private float rotatingSpeed;
+    [SerializeField] private float maxDegree;
 
-    
     [Header("Fields")] 
     public Vector2 move;
     private bool grounded = false;
     private bool canJump = true;
     public bool jumpButtonPressed;
     private bool facingRight;
+    private float speed;
+    public bool canMove = true;
+    private Vector2 lastPosition;
+    private Quaternion baseRotation;
     
     [Header("Refs")] 
     private Rigidbody2D rb;
     [SerializeField] private Transform groundCheckTransform;
-    
-    
+    [SerializeField] private GameObject rotatingPoint;
+    [SerializeField]private ParticleSystem particleSystem;
     
     // Start is called before the first frame update
     void Start()
     {
+        canMove = true;
         facingRight = true;
+        baseRotation = rotatingPoint.transform.rotation;
         rb = transform.parent.GetComponent<Rigidbody2D>();
+        particleSystem = GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        speed = (lastPosition - (Vector2)rb.position).magnitude;
+        lastPosition = rb.position;
+
+        ParticleSystemUpdate();
         CheckGrounded();
         Move();
         Jump();
         Clamp();
+        RotateSprite();
     }
 
     public void Jump()
     {
-        if (facingRight && move.x < 0)
-        {
-            facingRight = false;
-            Vector3 scale = transform.localScale;
-            scale.x *= -1;
-            transform.localScale = scale;   
-        }
-
-        if (!facingRight && move.x > 0)
-        {
-            facingRight = true;
-            Vector3 scale = transform.localScale;
-            scale.x *= -1;
-            transform.localScale = scale;   
-        }
+        
         
         if (!CanJump()) return;
         canJump = false;
@@ -71,7 +70,7 @@ public class MovementController : MonoBehaviour
 
     public void Move()
     {
-        if (move == Vector2.zero) return;
+        if (move == Vector2.zero || !canMove ) return;
 
         rb.AddForce( Time.deltaTime *  movementSpeed *  move );
     }
@@ -104,7 +103,7 @@ public class MovementController : MonoBehaviour
     private IEnumerator JumpAction()
     {
         grounded = false;
-        SoundManager.Play(13);
+        SoundManager.Play(SoundManager.Sounds.Jump);
         rb.AddForce(Vector2.up * initialJumpForce);
         yield return new WaitForSeconds(jumpCooldown);
         canJump = true;
@@ -113,8 +112,71 @@ public class MovementController : MonoBehaviour
     private void TouchedGround()
     {
         grounded = true;
-        
     }
 
-    
+    private void RotateSprite()
+    {
+        if (!grounded) return;
+        
+        
+        if (speed == 0 && canMove)
+        {
+            rotatingPoint.transform.rotation = baseRotation;
+            return;
+        }
+        
+        float angle = Quaternion.Angle(Quaternion.Euler(Vector3.up), rotatingPoint.transform.rotation);
+        if (move.x == 0)
+        {
+            if (angle < 1.5)
+            {
+                rotatingPoint.transform.rotation = baseRotation;
+                return;
+            }
+
+            float dotProduct = Vector3.Dot(Vector3.right, rotatingPoint.transform.up);
+            int direction = 0;
+            if (dotProduct < 0) direction = -1;
+            if (dotProduct > 0) direction = 1;
+            //If on treadmill return faster to natural pose
+            if(!canMove) rotatingPoint.transform.Rotate(new Vector3(0,0,direction), rotatingSpeed*2);
+            else rotatingPoint.transform.Rotate(new Vector3(0,0,direction), rotatingSpeed/3);
+            return;
+        }
+        if (angle > maxDegree) return;
+        
+        int dir = facingRight ? -1 : 1;
+        rotatingPoint.transform.Rotate(new Vector3(0,0,dir), rotatingSpeed);
+    }
+
+    public void TranslatePlayer(float x, float y, float z)
+    {
+        transform.parent.Translate(x,y,z);
+    }
+
+    public Vector2 GetPosition()
+    {
+        return rb.position;
+    }
+
+    private void ParticleSystemUpdate()
+    {
+        float particleAmount = Mathf.Lerp(0, 25, rb.velocity.magnitude);
+        var emission = particleSystem.emission;
+        if(!canMove && move.x != 0) emission.rateOverTime = 25;
+        else if (!grounded) emission.rateOverTime = 0;
+        else  emission.rateOverTime = (int)particleAmount;
+        
+        if (facingRight && move.x < 0)
+        {
+            facingRight = false;
+            particleSystem.transform.rotation =new Quaternion(-0.594704449f, 0.382526636f, -0.382526636f, 0.594704449f);
+        }
+        
+        if (!facingRight && move.x > 0)
+        {
+            facingRight = true;
+            particleSystem.transform.rotation  = new Quaternion(-0.597565055f, -0.37804234f, 0.382526636f, 0.594704449f);
+        }
+    }
 }

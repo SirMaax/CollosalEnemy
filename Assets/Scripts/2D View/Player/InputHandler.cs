@@ -113,32 +113,33 @@ public class InputHandler : MonoBehaviour
 
     public void MoveInput(Vector2 newMoveDirection)
     {
-        if (newMoveDirection[0] == 0 && newMoveDirection[1] == 0)
-        {
-            // sprintToggle = false;
-            // sprint = false;
-        }
-
+        if (newMoveDirection.y > 0) _movement.jumpButtonPressed = true;
+        else _movement.jumpButtonPressed = false;
         if (PlayerIsControllingMech)
         {
+            
             _mechMovement.move = newMoveDirection;
             _movement.move = Vector2.zero;
+            _movement.jumpButtonPressed = false;
+            return;
         }
-        else if (playerIsTurningMech)
+        if (playerIsTurningMech)
         {
+            if (_movement.jumpButtonPressed)
+            {
+                TogglePlayerIsTurningMech();
+                return;
+            }
             _mechCanon.move = newMoveDirection;
-            _movement.move = Vector2.zero;
+            // _movement.move = Vector2.zero;
+            _movement.jumpButtonPressed = false;
         }
-        else
-        {
-            if (newMoveDirection.y > 0) _movement.jumpButtonPressed = true;
-            else _movement.jumpButtonPressed = false;
         
-            //Remove Y component
-            newMoveDirection.y = 0;
-            _movement.move = newMoveDirection;
+        //Remove Y component
+        newMoveDirection.y = 0;
+        _movement.move = newMoveDirection;
             
-        }
+        
     }
     public void MoveInput1(Vector2 newMoveDirection)
     {
@@ -204,16 +205,19 @@ public class InputHandler : MonoBehaviour
         }
     }
 
-    public void TogglePlayerIsTurningMech()
+    public void TogglePlayerIsTurningMech(bool removePlayerSpeed = false)
     {
         if (playerIsTurningMech)
         {
             playerIsTurningMech = false;
             _mechCanon.move = Vector2.zero;
+            _player.gameObject.GetComponent<MovementController>().canMove = true;
         }
         else
         {
             playerIsTurningMech = true;
+            if(removePlayerSpeed)_player.rb.velocity = Vector2.zero;
+            _player.gameObject.GetComponent<MovementController>().canMove = false;
         }
     }
 }

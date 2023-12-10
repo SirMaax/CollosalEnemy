@@ -7,15 +7,14 @@ public class MechCanon : MonoBehaviour
 {
     [Header("Settings")] 
     [SerializeField] private float turnSpeed;
-
-    [SerializeField] 
-    public int turnTest;
-    public bool turning;
-    public bool test;
+    [SerializeField] private float turnSpeedIncrease;
+    [SerializeField] private float maxTurnSpeed;
+    
     public Vector2 move;
-
+    private float baseTurnSpeed;  
     private Quaternion startRotation;
-
+    private int lastMoveDirection;
+    
     [Header("Refs")] 
     [SerializeField] private GameObject bulletPrefab;
     // Start is called before the first frame update
@@ -27,15 +26,20 @@ public class MechCanon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (lastMoveDirection != move.x || move == Vector2.zero) turnSpeed = 0;
+        else  turnSpeed = Mathf.Clamp(turnSpeed + turnSpeedIncrease, 0, maxTurnSpeed);
+        
+        lastMoveDirection = (int)move.x;
+        
         if (move != Vector2.zero)
-        {
+        { 
             TurnLeftOrRight(move.x * -1);
         }
+        
     }
 
     public void TurnLeftOrRight(float multiplier)
     {
-        // Quaternion quaternion = Quaternion.AngleAxis(currentAngle + multiplier * turnSpeed, Vector3.forward);
         transform.Rotate(Vector3.forward, turnSpeed * multiplier);
     }
 
