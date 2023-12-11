@@ -24,12 +24,13 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float disitacneTillAttacking;
     [SerializeField] private float timeBetweenAttacking;
     
-    
     [Header("Refs")] 
     private MechMovement _mech;
     [SerializeField] private GameObject bulletPrefab;
-
-    [Header("Other")] private Vector2 movementDirection;
+    [SerializeField] private GameObject gx;
+    
+    [Header("Other")] 
+    private Vector2 movementDirection;
     public enum BehaviorState
     {
         Walking,
@@ -45,10 +46,8 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log((_mech.position - transform.position).magnitude);
         if (isMoving)
         {
-            transform.rotation = Quaternion.FromToRotation(transform.forward, movementDirection);
             transform.Translate( movementSpeed * Time.deltaTime* movementDirection);
         }
         
@@ -102,7 +101,7 @@ public class Enemy : MonoBehaviour
         float x = Random.Range(-1f, 1f);
         float y = Random.Range(-1f, 1f);
         movementDirection = new Vector2(x, y).normalized;
-        transform.rotation = Quaternion.FromToRotation(transform.forward , movementDirection);
+        RotateGxTowards(movementDirection);
         StartCoroutine(MoveInDirectionForSeconds(howLongMoving));
     }
 
@@ -120,8 +119,7 @@ public class Enemy : MonoBehaviour
         Vector2 dir = (_mech.position - transform.position).normalized;
         float howLongMoving = Random.Range(1f, 2f);
         movementDirection = dir;
-        transform.rotation = Quaternion.FromToRotation(transform.forward, dir);
-
+        RotateGxTowards(movementDirection);
         StartCoroutine(MoveInDirectionForSeconds(howLongMoving));
     }
     /// <summary>
@@ -192,7 +190,7 @@ public class Enemy : MonoBehaviour
         Vector2 dir = (_mech.transform.position - transform.position).normalized;
         Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(transform.forward, dir))
             .GetComponent<Bullet>();
-        bullet.SetAttributes(dir,Bullet.BulletType.enemy);
+        bullet.SetAttributes(dir,Bullet.BulletType.enemy,1.5f);
         SoundManager.Play(SoundManager.Sounds.EnemyHit);
     }
     
@@ -216,7 +214,9 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Bullet")) return;
-        if (col.GetComponent<Bullet>().type != Bullet.BulletType.player) return;
+        Bullet bullet = col.GetComponent<Bullet>();
+        if (bullet.type != Bullet.BulletType.player) return;
+        bullet.HitSomething();
         GetHit();
     }
 
@@ -224,5 +224,10 @@ public class Enemy : MonoBehaviour
     {
         //TriggerAnimation
         Destroy(gameObject);
+    }
+
+    private void RotateGxTowards(Vector2 rot)
+    {
+        gx.transform.rotation = Quaternion.FromToRotation(Vector3.down, rot);
     }
 }

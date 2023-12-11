@@ -5,11 +5,12 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [Header("Attributes")] 
-    private Vector2 direction;
     [SerializeField] private float speed;
-    public float timeAlive;
+    private float timeAlive;
     public BulletType type;
-
+    private Vector2 direction;
+    private bool isAboutToBeRemoved = false;
+        
     public enum BulletType
     {
         enemy,
@@ -25,8 +26,8 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isAboutToBeRemoved) return;
         Vector2 test = speed * Time.deltaTime * direction;
-        // transform.Translate( speed * Time.deltaTime * direction);
         Vector2 current = transform.position;
         transform.position = current + test;
     }
@@ -35,12 +36,24 @@ public class Bullet : MonoBehaviour
     {
         yield return new WaitForSeconds(timeAlive);
         //ExplosionAnimation
-        Destroy(gameObject);
+        HitSomething();
     }
 
-    public void SetAttributes(Vector2 dir, BulletType newType)
+    public void SetAttributes(Vector2 dir, BulletType newType,float time)
     {
         direction = dir;
         type = newType;
+        timeAlive = time;
+    }
+
+    public void HitSomething()
+    {
+        if (isAboutToBeRemoved) return;
+        isAboutToBeRemoved = true;
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        GetComponentInChildren<ParticleSystem>().Play();
+        SoundManager.Play(SoundManager.Sounds.MechGotHit);
+        Destroy(gameObject,5);
     }
 }

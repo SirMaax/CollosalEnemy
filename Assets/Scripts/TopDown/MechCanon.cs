@@ -49,7 +49,8 @@ public class MechCanon : MonoBehaviour
         dir.Normalize();
         Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector2.up, dir))
             .GetComponent<Bullet>();
-        bullet.SetAttributes(dir,Bullet.BulletType.player);
+        bullet.SetAttributes(dir,Bullet.BulletType.player,1.5f);
+        
         SoundManager.Play(SoundManager.Sounds.EnemyHit);
     }
 

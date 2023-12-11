@@ -30,7 +30,7 @@ TagManager:
   - Player3
   - Player4
   - GroundForPlayerOnly
-  - 
+  - TopDownLayer
   - 
   - 
   - 
@@ -70,4 +70,7 @@ TagManager:
     locked: 0
   - name: 2D Mechs
     uniqueID: 113439431
+    locked: 0
+  - name: 2D Particles
+    uniqueID: 112959411
     locked: 0

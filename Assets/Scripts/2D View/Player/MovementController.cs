@@ -47,7 +47,7 @@ public class MovementController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        speed = (lastPosition - (Vector2)rb.position).magnitude;
+        speed = (lastPosition - (Vector2)transform.parent.position).magnitude * Time.deltaTime;
         lastPosition = rb.position;
 
         ParticleSystemUpdate();
@@ -118,12 +118,13 @@ public class MovementController : MonoBehaviour
     {
         if (!grounded) return;
         
-        
-        if (speed == 0 && canMove)
-        {
-            rotatingPoint.transform.rotation = baseRotation;
-            return;
-        }
+        // Debug.Log(speed);
+        // if (speed == 0 && canMove)
+        // {
+        //     rotatingPoint.transform.rotation = baseRotation;
+        //     Debug.Log("Reset Rotation");
+        //     return;
+        // }
         
         float angle = Quaternion.Angle(Quaternion.Euler(Vector3.up), rotatingPoint.transform.rotation);
         if (move.x == 0)
@@ -147,6 +148,7 @@ public class MovementController : MonoBehaviour
         
         int dir = facingRight ? -1 : 1;
         rotatingPoint.transform.Rotate(new Vector3(0,0,dir), rotatingSpeed);
+        Debug.Log("Rotated");
     }
 
     public void TranslatePlayer(float x, float y, float z)
