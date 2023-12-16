@@ -8,6 +8,7 @@ public class EnvironmentController : MonoBehaviour
     private GameMaster gm;
 
     [Header("Attributes")]
+    [SerializeField] private bool disableEnvironment;
     [SerializeField] private bool test;
     [SerializeField] private float minSpinForce;
     [SerializeField] private float maxSpinForce;
@@ -31,6 +32,7 @@ public class EnvironmentController : MonoBehaviour
 
     public void ApplyEffectFrom(Vector2 origin)
     {
+        if (disableEnvironment) return;
         SoundManager.Play(SoundManager.Sounds.MechGotHit);
         //Players
         for (int i = 0; i < GameMaster.AMOUNT_PLAYER; i++)
@@ -52,6 +54,7 @@ public class EnvironmentController : MonoBehaviour
     
     private void ApplyForceInDirection(Vector2 direction,Rigidbody2D rb, bool isObject)
     {
+        if (disableEnvironment) return;
         if (direction == Vector2.zero)
         {
             float x = Random.Range(-100, 100);

@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class Mech : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    [Header("References")] 
+    [SerializeField] private EventSystem eventSystem;
+    
+    public void GetHit()
     {
-        
+        //Animation
+        eventSystem.Attacked();
+        // if (health <= 0) Die();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        
+        if (!col.gameObject.CompareTag("Bullet")) return;
+        Bullet bullet = col.GetComponent<Bullet>();
+        if (bullet.type != Bullet.BulletType.enemy) return;
+        bullet.HitSomething();
+        GetHit();
     }
 }

@@ -3197,36 +3197,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38949b5706cd0734a9391f7004c173c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canSpawnShieldedEnemies: 0
-  disableEvents: 1
-  incomingAttack: 0
-  minTimeBetweenAttacks: 20
-  maxTimeBetweenAttacks: 45
-  timeTillAttackArriveMin: 15
-  timeTillAttackArriveMax: 30
-  maxAttackCoordinateX: -12
-  minAttackCoordinateX: 17
-  minAttackCoordinateY: -7
-  maxAttackCoordinateY: 13
-  targetAvailable: 0
-  timeTillTargetLeaves: 0
-  minShieldRecharge: 0
-  maxShieldRecharge: 0
-  timeTillTargetLeavesMax: 61
-  timeTillTargetLeavesMin: 30
-  timeTillNextTargetMin: 5
-  timeTillNextTargetMax: 20
-  scoreHitDeflected: 2000
-  scoreHitNotDeflected: -3000
-  scoreTargetLeft: -1500
-  scoreTargetKilled: 1250
+  coordinatesLeftBottom: {fileID: 1687542913}
+  coordiantesRightTop: {fileID: 1686502918}
   shield: {fileID: 626756646}
   _environmentController: {fileID: 1390910330}
-  incomingAttackText: {fileID: 1431034388}
-  targetText: {fileID: 1312788897}
-  targetHealth: {fileID: 2011596019}
-  targetLeavestext: {fileID: 273643819}
-  targetsKilledText: {fileID: 683097915}
 --- !u!4 &725244914
 Transform:
   m_ObjectHideFlags: 0
@@ -3238,7 +3212,9 @@ Transform:
   m_LocalPosition: {x: 1.1582896, y: 1.8480704, z: -0.043313034}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1687542913}
+  - {fileID: 1686502918}
   m_Father: {fileID: 525929003}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6110,8 +6086,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstSpawn: 0
-  spawnSpeedMax: 4
-  spawnSpeedMin: 6
+  spawnSpeedMax: 0.1
+  spawnSpeedMin: 0.2
   spawnPoints:
   - {fileID: 298093415}
   - {fileID: 530259267}
@@ -7656,6 +7632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d231b8fec79bc154e89a7b43478902a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  disableEnvironment: 1
   test: 0
   minSpinForce: 30
   maxSpinForce: 60
@@ -8811,6 +8788,68 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1686502917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1686502918}
+  m_Layer: 0
+  m_Name: RightTop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1686502918
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686502917}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.2, y: -18.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 725244914}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1687542912
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1687542913}
+  m_Layer: 0
+  m_Name: LeftBottom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1687542913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687542912}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -26.6, y: -31.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 725244914}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1697507412
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9028,7 +9067,7 @@ GameObject:
   - component: {fileID: 1765705423}
   - component: {fileID: 1765705422}
   - component: {fileID: 1765705424}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Mech
   m_TagString: Mech
   m_Icon: {fileID: 0}
@@ -9085,6 +9124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 237a77248339c35459c1d4f10203d817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eventSystem: {fileID: 725244913}
 --- !u!61 &1765705424
 BoxCollider2D:
   m_ObjectHideFlags: 0

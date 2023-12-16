@@ -12,11 +12,13 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float spawnSpeedMax;
     [SerializeField] private float spawnSpeedMin;
 
-
+    [Header("Other")] 
+    private int lastIndex;
+    
     [Header("References")] 
     [SerializeField] private GameObject[] spawnPoints;
     [SerializeField] private GameObject enemyPrefab;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -31,8 +33,13 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy()
     {
-        int index = (int)Random.Range(0, spawnPoints.Length);
-
+        int index = 0;
+        do
+        {
+            index = (int)Random.Range(0, spawnPoints.Length);
+        } while (index == lastIndex);
+        lastIndex = index;
+        
         Enemy enemy = Instantiate(enemyPrefab, 
                             spawnPoints[index].transform.position, 
             quaternion.identity).GetComponent<Enemy>();

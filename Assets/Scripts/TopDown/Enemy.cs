@@ -215,7 +215,7 @@ public class Enemy : MonoBehaviour
     public void GetHit()
     {
         //Animation
-        Debug.Log("Got Hit");
+        health -= 1;
         if (health <= 0) Die();
     }
 

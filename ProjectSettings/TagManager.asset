@@ -10,6 +10,7 @@ TagManager:
   - GM
   - Mech
   - Bullet
+  - Enemy
   layers:
   - Default
   - TransparentFX

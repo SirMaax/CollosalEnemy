@@ -10,7 +10,8 @@ public class Bullet : MonoBehaviour
     public BulletType type;
     private Vector2 direction;
     private bool isAboutToBeRemoved = false;
-        
+    [SerializeField] private float aoeAttackRadius;
+    
     public enum BulletType
     {
         enemy,
@@ -44,16 +45,40 @@ public class Bullet : MonoBehaviour
         direction = dir;
         type = newType;
         timeAlive = time;
+        if (newType == BulletType.enemy)
+        {
+            transform.localScale /= 2;
+            GetComponentInChildren<ParticleSystem>().transform.localScale /= 3;
+        }
     }
 
     public void HitSomething()
     {
         if (isAboutToBeRemoved) return;
         isAboutToBeRemoved = true;
+        if (type == BulletType.player) AOEAttack();
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
         GetComponentInChildren<ParticleSystem>().Play();
         SoundManager.Play(SoundManager.Sounds.MechGotHit);
-        Destroy(gameObject,5);
+        Destroy(gameObject,3);
+    }
+
+    public void AOEAttack()
+    {
+        CircleCollider2D circleCollider2D = gameObject.AddComponent<CircleCollider2D>();
+        circleCollider2D.radius = aoeAttackRadius;
+        // circleCollider2D.isTrigger = true;        
+
+        ContactFilter2D filter = new ContactFilter2D();
+        List<Collider2D> contacts = new List<Collider2D>();
+        circleCollider2D.OverlapCollider(filter,contacts);
+        
+        foreach (var contact in contacts)
+        {
+            if (!contact.CompareTag("Enemy")) return;
+            Enemy enemy = contact.GetComponent<Enemy>();
+            enemy.GetHit();
+        }
     }
 }

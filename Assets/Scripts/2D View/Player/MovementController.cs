@@ -148,7 +148,6 @@ public class MovementController : MonoBehaviour
         
         int dir = facingRight ? -1 : 1;
         rotatingPoint.transform.Rotate(new Vector3(0,0,dir), rotatingSpeed);
-        Debug.Log("Rotated");
     }
 
     public void TranslatePlayer(float x, float y, float z)
