@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEditor.AnimatedValues;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
@@ -17,6 +18,10 @@ public class Enemy : MonoBehaviour
     public BehaviorState state;
     private bool isMoving;
     private bool acting;
+
+    [Header("Behavior Toggling")] 
+    [SerializeField] private bool allowRandomWalking;
+    [SerializeField] private bool allowStanding;
 
     [Header("Transition")]
     [Tooltip("Distance till enemy notices mech and will start to attack")]
@@ -79,15 +84,18 @@ public class Enemy : MonoBehaviour
     private void Walking()
     {
         if(CheckTransitionToStateGoingInRange())return;
+        int baseValue = 0;
+        baseValue += !allowRandomWalking ? 20 : 0;
+        baseValue += !allowStanding ? 40 : 0;
         
-        int whichAction = Random.Range(0, 101);
+        int whichAction = Random.Range(baseValue, 101);
         switch (whichAction)
         {
             case < 20:
                 RandomMovement();
                 break;
             case < 60:
-                // Standing();
+                //Standing();
                 break;
             case < 101:
                 MoveTowardsTarget();
@@ -188,7 +196,7 @@ public class Enemy : MonoBehaviour
     private void Attack()
     {
         Vector2 dir = (_mech.transform.position - transform.position).normalized;
-        Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(transform.forward, dir))
+        Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector2.up, dir))
             .GetComponent<Bullet>();
         bullet.SetAttributes(dir,Bullet.BulletType.enemy,1.5f);
         SoundManager.Play(SoundManager.Sounds.EnemyHit);
