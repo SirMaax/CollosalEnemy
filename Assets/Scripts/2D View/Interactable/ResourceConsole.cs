@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ResourceConsole : Console
@@ -22,38 +23,36 @@ public class ResourceConsole : Console
     {
         if (holdedObject != null) return;
         SoundManager.Play(SoundManager.Sounds.Interact);
-        switch (typeConsole)
+        if (player.carriedObject.type != typeConsole) return;
+
+        AcceptResource(player);
+        holdedObject = (Resource) player.TakeResource();
+        holdedObject.SetPosition(resourcePlace.transform.position);
+        isLoaded = true;
+        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
+    }
+     
+    protected override void OnTriggerEnter2D(Collider2D col)
+    {
+        if (canNotBeInteractedWith) return;
+        if (col.gameObject.CompareTag("Player")) PlayerEntersConsole();
+        else if (col.gameObject.CompareTag("Object") &&
+                 !isLoaded &&
+                 col.transform.parent.GetComponentInChildren<Object>().type==typeConsole &&
+                 !col.transform.parent.GetComponentInChildren<Object>().isCarried &&
+                 col.gameObject.layer!=LayerMask.NameToLayer("ObjectLogic"))
         {
-            case Object.typeObjects.EnergyCell:
-                EnergyConsole(player);
-                break;
-            case Object.typeObjects.AmmoCrate:
-                AmmoConsole(player);
-                break;
+            holdedObject = col.transform.parent.GetComponentInChildren<Resource>();
+            holdedObject.SetPosition(resourcePlace.transform.position);
+            isLoaded = true;
+            holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
+            holdedObject.PickUpObject(true);
+            holdedObject.transform.parent
+                .transform.rotation = quaternion.Euler(Vector3.zero);
         }
+        
     }
-    private void EnergyConsole(Player player)
-    {
-        if (player.carriedObject.type != Object.typeObjects.EnergyCell) return;
-
-        AcceptResource(player);
-        holdedObject = (Resource) player.TakeResource();
-        holdedObject.SetPosition(resourcePlace.transform.position);
-        isLoaded = true;
-        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
-    }
-
-    private void AmmoConsole(Player player)
-    {
-        if (player.carriedObject.type != Object.typeObjects.AmmoCrate) return;
-
-        AcceptResource(player);
-        holdedObject = (Resource) player.TakeResource();
-        holdedObject.SetPosition(resourcePlace.transform.position);
-        isLoaded = true;
-        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
-    }
-
+    
     private void AcceptResource(Player player)
     {
         player.carriedObject.transform.parent

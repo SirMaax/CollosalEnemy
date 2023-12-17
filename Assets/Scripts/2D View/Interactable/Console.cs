@@ -8,7 +8,7 @@ public class Console : MonoBehaviour
     [Header("Settings")] 
     [SerializeField] private bool usesInteractionRadius;
     [SerializeField] private float interactionRadius;
-    [SerializeField] private bool canNotBeInteractedWith;
+    [SerializeField] protected bool canNotBeInteractedWith;
     [SerializeField] public bool buttonConsole;
     [SerializeField] public bool controlConsole;
     public bool wasPressed;
@@ -30,6 +30,7 @@ public class Console : MonoBehaviour
             if (collider2D == null) return;
             collider2D.enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
+            GetComponent<Rigidbody2D>().isKinematic = true;
         }
 
         player = GameObject.FindWithTag("Player").GetComponent<Player>();

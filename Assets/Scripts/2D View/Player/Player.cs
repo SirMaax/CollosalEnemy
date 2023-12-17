@@ -59,14 +59,21 @@ public class Player : MonoBehaviour
      */
     public void Interact()
     {
-        if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
-        else if (consoleNearby && nearestConsole.controlConsole) InteractWithConsole();
-        else if (isCarrying && consoleNearby) InteractWithConsole();
+        // if (isCarrying) Drop();
+        // else TryToPickUp();
+        // if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
+        // else if (consoleNearby && nearestConsole.controlConsole) InteractWithConsole();
+        // else if (isCarrying && consoleNearby) InteractWithConsole();
     }
 
     public void Use()
     {
-        if (isCarrying) Drop();
+        // if (isCarrying) Drop();
+        // else TryToPickUp();
+        if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
+        else if (consoleNearby && nearestConsole.controlConsole) InteractWithConsole();
+        else if (isCarrying && consoleNearby) InteractWithConsole();
+        else if (isCarrying) Drop();
         else TryToPickUp();
     }
     

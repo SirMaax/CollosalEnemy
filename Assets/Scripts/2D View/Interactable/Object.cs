@@ -9,7 +9,7 @@ public class Object : MonoBehaviour
     
     public bool canBePickedUp;
     private bool isInPickUpRange;
-    private bool isCarried = false;
+    public bool isCarried = false;
     
     [Header("Ejection Force")]
     [SerializeField] private float minSpinForce;
@@ -53,9 +53,11 @@ public class Object : MonoBehaviour
         isInPickUpRange = false;
     }
     
-    public bool PickUpObject(bool isPickedUpByContainer)
+    public bool PickUpObject(bool isPickedUpByContainer, Player player=null)
     {
         if (!isPickedUpByContainer && !canBePickedUp) return false;
+        // if(isPickedUpByContainer && player!=null) player.ThisIsNotAnymoreInPlayerPickUpRadius(this);
+
         canBePickedUp = false;
         isInPickUpRange = false;
         isCarried = true;
