@@ -17,6 +17,7 @@ public class EnemySpawner : MonoBehaviour
     
     [Header("References")] 
     [SerializeField] private GameObject[] spawnPoints;
+    [SerializeField] private GameObject[] signs;
     [SerializeField] private GameObject enemyPrefab;
     
     // Start is called before the first frame update
@@ -27,18 +28,20 @@ public class EnemySpawner : MonoBehaviour
     
     IEnumerator SpawnEnemyCooldown(float time)
     {
-        yield return new WaitForSeconds(time);
-        SpawnEnemy();
-    }
-
-    private void SpawnEnemy()
-    {
         int index = 0;
         do
         {
             index = (int)Random.Range(0, spawnPoints.Length);
         } while (index == lastIndex);
         lastIndex = index;
+        signs[index].GetComponent<Sign>().ShowSign(Sign.signType.EnemyAppearing, time-0.2f);
+        yield return new WaitForSeconds(time);
+        SpawnEnemy(index);
+    }
+
+    private void SpawnEnemy(int index)
+    {
+        
         
         Enemy enemy = Instantiate(enemyPrefab, 
                             spawnPoints[index].transform.position, 
@@ -47,4 +50,6 @@ public class EnemySpawner : MonoBehaviour
         float randomTime = Random.Range(spawnSpeedMin, spawnSpeedMax);
         StartCoroutine(SpawnEnemyCooldown(randomTime));
     }
+    
+    
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
-public class Enemy : MonoBehaviour
+public class Enemy : BaseMech
 {
     [Header("Attributes")]
     [SerializeField] private int health;
@@ -45,6 +45,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
         _mech = GameObject.FindWithTag("Mech").GetComponentInChildren < MechMovement>();
     }
 
@@ -186,6 +187,7 @@ public class Enemy : MonoBehaviour
         acting = true;
         while (!CheckTransitionToStateGoingInRangeFromAttack())
         {
+            sign.ShowSign(Sign.signType.Attacking,timeBetweenAttacking,flashing:true);
             yield return new WaitForSeconds(timeBetweenAttacking);
             Attack();
         }
