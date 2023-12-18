@@ -42,7 +42,6 @@ public class GameMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (canvasActive) canvas.transform.position = player1.transform.position;
         scoreText.SetText("Score " + ((int)SCORE).ToString());        
     }
 
@@ -58,7 +57,7 @@ public class GameMaster : MonoBehaviour
     }
     
 
-    public void RestartLevel()
+    public static void RestartLevel()
     {
         SceneManager.LoadScene("FirstLevel");
     }
@@ -68,10 +67,11 @@ public class GameMaster : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    public static void ShowGui()
+    public static void ToggleGui()
     {
-        canvas.SetActive(true);
-        canvasActive = true;
+        if (canvasActive)canvas.SetActive(false);
+        else canvas.SetActive(true);
+        canvasActive = !canvasActive;
     }
 
     public void HideGui()

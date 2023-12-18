@@ -189,7 +189,7 @@ public class InputHandler : MonoBehaviour
 
     public void OnEscape(InputValue value)
     {
-        GameMaster.ShowGui();
+        GameMaster.ToggleGui();
     }
 
     public void TogglePlayerIsControllingMech()

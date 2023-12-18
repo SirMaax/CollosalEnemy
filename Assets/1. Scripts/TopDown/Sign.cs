@@ -19,8 +19,7 @@ public class Sign : MonoBehaviour
 
     public void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.enabled = false;
+        GetSpriteRenderer();
     }
 
     public enum signType
@@ -31,6 +30,7 @@ public class Sign : MonoBehaviour
 
     public void ShowSign(signType type, float time = 0, bool flashing = false, bool destroyAfterwards = false)
     {
+        if (spriteRenderer == null) GetSpriteRenderer();
         if (routine != null) StopCoroutine(routine);
 
         spriteRenderer.sprite = signSprites[(int)type];
@@ -66,4 +66,12 @@ public class Sign : MonoBehaviour
         }
         spriteRenderer.enabled = false;
     }
+
+    private void GetSpriteRenderer()
+    {
+        if (spriteRenderer != null) return;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.enabled = false;
+    }
+    
 }

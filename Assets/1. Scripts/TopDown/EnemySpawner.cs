@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -23,9 +24,14 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+    }
+
+    private void Awake()
+    {
         StartCoroutine(SpawnEnemyCooldown(firstSpawn));
     }
-    
+
     IEnumerator SpawnEnemyCooldown(float time)
     {
         int index = 0;

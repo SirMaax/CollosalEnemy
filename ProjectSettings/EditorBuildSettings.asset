@@ -9,12 +9,15 @@ EditorBuildSettings:
     path: Assets/4. Scenes/MainMenu.unity
     guid: caaf991bcde8bd34db83ff15cebdef15
   - enabled: 0
-    path: Assets/4. Scenes/FirstLevel.unity
+    path: Assets/4. Scenes/Old Scenes/FirstLevelOld.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/4. Scenes/FirstLevelV2.unity
+    path: Assets/4. Scenes/Old Scenes/FirstLevelV2Old.unity
     guid: 46e751095edbb0646869480ab7e6cf03
   - enabled: 1
     path: Assets/4. Scenes/ScoreScene.unity
     guid: 3538f77e6976bf6428e51112f6758995
+  - enabled: 1
+    path: Assets/4. Scenes/FirstLevel.unity
+    guid: 4e4f0cfadc443bb4a92761efd8ba1c24
   m_configObjects: {}
