@@ -1,20 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Mech : MonoBehaviour
 {
+    [Header("Attributes")] 
+    [SerializeField] private float health;
 
+    [Header("Private")] 
+    private float maxHealth;
+    
     [Header("References")] 
     [SerializeField] private EventSystem eventSystem;
-    
-    public void GetHit()
+    [SerializeField] private Image slider;
+
+    private void Start()
     {
-        //Animation
-        eventSystem.Attacked();
-        // if (health <= 0) Die();
+        maxHealth = health;
     }
 
+    private void GetHit()
+    {
+        eventSystem.Attacked();
+        UpdateHealth(-1);
+    }
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Bullet")) return;
@@ -22,5 +33,17 @@ public class Mech : MonoBehaviour
         if (bullet.type != Bullet.BulletType.enemy) return;
         bullet.HitSomething();
         GetHit();
+    }
+    
+    private void UpdateHealth(float value)
+    {
+        health += value;
+        slider.fillAmount = health / maxHealth;
+        if (health <= 0) Die();
+    }
+
+    private void Die()
+    {
+        //Restart Level    
     }
 }
