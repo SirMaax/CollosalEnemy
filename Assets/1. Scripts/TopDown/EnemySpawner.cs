@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Settings")] 
+    [SerializeField] private bool enableSpawning;
     [SerializeField] private float firstSpawn;
     [SerializeField] private float spawnSpeedMax;
     [SerializeField] private float spawnSpeedMin;
@@ -29,6 +30,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
+        if (!enableSpawning) return;
         StartCoroutine(SpawnEnemyCooldown(firstSpawn));
     }
 

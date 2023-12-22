@@ -45,6 +45,8 @@ public class Mech : MonoBehaviour
     private void Die()
     {
         //Restart Level    
-        GameMaster.RestartLevel();
+        //Sound
+        Menu.clearedLevel = false;
+        Menu.LoadScoreScene();
     }
 }

@@ -50,21 +50,24 @@ public class GameMaster : MonoBehaviour
         for (int i = 0; i < playTime; i++)
         {
             timer.SetText("Time left: " + (playTime-i).ToString());
+            if (playTime-i == 10)
+            {
+                //Start Different end sound
+            }
             yield return new WaitForSeconds(1);
         }
-        // yield return new WaitForSeconds(playTime);
-        SceneManager.LoadScene("ScoreScene");
+        Menu.LoadScoreScene();
     }
     
 
     public static void RestartLevel()
     {
-        SceneManager.LoadScene("FirstLevel");
+       Menu.Restart();
     }
 
     public void MainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        Menu.MainMenu();
     }
 
     public static void ToggleGui()

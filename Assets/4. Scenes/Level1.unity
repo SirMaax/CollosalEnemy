@@ -4046,37 +4046,6 @@ AudioSource:
   m_CorrespondingSourceObject: {fileID: 2455897349244122651, guid: 954f3d09fe218ba4ba4426e2648fb559, type: 3}
   m_PrefabInstance: {fileID: 877882772}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &878316730
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 878316731}
-  m_Layer: 0
-  m_Name: GameMaster
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &878316731
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878316730}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -47.87065, y: -9.489956, z: 2.6955013}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &890934879
 GameObject:
   m_ObjectHideFlags: 0
@@ -6561,6 +6530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad6d5c34dc213e044a3ff298b887ce42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableSpawning: 0
   firstSpawn: 1
   spawnSpeedMax: 5
   spawnSpeedMin: 15
@@ -6611,7 +6581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setAmountPlayer: 1
-  playTime: 200
+  playTime: 15
   testMode: 1
   noTime: 1
   players:
