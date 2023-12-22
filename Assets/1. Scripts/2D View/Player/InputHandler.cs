@@ -113,11 +113,14 @@ public class InputHandler : MonoBehaviour
 
     public void MoveInput(Vector2 newMoveDirection)
     {
+        Debug.Log("Moveinput called");
+
         if (newMoveDirection.y > 0) _movement.jumpButtonPressed = true;
         else _movement.jumpButtonPressed = false;
         if (PlayerIsControllingMech)
         {
-            
+            Debug.Log("Player is controlling");
+
             _mechMovement.move = newMoveDirection;
             _movement.move = Vector2.zero;
             _movement.jumpButtonPressed = false;
@@ -125,8 +128,10 @@ public class InputHandler : MonoBehaviour
         }
         if (playerIsTurningMech)
         {
+            Debug.Log("Player is turnign");
             if (_movement.jumpButtonPressed)
             {
+                Debug.Log("Player is turning and jumping");
                 TogglePlayerIsTurningMech();
                 return;
             }
@@ -218,6 +223,8 @@ public class InputHandler : MonoBehaviour
             playerIsTurningMech = true;
             if(removePlayerSpeed)_player.rb.velocity = Vector2.zero;
             _player.gameObject.GetComponent<MovementController>().canMove = false;
+            _movement.jumpButtonPressed = false;
+            MoveInput(_movement.move);
         }
     }
 }
