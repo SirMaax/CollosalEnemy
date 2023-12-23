@@ -35,7 +35,7 @@ public class ResourceConsole : Console
     protected override void OnTriggerEnter2D(Collider2D col)
     {
         if (canNotBeInteractedWith) return;
-        if (col.gameObject.CompareTag("Player")) PlayerEntersConsole();
+        if (col.gameObject.CompareTag("Player")) PlayerEntersConsole(col.GetComponent<Player>());
         else if (col.gameObject.CompareTag("Object") &&
                  !isLoaded &&
                  col.transform.parent.GetComponentInChildren<Object>().type==typeConsole &&

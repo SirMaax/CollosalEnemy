@@ -102,6 +102,7 @@ public class MovementController : MonoBehaviour
 
     private IEnumerator JumpAction()
     {
+        jumpButtonPressed = false;
         grounded = false;
         SoundManager.Play(SoundManager.Sounds.Jump);
         rb.AddForce(Vector2.up * initialJumpForce);
@@ -153,6 +154,14 @@ public class MovementController : MonoBehaviour
     public void TranslatePlayer(float x, float y, float z)
     {
         transform.parent.Translate(x,y,z);
+    }
+    public void SetPlayerPosition(float x, float y, float z)
+    {
+        transform.parent.position = new Vector3(x,y,z);
+    }
+    public void SetPlayerPosition(Vector3 vec)
+    {
+        transform.parent.position = vec;
     }
 
     public Vector2 GetPosition()

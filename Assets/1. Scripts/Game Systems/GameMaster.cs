@@ -19,10 +19,8 @@ public class GameMaster : MonoBehaviour
     [SerializeField] public GameObject[] players;
     [SerializeField] private GameObject setCanvas;
     [SerializeField] private static GameObject canvas;
-    [SerializeField] private GameObject player1;
     [SerializeField] private TMP_Text timer;
     [SerializeField] private TMP_Text scoreText;
-
     [Header("Other")] static bool canvasActive = false;
     
     // Start is called before the first frame update
@@ -30,9 +28,9 @@ public class GameMaster : MonoBehaviour
     {
         canvas = setCanvas;
         if (testMode) AMOUNT_PLAYER = setAmountPlayer;
-        else AMOUNT_PLAYER = Menu.Amount_Player;
-        for (int i = 0; i < 4; i++) players[i].SetActive(false);
-        for (int i = 0; i < AMOUNT_PLAYER; i++) players[i].SetActive(true);
+        // else AMOUNT_PLAYER = Menu.Amount_Player;
+        // for (int i = 0; i < 4; i++) players[i].SetActive(false);
+        // for (int i = 0; i < AMOUNT_PLAYER; i++) players[i].SetActive(true);
 
         if (!noTime) StartCoroutine(LevelTime());
         // if(skipMainMenu)SceneManager.LoadScene("FirstLevel");
@@ -87,6 +85,12 @@ public class GameMaster : MonoBehaviour
     {
         SCORE += score;
         
+    }
+
+    public void PlayerJoins()
+    {
+        AMOUNT_PLAYER += 1;
+        Debug.Log("Player Joins");
     }
     
     

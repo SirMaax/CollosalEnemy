@@ -12,7 +12,6 @@ public class Console : MonoBehaviour
     [SerializeField] public bool buttonConsole;
     [SerializeField] public bool controlConsole;
     public bool wasPressed;
-    protected Player player;
     public enum enumResource
     {
         Energy,
@@ -33,10 +32,9 @@ public class Console : MonoBehaviour
             GetComponent<Rigidbody2D>().isKinematic = true;
         }
 
-        player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
-    protected virtual void PlayerEntersConsole()
+    protected virtual void PlayerEntersConsole(Player player)
     {
         player.SetConsole(this);
     }
@@ -44,7 +42,7 @@ public class Console : MonoBehaviour
     protected virtual void OnTriggerEnter2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Player")) return;
-        PlayerEntersConsole();
+        PlayerEntersConsole(col.gameObject.GetComponent<Player>());
         
     }
 
@@ -59,7 +57,8 @@ public class Console : MonoBehaviour
      public virtual void Interact(Player player) { }
      
      protected virtual void PlayerLeavesConsole() { }
-     
+     protected virtual void PlayerLeavesConsole(Player player) { }
+
      public virtual void PressButton()
      {
          wasPressed = true;

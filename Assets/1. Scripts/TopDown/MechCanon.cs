@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class MechCanon : MonoBehaviour
@@ -10,32 +11,42 @@ public class MechCanon : MonoBehaviour
     [SerializeField] private float turnSpeedIncrease;
     [SerializeField] private float maxTurnSpeed;
     
-    public Vector2 move;
+    public Vector2[] move;
     private float baseTurnSpeed;  
     private Quaternion startRotation;
-    private int lastMoveDirection;
+    private int lastDirection;
     
     [Header("Refs")] 
     [SerializeField] private GameObject bulletPrefab;
     // Start is called before the first frame update
     void Start()
     {
+        move = new Vector2[4];
         startRotation = transform.rotation;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (lastMoveDirection != move.x || move == Vector2.zero) turnSpeed = 0;
-        else  turnSpeed = Mathf.Clamp(turnSpeed + turnSpeedIncrease, 0, maxTurnSpeed);
-        
-        lastMoveDirection = (int)move.x;
-        
-        if (move != Vector2.zero)
-        { 
-            TurnLeftOrRight(move.x * -1);
+        float sum = 0;
+        foreach (var ele in move)
+        {
+            sum+= ele.x;
+        }
+
+        Debug.Log(sum);
+        if (sum == 0)
+        {
+            turnSpeed = 0;
+            return;
         }
         
+        int direction = sum > 0 ? 1 : -1;
+        if (lastDirection == direction) turnSpeed = Mathf.Clamp(turnSpeed + turnSpeedIncrease, 0, maxTurnSpeed);
+        else turnSpeed = 0;
+        
+        lastDirection = direction;
+        TurnLeftOrRight(sum * -1);
     }
 
     public void TurnLeftOrRight(float multiplier)
