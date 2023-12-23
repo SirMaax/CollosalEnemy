@@ -28,11 +28,9 @@ public class Player : MonoBehaviour
     [Header("Refs")]
     [SerializeField] private GameObject positionForCarryObject;
     public InputHandler inputHandler;
-    private MovementController _movement;
+    [SerializeField]private MovementController _movement;
     public Rigidbody2D rb;
-
-    [Header("Camera")] 
-    [SerializeField] private List<LayerMask> playerLayers;
+    [SerializeField] private Sprite[] sprites;
     
     // Start is called before the first frame update
     void Start()
@@ -42,9 +40,10 @@ public class Player : MonoBehaviour
         rb = transform.parent.GetComponent<Rigidbody2D>();
         startMass = rb.mass;
 
-        // int layerToAdd = (int)Mathf.Log(playerLayers[playerId].value, 2);
-        // transform.parent.GetComponentInChildren<CinemachineVirtualCamera>().gameObject.layer = layerToAdd;
-        // transform.parent.GetComponentInChildren<Camera>().cullingMask |= 1 << layerToAdd;
+        playerId = GameMaster.AMOUNT_PLAYER;
+        GetComponentInChildren<SpriteRenderer>().sprite = sprites[playerId - 1];
+        _movement.SetPlayerPosition(GameObject.FindWithTag("SpawnPoint").transform.position);
+        
     }
 
     // Update is called once per frame
@@ -54,18 +53,7 @@ public class Player : MonoBehaviour
 
         if (isCarrying) UpdateObjectPosition();
     }
-    /**
-     * Is called via event
-     */
-    public void Interact()
-    {
-        // if (isCarrying) Drop();
-        // else TryToPickUp();
-        // if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
-        // else if (consoleNearby && nearestConsole.controlConsole) InteractWithConsole();
-        // else if (isCarrying && consoleNearby) InteractWithConsole();
-    }
-
+    
     public void Use()
     {
         // if (isCarrying) Drop();
@@ -165,6 +153,11 @@ public class Player : MonoBehaviour
     public void Disable(bool useStatus)
     {
         
+    }
+
+    public int GetPlayerId()
+    {
+        return playerId;
     }
     
 } 

@@ -11,6 +11,7 @@ TagManager:
   - Mech
   - Bullet
   - Enemy
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
