@@ -6,6 +6,12 @@ using UnityEngine;
 
 public class ResourceGiver : MechSystem
 {
+    [Header("Attributes")] 
+    [SerializeField] private bool _isUsingButton;
+    [SerializeField] private int id;
+    [SerializeField] private bool noBoxSpawnLimit;
+    
+    
     [Header("Refs")] [SerializeField] Lever _lever;
     [SerializeField] private ResourceConsole _energy;
     [SerializeField] private ResourceConsole _ammo;
@@ -14,10 +20,6 @@ public class ResourceGiver : MechSystem
     [SerializeField] private int amountEmptyCrates;
     [SerializeField] private TMP_Text cratesText;
 
-    [Header("Attributes")] [SerializeField]
-    private int id;
-
-    [SerializeField] private bool noBoxSpawnLimit;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +38,12 @@ public class ResourceGiver : MechSystem
         {
             StartCoroutine(SpawnNewEnergy(0));
         }
+    }
+
+    public void Update()
+    {
+        if(_energy != null && !_energy.isLoaded)StartCoroutine(SpawnNewEnergy(0));
+        else if(_ammo != null && !_ammo.isLoaded)StartCoroutine(SpawnNewAmmo(0));
     }
     
     public override void Trigger(int whichMethod = -1)
@@ -108,4 +116,6 @@ public class ResourceGiver : MechSystem
         if (cratesText.IsUnityNull()) return;
         cratesText.SetText("Crates: " + amountEmptyCrates.ToString());
     }
+    
+    
 }

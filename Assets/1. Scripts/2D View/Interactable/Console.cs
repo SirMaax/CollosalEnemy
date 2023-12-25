@@ -11,6 +11,7 @@ public class Console : MonoBehaviour
     [SerializeField] protected bool canNotBeInteractedWith;
     [SerializeField] public bool buttonConsole;
     [SerializeField] public bool controlConsole;
+    [SerializeField] public bool isResourceConsole;
     public bool wasPressed;
     public enum enumResource
     {

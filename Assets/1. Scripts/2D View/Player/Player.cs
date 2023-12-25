@@ -59,8 +59,15 @@ public class Player : MonoBehaviour
         // if (isCarrying) Drop();
         // else TryToPickUp();
         if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
-        else if (consoleNearby && nearestConsole.controlConsole) InteractWithConsole();
-        else if (isCarrying && consoleNearby) InteractWithConsole();
+        else if (consoleNearby && nearestConsole.controlConsole && (nearestConsole.isResourceConsole 
+                 && !isCarrying)) InteractWithConsole();
+        else if (isCarrying && consoleNearby)
+        {
+            if (nearestConsole.isResourceConsole && !((ResourceConsole)nearestConsole).isLoaded) InteractWithConsole();
+            else Drop();
+
+        }
+        
         else if (isCarrying) Drop();
         else TryToPickUp();
     }
@@ -158,6 +165,13 @@ public class Player : MonoBehaviour
     public int GetPlayerId()
     {
         return playerId;
+    }
+
+    public void CarryObject(Object newObject)
+    {
+        carriedObject = newObject;
+        isCarrying = true;
+        ChangeWeight();
     }
     
 } 

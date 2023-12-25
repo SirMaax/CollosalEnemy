@@ -17,19 +17,28 @@ public class ResourceConsole : Console
 
     [Header("Refs")] 
     [SerializeField] public GameObject resourcePlace;
-    private Resource holdedObject;
-    
+    private Resource _holdedObject;
+
+
     public override void Interact(Player player)
     {
-        if (holdedObject != null) return;
+        if (isEjectingResource)
+        {
+            player.CarryObject(_holdedObject);
+            _holdedObject.PickUpObject(false,byPassChecks:true);
+            isLoaded = false;
+            return;
+        }
+        
+        if (_holdedObject != null) return;
         SoundManager.Play(SoundManager.Sounds.Interact);
         if (player.carriedObject.type != typeConsole) return;
 
         AcceptResource(player);
-        holdedObject = (Resource) player.TakeResource();
-        holdedObject.SetPosition(resourcePlace.transform.position);
+        _holdedObject = (Resource) player.TakeResource();
+        _holdedObject.SetPosition(resourcePlace.transform.position);
         isLoaded = true;
-        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
+        _holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
     }
      
     protected override void OnTriggerEnter2D(Collider2D col)
@@ -42,12 +51,12 @@ public class ResourceConsole : Console
                  !col.transform.parent.GetComponentInChildren<Object>().isCarried &&
                  col.gameObject.layer!=LayerMask.NameToLayer("ObjectLogic"))
         {
-            holdedObject = col.transform.parent.GetComponentInChildren<Resource>();
-            holdedObject.SetPosition(resourcePlace.transform.position);
+            _holdedObject = col.transform.parent.GetComponentInChildren<Resource>();
+            _holdedObject.SetPosition(resourcePlace.transform.position);
             isLoaded = true;
-            holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
-            holdedObject.PickUpObject(true);
-            holdedObject.transform.parent
+            _holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
+            _holdedObject.PickUpObject(true);
+            _holdedObject.transform.parent
                 .transform.rotation = quaternion.Euler(Vector3.zero);
         }
         
@@ -61,21 +70,21 @@ public class ResourceConsole : Console
 
     public bool DepleteResource()
     {
-        return holdedObject.UseAndCheckIfDepleted();
+        return _holdedObject.UseAndCheckIfDepleted();
     }
 
     public void EjectObject()
     {
-        if (holdedObject == null) return;
+        if (_holdedObject == null) return;
         if (isEjectingResource)
         {
             SoundManager.Play(4);
-            if (ejectDirection != Vector2.zero) holdedObject.Eject(ejectDirection);
-            else holdedObject.Eject();
+            if (ejectDirection != Vector2.zero) _holdedObject.Eject(ejectDirection);
+            else _holdedObject.Eject();
         }
         else
         {
-            holdedObject.DestroyIn(0);
+            _holdedObject.DestroyIn(0);
         }
 
         NotHoldingAnymore();
@@ -84,15 +93,18 @@ public class ResourceConsole : Console
     private void NotHoldingAnymore()
     {
         isLoaded = false;
-        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 2;
-        holdedObject = null;
+        _holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 2;
+        _holdedObject = null;
     }
 
-    public void PlaceResource(Resource newObject)
+    public void PlaceResource(Resource newObject, bool canBePickedUp = false)
     {
         isLoaded = true;
-        holdedObject = newObject;
+        _holdedObject = newObject;
         newObject.PickUpObject(true);
-        holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
+        _holdedObject.transform.parent.GetComponentInChildren<SpriteRenderer>().sortingOrder = 0;
     }
+
+
+
 }

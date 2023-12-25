@@ -53,9 +53,9 @@ public class Object : MonoBehaviour
         isInPickUpRange = false;
     }
     
-    public bool PickUpObject(bool isPickedUpByContainer, Player player=null)
+    public bool PickUpObject(bool isPickedUpByContainer, Player player=null, bool byPassChecks=false)
     {
-        if (!isPickedUpByContainer && !canBePickedUp) return false;
+        if (!isPickedUpByContainer && !canBePickedUp && !byPassChecks) return false;
         // if(isPickedUpByContainer && player!=null) player.ThisIsNotAnymoreInPlayerPickUpRadius(this);
 
         canBePickedUp = false;

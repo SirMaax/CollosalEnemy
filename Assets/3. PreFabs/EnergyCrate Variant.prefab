@@ -48,8 +48,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1859664852442330758, guid: 189da12d283f6cc4f97ece368271bc9b, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1859664852442330758, guid: 189da12d283f6cc4f97ece368271bc9b, type: 3}
       propertyPath: m_SortingOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1859664852442330758, guid: 189da12d283f6cc4f97ece368271bc9b, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 305528249
       objectReference: {fileID: 0}
     - target: {fileID: 1859664852442330758, guid: 189da12d283f6cc4f97ece368271bc9b, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -190,6 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   canBePickedUp: 1
+  isCarried: 0
   minSpinForce: 5
   maxSpinForce: 5
   maxForce: 5
