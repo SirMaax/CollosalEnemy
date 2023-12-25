@@ -8,6 +8,7 @@ public class GroundButton : Console
 
 
     [Header("Attributes")] 
+    [SerializeField] private float _buttonAnimationSpeed;
     [SerializeField] private int whichTriggeredMethod = -1;
     [SerializeField] private float activationForce;
     [SerializeField] private float buttonCooldown;
@@ -23,6 +24,7 @@ public class GroundButton : Console
     public bool buttonWasPressed;
 
     [Header("Refs")] 
+    [SerializeField] private GameObject _buttonHead;
     [SerializeField] private MechSystem activatedSystem;
     protected Player _player;
     
@@ -109,8 +111,8 @@ public class GroundButton : Console
     
     private IEnumerator ButtonAnimation()
     {
-        transform.Translate(Vector3.down * buttonMovement);
-        yield return new WaitForSeconds(0.3f);
-        transform.Translate(Vector3.up * buttonMovement);
+        _buttonHead.transform.Translate(Vector3.down * buttonMovement);
+        yield return new WaitForSeconds(_buttonAnimationSpeed);
+        _buttonHead.transform.Translate(Vector3.up * buttonMovement);
     }
 }

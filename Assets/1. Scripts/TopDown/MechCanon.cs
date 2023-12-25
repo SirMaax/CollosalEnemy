@@ -34,7 +34,6 @@ public class MechCanon : MonoBehaviour
             sum+= ele.x;
         }
 
-        Debug.Log(sum);
         if (sum == 0)
         {
             turnSpeed = 0;
