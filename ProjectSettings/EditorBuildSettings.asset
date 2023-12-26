@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/4. Scenes/Old Scenes/FirstLevelOld.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/4. Scenes/Old Scenes/FirstLevelV2Old.unity
     guid: 46e751095edbb0646869480ab7e6cf03
   - enabled: 1
