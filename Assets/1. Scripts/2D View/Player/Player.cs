@@ -121,6 +121,11 @@ public class Player : MonoBehaviour
         float smallestDistance = 10000;
         foreach (var ele in nearestObjects)
         {
+            if (ele == null)
+            {
+                nearestObjects.Remove(ele);
+                continue;
+            }
             float distance = (ele.transform.position - transform.position).magnitude;
             if (smallestDistance > distance)
             {

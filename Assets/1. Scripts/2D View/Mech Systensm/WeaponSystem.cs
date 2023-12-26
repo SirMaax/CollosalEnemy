@@ -16,6 +16,8 @@ public class WeaponSystem : MechSystem
     [SerializeField] private TMP_Text cannonReadyText;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private MechCanon mechCanon;
+    [SerializeField] private Animator _animator;
+    [SerializeField] private ParticleSystem _particleSystem;
     private EnergyCore core;
     
     // Start is called before the first frame update
@@ -77,5 +79,9 @@ public class WeaponSystem : MechSystem
             console.EjectObject();
         }
         mechCanon.Shoot();
+        _animator.Play("CannonShoting");
+        _particleSystem.Play();
     }
+    
+    
 }
