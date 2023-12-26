@@ -24,7 +24,7 @@ public class GameMaster : MonoBehaviour
     [SerializeField] private TMP_Text timer;
     [SerializeField] private TMP_Text scoreText;
     [Header("Other")] static bool canvasActive = false;
-    
+    [SerializeField] private EnemySpawner _enemySpawner;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +50,10 @@ public class GameMaster : MonoBehaviour
         for (int i = 0; i < playTime; i++)
         {
             timer.SetText(_timerText + (playTime-i).ToString());
+            if (playTime - i == 30)
+            {
+                _enemySpawner.amountSpawnEnemies = 3;
+            }
             if (playTime-i == 10)
             {
                 //Start Different end sound

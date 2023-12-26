@@ -143,7 +143,6 @@ public class Object : MonoBehaviour
     public void IncreaseOpacityOverTime(float time)
     {
         _spriteRenderer.sortingLayerName = "Boden";
-        Debug.Log("Set to Boden");
         StartCoroutine(RoutineIncreaseOpacity(0.2f, time));
     }
 

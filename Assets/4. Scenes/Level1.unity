@@ -2205,7 +2205,7 @@ Transform:
   m_GameObject: {fileID: 388354078}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1, y: -0, z: 33.37582}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1829340083}
@@ -4255,7 +4255,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 839280769}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -19.14, y: -20.51, z: -1.0196112}
+  m_LocalPosition: {x: -23.25, y: -20.51, z: -1.0196112}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4288,7 +4288,7 @@ Transform:
   m_GameObject: {fileID: 840956568}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.999, y: -0, z: 33.37582}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1829340083}
@@ -6790,8 +6790,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad6d5c34dc213e044a3ff298b887ce42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableSpawning: 0
-  firstSpawn: 1
+  enableSpawning: 1
+  amountSpawnEnemies: 1
+  firstSpawn: 10
   spawnSpeedMax: 5
   spawnSpeedMin: 15
   spawnPoints:
@@ -6841,9 +6842,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setAmountPlayer: 1
-  playTime: 15
+  playTime: 150
   testMode: 1
-  noTime: 1
+  noTime: 0
   _timerText: 'Objective: Survive for '
   players:
   - {fileID: 1237187945}
@@ -6853,6 +6854,7 @@ MonoBehaviour:
   setCanvas: {fileID: 1161842156}
   timer: {fileID: 1113006829}
   scoreText: {fileID: 2037018592}
+  _enemySpawner: {fileID: 0}
 --- !u!4 &1227054144
 Transform:
   m_ObjectHideFlags: 0
@@ -10680,7 +10682,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1829340082}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

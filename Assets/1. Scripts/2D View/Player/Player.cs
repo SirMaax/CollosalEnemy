@@ -124,7 +124,8 @@ public class Player : MonoBehaviour
             if (ele == null)
             {
                 nearestObjects.Remove(ele);
-                continue;
+                TryToPickUp();
+                return;
             }
             float distance = (ele.transform.position - transform.position).magnitude;
             if (smallestDistance > distance)
