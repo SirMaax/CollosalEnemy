@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,6 +15,7 @@ public class GameMaster : MonoBehaviour
     [SerializeField] private int playTime;
     [SerializeField] private bool testMode;
     [SerializeField] private bool noTime;
+    [SerializeField] private String _timerText;
     
     [Header("Refs")] 
     [SerializeField] public GameObject[] players;
@@ -47,7 +49,7 @@ public class GameMaster : MonoBehaviour
     {
         for (int i = 0; i < playTime; i++)
         {
-            timer.SetText("Time left: " + (playTime-i).ToString());
+            timer.SetText(_timerText + (playTime-i).ToString());
             if (playTime-i == 10)
             {
                 //Start Different end sound

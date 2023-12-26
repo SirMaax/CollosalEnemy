@@ -10,7 +10,7 @@ public class ResourceGiver : MechSystem
     [SerializeField] private bool _isUsingButton;
     [SerializeField] private int id;
     [SerializeField] private bool noBoxSpawnLimit;
-    
+    [SerializeField] private float _respawnTime;
     
     [Header("Refs")] [SerializeField] Lever _lever;
     [SerializeField] private ResourceConsole _energy;
@@ -42,8 +42,8 @@ public class ResourceGiver : MechSystem
 
     public void Update()
     {
-        if(_energy != null && !_energy.isLoaded)StartCoroutine(SpawnNewEnergy(0));
-        else if(_ammo != null && !_ammo.isLoaded)StartCoroutine(SpawnNewAmmo(0));
+        if(_energy != null && !_energy.isLoaded)StartCoroutine(SpawnNewEnergy(_respawnTime));
+        else if(_ammo != null && !_ammo.isLoaded)StartCoroutine(SpawnNewAmmo(_respawnTime));
     }
     
     public override void Trigger(int whichMethod = -1)
@@ -91,18 +91,26 @@ public class ResourceGiver : MechSystem
 
     private IEnumerator SpawnNewEnergy(float time)
     {
-        yield return new WaitForSeconds(time);
         GameObject energy = Instantiate(energyPreFab, _energy.resourcePlace.transform.position, Quaternion.identity);
         energy.GetComponentInChildren<Object>().Start();
         _energy.PlaceResource(energy.GetComponentInChildren<Resource>());
+        energy.GetComponentInChildren<Object>().IncreaseOpacityOverTime(time);
+        _energy.canTakeResource = false;
+        yield return new WaitForSeconds(time);
+        _energy.canTakeResource = true;
     }
 
     private IEnumerator SpawnNewAmmo(float time)
     {
-        yield return new WaitForSeconds(time);
+        
         GameObject ammo = Instantiate(ammoPreFab, _ammo.resourcePlace.transform.position, Quaternion.identity);
         ammo.GetComponentInChildren<Object>().Start();
         _ammo.PlaceResource(ammo.GetComponentInChildren<Resource>());
+        ammo.GetComponentInChildren<Object>().IncreaseOpacityOverTime(time);
+        _ammo.canTakeResource = false;
+        yield return new WaitForSeconds(time);
+        _ammo.canTakeResource = true;
+
     }
 
     public void IncreaseNumberEmptyCrates()

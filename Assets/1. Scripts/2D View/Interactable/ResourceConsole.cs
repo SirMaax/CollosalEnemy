@@ -14,6 +14,7 @@ public class ResourceConsole : Console
     public bool isEjectingResource = true;
     public bool sameLoadingSpace;
     [SerializeField] private Vector2 ejectDirection;
+    public bool canTakeResource;
 
     [Header("Refs")] 
     [SerializeField] public GameObject resourcePlace;
@@ -22,6 +23,7 @@ public class ResourceConsole : Console
 
     public override void Interact(Player player)
     {
+        if (!canTakeResource) return;
         if (isEjectingResource)
         {
             player.CarryObject(_holdedObject);

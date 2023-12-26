@@ -21,7 +21,7 @@ public class Object : MonoBehaviour
     public Rigidbody2D rb;
     private BoxCollider2D physicalBoxCollider;
     private Transform parent;
-    
+    private SpriteRenderer _spriteRenderer;
     public enum typeObjects
     {
         EnergyCell,
@@ -34,6 +34,7 @@ public class Object : MonoBehaviour
         parent = transform.parent;
         rb = parent.GetComponent<Rigidbody2D>();
         physicalBoxCollider = parent.GetComponent<BoxCollider2D>();
+        _spriteRenderer = GetComponentInParent<SpriteRenderer>();
         canBePickedUp = true;
     }
     
@@ -57,7 +58,8 @@ public class Object : MonoBehaviour
     {
         if (!isPickedUpByContainer && !canBePickedUp && !byPassChecks) return false;
         // if(isPickedUpByContainer && player!=null) player.ThisIsNotAnymoreInPlayerPickUpRadius(this);
-
+        if(isPickedUpByContainer)_spriteRenderer.sortingLayerName = "Default";
+        else _spriteRenderer.sortingLayerName = "Objects";
         canBePickedUp = false;
         isInPickUpRange = false;
         isCarried = true;
@@ -137,5 +139,24 @@ public class Object : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         transform.parent.gameObject.layer = 8;
     }
-    
+
+    public void IncreaseOpacityOverTime(float time)
+    {
+        _spriteRenderer.sortingLayerName = "Boden";
+        Debug.Log("Set to Boden");
+        StartCoroutine(RoutineIncreaseOpacity(0.2f, time));
+    }
+
+    private IEnumerator RoutineIncreaseOpacity(float step, float time)
+    {
+        float currentTime = 0;
+        while (currentTime < time)
+        {
+            yield return new WaitForSeconds(step);
+            currentTime += step;
+            Color color = _spriteRenderer.color;
+            color.a = Mathf.Clamp01(Mathf.Lerp(0, 1, currentTime / time));
+            _spriteRenderer.color = color;
+        }
+    }
 }

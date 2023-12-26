@@ -203,17 +203,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1859664853766003658}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b2d644271ba1de46982c7ca84c63c12, type: 3}
+  m_Script: {fileID: 11500000, guid: cac9635695ed58f49963c097e7273ef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uses: 0
+  type: 0
+  canBePickedUp: 0
+  isCarried: 0
   minSpinForce: 0
   maxSpinForce: 0
   maxForce: 0
   minForce: 0
-  empty: {fileID: 0}
-  canPickUp: 0
-  type: 1
   rb: {fileID: 0}
 --- !u!58 &1859664853766003632
 CircleCollider2D:
