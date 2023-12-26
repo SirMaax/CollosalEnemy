@@ -187,7 +187,7 @@ public class Enemy : BaseMech
         acting = true;
         while (!CheckTransitionToStateGoingInRangeFromAttack())
         {
-            sign.ShowSign(Sign.signType.Attacking,timeBetweenAttacking,flashing:true);
+            sign.ShowSign(Sign.SignType.Attacking,timeBetweenAttacking,flashing:true,flashFaster:true);
             yield return new WaitForSeconds(timeBetweenAttacking);
             Attack();
         }

@@ -45,14 +45,13 @@ public class EnemySpawner : MonoBehaviour
                 index = (int)Random.Range(0, spawnPoints.Length);
             } while (index == lastIndex);
             lastIndex = index;
-            signs[index].GetComponent<Sign>().ShowSign(Sign.signType.EnemyAppearing, time - 0.2f);
+            signs[index].GetComponent<Sign>().ShowSign(Sign.SignType.EnemyAppearing, time - 0.2f);
             indexes.Add(index);
         }
 
         yield return new WaitForSeconds(time);
         foreach (var index in indexes)
         {
-            Debug.Log("spawned enemy");
             SpawnEnemy(index);
         }
         indexes.Clear();
@@ -66,6 +65,5 @@ public class EnemySpawner : MonoBehaviour
         Enemy enemy = Instantiate(enemyPrefab,
             spawnPoints[index].transform.position,
             quaternion.identity).GetComponent<Enemy>();
-
     }
 }
