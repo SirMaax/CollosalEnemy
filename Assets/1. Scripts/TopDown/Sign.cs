@@ -8,7 +8,6 @@ public class Sign : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private float flashingIntervall;
-    private float _flashFasterSpeed = 0.01f;
     private static float _startFlashingIntervall;
     
     [Header("Private")] private SignType type;

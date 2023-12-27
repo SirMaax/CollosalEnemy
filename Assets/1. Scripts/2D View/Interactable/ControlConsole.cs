@@ -7,7 +7,8 @@ public class ControlConsole : Console
 {
     [Header("Variables")] 
     [SerializeField] private ControlStationType type;
-    
+    private bool _isInUse = false;
+    private Player _whichPlayerUsesConsole;
     public enum ControlStationType
     {
         movement,
@@ -17,6 +18,10 @@ public class ControlConsole : Console
     
     public override void Interact(Player player)
     {
+        if (_isInUse && player != _whichPlayerUsesConsole) return;
+        _isInUse = !_isInUse;
+        if (!_isInUse) _whichPlayerUsesConsole = null;
+        
         switch (type )
         {
             case ControlStationType.movement:

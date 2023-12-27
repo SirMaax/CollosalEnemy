@@ -58,6 +58,8 @@ public class Player : MonoBehaviour
         // if (isCarrying) Drop();
         // else TryToPickUp();
         if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
+        else if (consoleNearby && nearestConsole.controlConsole && !nearestConsole.isResourceConsole)
+            InteractWithConsole();
         else if (consoleNearby && nearestConsole.controlConsole && (nearestConsole.isResourceConsole 
                  && !isCarrying)) InteractWithConsole();
         else if (isCarrying && consoleNearby)

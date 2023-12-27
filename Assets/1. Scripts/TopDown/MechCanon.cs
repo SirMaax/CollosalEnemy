@@ -63,5 +63,6 @@ public class MechCanon : MonoBehaviour
     public void MechBodyRotated()
     {
         transform.rotation =  Quaternion.Inverse(transform.parent.rotation) * startRotation;
+        // transform.Rotate();
     }
 }

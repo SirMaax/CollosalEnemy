@@ -5,13 +5,16 @@ public class MechMovement : MonoBehaviour
 {
     [Header("Movement")] 
     [SerializeField] private float maxMovementSpeed;
-    private float currentMovementSpeed;
     [SerializeField] AnimationCurve movementSpeedBehavir;
     [SerializeField] private AnimationCurve slowDownCurve;
-    private float currentStepOnCurve;
     [SerializeField] private float StepSpeed;
-    private bool acceleratingOrDecelerating;
     [SerializeField] private float maxTurningSpeed;
+    [SerializeField] private float _rotationSpeed;
+    [SerializeField] private bool _isTurningInMoveDirection;
+    private float currentMovementSpeed;
+    private float currentStepOnCurve;
+    private bool acceleratingOrDecelerating;
+    private bool isUsingTranslateForMovement = false;
     
     [Header("Vars")] 
     private Quaternion rotation;
@@ -47,9 +50,9 @@ public class MechMovement : MonoBehaviour
             slowDown = 0;
         }
         CalculateMovementSpeed();
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, 
+        if(_isTurningInMoveDirection) transform.rotation = Quaternion.RotateTowards(transform.rotation, 
             Quaternion.Euler(0,0,Vector2.SignedAngle(Vector2.up, input)) 
-        , maxTurningSpeed);
+        , maxTurningSpeed); 
         
         if (input != lastInput && input != Vector2.zero && slowDown == 0)
         {
@@ -58,8 +61,8 @@ public class MechMovement : MonoBehaviour
         }
         
         CalculateMovementSpeed();
-        transform.parent.position = (Vector2)position + (currentMovementSpeed * Time.deltaTime * input);
-        // transform.Translate( currentMovementSpeed * Time.deltaTime * input);
+        if (isUsingTranslateForMovement) input = transform.rotation * input; 
+            transform.parent.position = (Vector2)position + (currentMovementSpeed * Time.deltaTime * input);
         // _mechCanon.MechBodyRotated();
     }
 
@@ -92,5 +95,28 @@ public class MechMovement : MonoBehaviour
     {
         slowDown = 0;
         
+    }
+
+    public void StartMovement(Vector2 newMovement, bool useTranslate=false)
+    {
+        isUsingTranslateForMovement = useTranslate;
+        move = newMovement;
+    }
+
+    public void StopMovement()
+    {
+        move = Vector2.zero;
+        isUsingTranslateForMovement = false;
+    }
+
+    public void Rotate(float direction)
+    {
+        direction *= -1;
+        float rotationAmount = direction * _rotationSpeed * Time.deltaTime;
+        float currentRotation = transform.rotation.eulerAngles.z;
+        float newRotation = (currentRotation + rotationAmount) % 360f;
+        newRotation = (newRotation + 360f) % 360f;
+        // transform.Rotate(Vector3.forward, direction *_rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Euler(0, 0, newRotation);
     }
 }
