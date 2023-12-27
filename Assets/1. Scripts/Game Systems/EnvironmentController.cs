@@ -39,17 +39,17 @@ public class EnvironmentController : MonoBehaviour
         {
             Vector2 forceDirection = gm.players[i].transform.position; 
             ApplyForceInDirection(forceDirection,
-                gm.players[i].GetComponentInChildren<Rigidbody2D>(),false);
+                gm.players[i].GetComponentInParent<Rigidbody2D>(),false);
         }
         
         //Objects
-        GameObject[] objects = GameObject.FindGameObjectsWithTag("Object");
-        foreach (GameObject ele in objects)
-        {
-            Vector2 forceDirection = ele.transform.position;
-            ApplyForceInDirection(forceDirection,
-                ele.GetComponentInChildren<Rigidbody2D>(),true);
-        }
+        // GameObject[] objects = GameObject.FindGameObjectsWithTag("Object");
+        // foreach (GameObject ele in objects)
+        // {
+        //     Vector2 forceDirection = ele.transform.position;
+        //     ApplyForceInDirection(forceDirection,
+        //         ele.GetComponentInChildren<Rigidbody2D>(),true);
+        // }
     }
     
     private void ApplyForceInDirection(Vector2 direction,Rigidbody2D rb, bool isObject)
@@ -70,4 +70,6 @@ public class EnvironmentController : MonoBehaviour
         }
         if(isObject) rb.AddTorque(Random.Range(minSpinForce,maxSpinForce));
     }
+    
+    
 }

@@ -565,6 +565,7 @@ GameObject:
   - component: {fileID: 54318995}
   - component: {fileID: 54318994}
   - component: {fileID: 54318993}
+  - component: {fileID: 54318996}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -632,7 +633,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 20.274967
+  orthographic size: 21.96
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -656,13 +657,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 54318992}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.02, y: -24.27, z: -11.004516}
+  m_LocalPosition: {x: -8.6, y: -24.27, z: -11.004516}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 525929003}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &54318996
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54318992}
+  m_Enabled: 1
 --- !u!1 &78732307
 GameObject:
   m_ObjectHideFlags: 0
@@ -4660,7 +4669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundIsDisabled: 0
-  isBackgroundMusicEnabled: 0
+  isBackgroundMusicEnabled: 1
   SerialeffectSource:
   - {fileID: 877882774}
   - {fileID: 2025442287}

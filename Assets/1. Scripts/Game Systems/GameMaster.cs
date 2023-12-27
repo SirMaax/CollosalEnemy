@@ -50,9 +50,13 @@ public class GameMaster : MonoBehaviour
         for (int i = 0; i < playTime; i++)
         {
             timer.SetText(_timerText + (playTime-i).ToString());
-            if (playTime - i == 30)
+            if (playTime - i == 60)
             {
-                _enemySpawner.amountSpawnEnemies = 3;
+                _enemySpawner.amountSpawnEnemies = 2;
+            }
+            if (playTime - i == 20)
+            {
+                _enemySpawner.amountSpawnEnemies = 4;
             }
             if (playTime-i == 10)
             {
@@ -96,6 +100,12 @@ public class GameMaster : MonoBehaviour
     public void PlayerJoins()
     {
         AMOUNT_PLAYER += 1;
+        foreach (var ele in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            Player player = ele.GetComponent<Player>();
+            players[player.GetPlayerId()] = ele;
+        }
+        
         Debug.Log("Player Joins");
     }
     

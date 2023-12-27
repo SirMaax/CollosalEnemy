@@ -21,9 +21,9 @@ public class Menu : MonoBehaviour
     public void Awake()
     {
         String text = clearedLevel ? "Level Cleared!" : "Level Failed!";
-        levelStatusText.SetText(text);
-        nextLevelButton.SetActive(clearedLevel);
-        restartLevelButton.SetActive(!clearedLevel);
+        if(levelStatusText!=null)levelStatusText.SetText(text);
+        if(nextLevelButton!=null)nextLevelButton.SetActive(clearedLevel);
+        if(restartLevelButton!=null)restartLevelButton.SetActive(!clearedLevel);
     }
 
     public void StartGameWithPlayers(int player)

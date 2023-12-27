@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     public bool objectNearby;
     public Object carriedObject;
     
-    
     [Header("Interaction")] 
     private Console nearestConsole;
     private List<Object> nearestObjects;
@@ -179,5 +178,9 @@ public class Player : MonoBehaviour
         isCarrying = true;
         ChangeWeight();
     }
-    
+
+    public Rigidbody2D GetRigidBody()
+    {
+        return rb;
+    }
 } 

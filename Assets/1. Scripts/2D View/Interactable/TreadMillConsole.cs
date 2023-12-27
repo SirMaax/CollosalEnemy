@@ -101,6 +101,7 @@ public class TreadMillConsole : Console
     protected override void OnTriggerExit2D(Collider2D col)
     {
         PlayerLeavesConsole(col.GetComponent<Player>());
+        col.GetComponent<Player>().inputHandler.TogglePlayerIsTurningMech(false,newState:-1);
         base.OnTriggerExit2D(col);
     }
 }

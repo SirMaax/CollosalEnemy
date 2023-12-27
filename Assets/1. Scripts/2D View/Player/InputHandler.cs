@@ -124,16 +124,18 @@ public class InputHandler : MonoBehaviour
             PlayerIsControllingMech = true;
         }
     }
-
-    public void TogglePlayerIsTurningMech(bool removePlayerSpeed = false)
+    /**
+     * NewState overrides the toggleMechanic -1 means new status is false and 1 means new status is enabled
+     */
+    public void TogglePlayerIsTurningMech(bool removePlayerSpeed = false, int newState = 0)
     {
-        if (playerIsTurningMech)
+        if (playerIsTurningMech || newState ==-1)
         {
             playerIsTurningMech = false;
             _mechCanon.move[_player.GetPlayerId()-1] = Vector2.zero;
             _player.gameObject.GetComponent<MovementController>().canMove = true;
         }
-        else
+        else if(!playerIsTurningMech || newState == 1)
         {
             playerIsTurningMech = true;
             if(removePlayerSpeed)_player.rb.velocity = Vector2.zero;
