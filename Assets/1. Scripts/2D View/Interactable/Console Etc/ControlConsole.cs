@@ -18,8 +18,10 @@ public class ControlConsole : Console
     
     public override void Interact(Player player)
     {
+        if (_isBroken) return;
         if (_isInUse && player != _whichPlayerUsesConsole) return;
         _isInUse = !_isInUse;
+        _whichPlayerUsesConsole = player;
         if (!_isInUse) _whichPlayerUsesConsole = null;
         
         switch (type )
@@ -33,13 +35,28 @@ public class ControlConsole : Console
         }
     }
 
+    protected override void PlayerLeavesConsole(Player player)
+    {
+        if (_isInUse && player == _whichPlayerUsesConsole) Interact(player);
+        base.PlayerLeavesConsole(player);
+    }
+
+    
+    
     private void ControlStation(Player player)
     {
         player.inputHandler.TogglePlayerIsControllingMech();
     }
-
+    
     private void TurningStation(Player player)
     {
         player.inputHandler.TogglePlayerIsTurningMech();
+    }
+
+    protected override void StopAllAction()
+    {
+        if (!_isInUse) return;
+        if(type==ControlStationType.movement)ControlStation(_whichPlayerUsesConsole);
+        else TurningStation(_whichPlayerUsesConsole);
     }
 }

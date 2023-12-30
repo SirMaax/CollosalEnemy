@@ -9,43 +9,37 @@ using UnityEngine.UIElements;
 
 public class InputHandler : MonoBehaviour
 {
-    [Header("Own Logic")] 
-    private bool PlayerIsControllingMech;
+    [Header("Own Logic")] private bool PlayerIsControllingMech;
     private bool playerIsTurningMech;
-    
-    [Header("Character Input Values")]
-    public Vector2 move;
+
+    [Header("Character Input Values")] public Vector2 move;
     public Vector2 look;
     public bool jump;
-    [Header("Movement Settings")]
-    public bool analogMovement;
+    [Header("Movement Settings")] public bool analogMovement;
 
-    [Header("Mouse Cursor Settings")]
-    public bool cursorLocked = true;
+    [Header("Mouse Cursor Settings")] public bool cursorLocked = true;
     public bool cursorInputForLook = true;
-    
-    [Header("Refs")] 
-    private MechMovement _mechMovement;
+
+    [Header("Refs")] private MechMovement _mechMovement;
     private MechCanon _mechCanon;
-    [SerializeField]private MovementController _movement;
+    [SerializeField] private MovementController _movement;
     private PlayerInput _playerInput;
     public InputAction inputAction;
-    [SerializeField]private Player _player;
-    
-    
+    [SerializeField] private Player _player;
+
+
     //How does a function to take input look like?
     public void OnNAMEofPart(InputValue value)
     {
         OtherFunction(value.Get<Vector3>());
-        
     }
-    
+
     public void OtherFunction(Vector3 vec)
     {
         //In combination with this function you specifiy why input is feed to the next function
     }
     //--------------------------------------------//
-    
+
     private void Start()
     {
         GameObject mech = GameObject.Find("Mech");
@@ -53,7 +47,7 @@ public class InputHandler : MonoBehaviour
         _mechCanon = mech.GetComponentInChildren<MechCanon>();
         _playerInput = GetComponent<PlayerInput>();
     }
-    
+
     public void OnMove(InputValue value)
     {
         MoveInput(value.Get<Vector2>());
@@ -61,52 +55,54 @@ public class InputHandler : MonoBehaviour
 
     public void OnUse(InputValue value)
     {
-        _player.Use();
+        if (value.isPressed) _player.Use();
+        else _player.CancelledInput();
     }
 
     public void OnJump(InputValue value)
     {
-        if(value.isPressed) _movement.jumpButtonPressed = true;
+        if (value.isPressed) _movement.jumpButtonPressed = true;
         else _movement.jumpButtonPressed = false;
     }
+
     public void MoveInput(Vector2 newMoveDirection)
     {
-        
         if (_playerInput.currentControlScheme != "Gamepad")
         {
             if (newMoveDirection.y > 0) _movement.jumpButtonPressed = true;
             else _movement.jumpButtonPressed = false;
         }
-        
+
         if (PlayerIsControllingMech)
         {
-            
             // _mechMovement.move[_player.GetPlayerId()] = newMoveDirection;
             _mechMovement.move = newMoveDirection;
             _movement.move = Vector2.zero;
             _movement.jumpButtonPressed = false;
             return;
         }
+
         if (playerIsTurningMech)
         {
             if (newMoveDirection.x > 0.9) newMoveDirection.x = 1;
-            else if(newMoveDirection.x < -0.9)newMoveDirection.x = -1;
-            
+            else if (newMoveDirection.x < -0.9) newMoveDirection.x = -1;
+
             if (_movement.jumpButtonPressed)
             {
                 TogglePlayerIsTurningMech();
                 return;
             }
-            _mechCanon.move[_player.GetPlayerId()-1] = newMoveDirection;
+
+            _mechCanon.move[_player.GetPlayerId() - 1] = newMoveDirection;
             _movement.jumpButtonPressed = false;
         }
-        
+
         //Remove Y component
         newMoveDirection.y = 0;
-        
+
         _movement.move = newMoveDirection;
     }
-    
+
     public void OnEscape(InputValue value)
     {
         GameMaster.ToggleGui();
@@ -124,21 +120,22 @@ public class InputHandler : MonoBehaviour
             PlayerIsControllingMech = true;
         }
     }
+
     /**
      * NewState overrides the toggleMechanic -1 means new status is false and 1 means new status is enabled
      */
     public void TogglePlayerIsTurningMech(bool removePlayerSpeed = false, int newState = 0)
     {
-        if (playerIsTurningMech || newState ==-1)
+        if (playerIsTurningMech || newState == -1)
         {
             playerIsTurningMech = false;
-            _mechCanon.move[_player.GetPlayerId()-1] = Vector2.zero;
+            _mechCanon.move[_player.GetPlayerId() - 1] = Vector2.zero;
             _player.gameObject.GetComponent<MovementController>().canMove = true;
         }
-        else if(!playerIsTurningMech || newState == 1)
+        else if (!playerIsTurningMech || newState == 1)
         {
             playerIsTurningMech = true;
-            if(removePlayerSpeed)_player.rb.velocity = Vector2.zero;
+            if (removePlayerSpeed) _player.rb.velocity = Vector2.zero;
             _player.gameObject.GetComponent<MovementController>().canMove = false;
             _movement.jumpButtonPressed = false;
             MoveInput(_movement.move);

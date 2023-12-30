@@ -39,6 +39,7 @@ public class GroundButton : Console
     
     protected override void OnTriggerEnter2D(Collider2D col)
     {
+        if (_isBroken) return;
         if (col.gameObject.CompareTag("Player"))
         {
             Player player = col.gameObject.GetComponent<Player>();

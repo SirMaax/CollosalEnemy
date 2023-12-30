@@ -35,6 +35,7 @@ public class ShieldSystems : MechSystem
 
     private void ToggleShield()
     {
+        if (_isBroken) return; 
         if (shieldActive)
         {
             if(shieldStatus!=null) shieldStatus.SetText("Shield off");
@@ -77,6 +78,10 @@ public class ShieldSystems : MechSystem
         howManyButtonsPressed = 0;
         buttons.Clear();
     }
-    
-    
+
+    protected override void StopAllAction()
+    {
+        shieldActive = false;
+        if(shieldStatus!=null) shieldStatus.SetText("Shield off");
+    }
 }

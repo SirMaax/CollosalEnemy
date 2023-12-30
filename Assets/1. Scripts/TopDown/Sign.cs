@@ -29,6 +29,7 @@ public class Sign : MonoBehaviour
     {
         EnemyAppearing,
         Attacking,
+        IsBroken,
     }
 
     public void ShowSign(SignType type, float time = 0, bool flashing = false, bool destroyAfterwards = false,bool flashFaster = false)
@@ -40,12 +41,14 @@ public class Sign : MonoBehaviour
         spriteRenderer.color = colors[(int)type];
         spriteRenderer.enabled = true;
         if (time != 0) routine = StartCoroutine(HideSignIn(time, flashing, flashFaster));
+        else if (time == 0 && flashing) StartCoroutine(FlashSignOnly(flashingIntervall));
         if (destroyAfterwards) Destroy(gameObject, time);
     }
 
     public void HideSign()
     {
-        spriteRenderer.enabled = true;
+        spriteRenderer.enabled = false;
+        StopAllCoroutines();
     }
 
     IEnumerator HideSignIn(float time, bool flashing, bool flashFaster)
@@ -70,6 +73,18 @@ public class Sign : MonoBehaviour
             }
         }
         spriteRenderer.enabled = false;
+    }
+    
+    IEnumerator FlashSignOnly(float flashInterval)
+    {
+        bool spriteActive = true;
+        while (true)
+        {
+            yield return new WaitForSeconds(flashInterval);
+            if (spriteActive) spriteRenderer.enabled = false;
+            else spriteRenderer.enabled = true;
+            spriteActive = !spriteActive;
+        }
     }
 
     private void GetSpriteRenderer()

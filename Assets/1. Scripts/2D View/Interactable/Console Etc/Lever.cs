@@ -30,6 +30,7 @@ public class Lever : MonoBehaviour
 
     private void Update()
     {
+        
         if(_useUpdate)CalculateStatus();
     }
     

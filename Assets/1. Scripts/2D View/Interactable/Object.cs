@@ -27,6 +27,7 @@ public class Object : MonoBehaviour
         EnergyCell,
         AmmoCrate,
         EmptyCrate,
+        RepairTool,
     }
     
     public void Start()

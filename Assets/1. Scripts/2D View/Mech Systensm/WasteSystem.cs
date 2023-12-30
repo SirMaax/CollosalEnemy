@@ -21,6 +21,7 @@ public class WasteSystem : MechSystem
     
     private void OnTriggerEnter2D(Collider2D col)
     {
+        if (_isBroken) return;
         if (col.gameObject.CompareTag("Object"))
         {
             giver.IncreaseNumberEmptyCrates();

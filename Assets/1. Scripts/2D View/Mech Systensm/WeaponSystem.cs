@@ -28,6 +28,7 @@ public class WeaponSystem : MechSystem
 
     public override void Trigger(int whichMethod=-1)
     {
+        if (_isBroken) return;
         Shot();
     }
 

@@ -38,8 +38,8 @@
                     "id": "89b447e9-2d32-43cb-a5f1-6949222aa6f8",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Jump",

@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public bool consoleNearby;
     public bool objectNearby;
     public Object carriedObject;
+    private bool _isRepairing;
     
     [Header("Interaction")] 
     private Console nearestConsole;
@@ -55,20 +56,22 @@ public class Player : MonoBehaviour
     
     public void Use()
     {
+        if (_isRepairing) return;
         // if (isCarrying) Drop();
         // else TryToPickUp();
-        if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
+        if (isCarrying && carriedObject.type == Object.typeObjects.RepairTool && consoleNearby &&
+            nearestConsole.GetBrokenStatus()) StartRepairing();
+        else if (consoleNearby && nearestConsole.buttonConsole) nearestConsole.PressButton();
         else if (consoleNearby && nearestConsole.controlConsole && !nearestConsole.isResourceConsole)
             InteractWithConsole();
-        else if (consoleNearby && nearestConsole.controlConsole && (nearestConsole.isResourceConsole 
-                 && !isCarrying)) InteractWithConsole();
+        else if (consoleNearby && nearestConsole.controlConsole && (nearestConsole.isResourceConsole
+                                                                    && !isCarrying)) InteractWithConsole();
         else if (isCarrying && consoleNearby)
         {
             if (nearestConsole.isResourceConsole && !((ResourceConsole)nearestConsole).isLoaded) InteractWithConsole();
             else Drop();
 
         }
-        
         else if (isCarrying) Drop();
         else TryToPickUp();
     }
@@ -184,5 +187,28 @@ public class Player : MonoBehaviour
     public Rigidbody2D GetRigidBody()
     {
         return rb;
+    }
+
+    public void CancelledInput()
+    {
+        if (!_isRepairing) return;
+        _isRepairing = false;
+        nearestConsole.StoppedRepairing();
+    }
+
+    private void StartRepairing()
+    {
+        _isRepairing = true;
+        nearestConsole.StartRepair();
+    }
+
+    public void SetIsRepairing(bool status)
+    {
+        _isRepairing = status;
+    }
+
+    public bool GetIsRepairing()
+    {
+        return _isRepairing;
     }
 } 

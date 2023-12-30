@@ -42,6 +42,7 @@ public class ResourceGiver : MechSystem
 
     public void Update()
     {
+        if (_isBroken) return;
         if(_energy != null && !_energy.isLoaded)StartCoroutine(SpawnNewEnergy(_respawnTime));
         else if(_ammo != null && !_ammo.isLoaded)StartCoroutine(SpawnNewAmmo(_respawnTime));
     }
