@@ -7,7 +7,7 @@ public class Enemy : BaseMech
     [Header("Attributes")]
     [SerializeField] private int health;
     [SerializeField] private float movementSpeed;
-    
+    [SerializeField] private bool _isShielded;
     
     [Header("Behvaior")] 
     public BehaviorState state;
@@ -195,7 +195,7 @@ public class Enemy : BaseMech
         Vector2 dir = (_mech.transform.position - transform.position).normalized;
         Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector2.up, dir))
             .GetComponent<Bullet>();
-        bullet.SetAttributes(dir,Bullet.BulletType.enemy,1.5f);
+        bullet.SetAttributes(dir,Bullet.BulletType.explosion,1.5f);
         SoundManager.Play(SoundManager.Sounds.EnemyHit);
     }
     
@@ -211,7 +211,7 @@ public class Enemy : BaseMech
     #endregion
     public void GetHit()
     {
-        //Animation
+        if (_isShielded) return;
         health -= 1;
         if (health <= 0) Die();
     }
@@ -220,7 +220,7 @@ public class Enemy : BaseMech
     {
         if (!col.gameObject.CompareTag("Bullet")) return;
         Bullet bullet = col.GetComponent<Bullet>();
-        if (bullet.type != Bullet.BulletType.player) return;
+        if (!bullet.firedByPlayer) return;
         bullet.HitSomething();
         GetHit();
     }

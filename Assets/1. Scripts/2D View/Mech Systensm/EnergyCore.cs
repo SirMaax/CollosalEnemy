@@ -114,7 +114,7 @@ public class EnergyCore : MechSystem
         //TODO this
     }
 
-    public bool CheckIfEnoughEnergyForDrainThenDrain(float amountEnergy)
+    public bool CheckIfEnoughEnergyForDrainThenDrain(float amountEnergy, bool playSound = false)
     {
         if (infiteEnergy) return true;
         bool enoughEnergy = false;
@@ -122,8 +122,9 @@ public class EnergyCore : MechSystem
         {
             energyLevel -= amountEnergy;
             enoughEnergy = true;
-        }
+        }else SoundManager.Play(SoundManager.Sounds.NoEnergyLeft);
 
+        
         return enoughEnergy;
     }
 

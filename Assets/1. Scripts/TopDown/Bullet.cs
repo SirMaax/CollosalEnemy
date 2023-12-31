@@ -6,16 +6,17 @@ public class Bullet : MonoBehaviour
 {
     [Header("Attributes")] 
     [SerializeField] private float speed;
-    private float timeAlive;
+    [SerializeField] private float aoeAttackRadius;
     public BulletType type;
+    private float timeAlive;
     private Vector2 direction;
     private bool isAboutToBeRemoved = false;
-    [SerializeField] private float aoeAttackRadius;
+    public bool firedByPlayer;
     
     public enum BulletType
     {
-        enemy,
-        player,
+        explosion,
+        shieldDisrupting
     }
     
     // Start is called before the first frame update
@@ -40,12 +41,13 @@ public class Bullet : MonoBehaviour
         HitSomething();
     }
 
-    public void SetAttributes(Vector2 dir, BulletType newType,float time)
+    public void SetAttributes(Vector2 dir, BulletType newType,float time, bool playerFired = false)
     {
         direction = dir;
         type = newType;
         timeAlive = time;
-        if (newType == BulletType.enemy)
+        this.firedByPlayer = playerFired;
+        if (!playerFired)
         {
             transform.localScale /= 2;
             GetComponentInChildren<ParticleSystem>().transform.localScale /= 3;
@@ -56,7 +58,7 @@ public class Bullet : MonoBehaviour
     {
         if (isAboutToBeRemoved) return;
         isAboutToBeRemoved = true;
-        if (type == BulletType.player) AOEAttack();
+        if (firedByPlayer && type==BulletType.explosion) AOEAttack();
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
         GetComponentInChildren<ParticleSystem>().Play();

@@ -8,17 +8,19 @@ public class WeaponSystem : MechSystem
 {
     
     [Header("Attributes")] 
-    [SerializeField] private float activeEnergyDrain;
-
+    [SerializeField] protected float activeEnergyDrain;
+    [SerializeField] protected Bullet.BulletType _whichBulletUsed;
+    [SerializeField] protected bool _playAnimationAndParticleSystem;
+    
     [Header("Refs")] 
+    [SerializeField] private string[] _allAnimations;
     [SerializeField] private ResourceConsole[] allConsoles;
     [SerializeField] private TMP_Text[] consoleText;
     [SerializeField] private TMP_Text cannonReadyText;
-    [SerializeField] private EventSystem eventSystem;
-    [SerializeField] private MechCanon mechCanon;
+    [SerializeField] protected MechCanon mechCanon;
     [SerializeField] private Animator _animator;
     [SerializeField] private ParticleSystem _particleSystem;
-    private EnergyCore core;
+    protected EnergyCore core;
     
     // Start is called before the first frame update
     void Start()
@@ -56,33 +58,44 @@ public class WeaponSystem : MechSystem
         }
     }
 
-    private void Shot()
+    protected virtual void Shot()
     {
+        if (!AtleastOneAmmoBoxLoaded()) return;
+        if (!core.CheckIfEnoughEnergyForDrainThenDrain(activeEnergyDrain, playSound:true)) return;
+        
+        UnloadAllConsoles();
+        
+        mechCanon.Shoot(_whichBulletUsed);
+        PlayAnimation();
+    }
 
+    protected virtual bool AtleastOneAmmoBoxLoaded()
+    {
         bool atleastAmmoBoxLoaded = false;
         foreach (var console in allConsoles)
         {
             atleastAmmoBoxLoaded = atleastAmmoBoxLoaded || console.isLoaded;
         }
-        
-        if (!atleastAmmoBoxLoaded) return;
-        
-        if (!core.CheckIfEnoughEnergyForDrainThenDrain(activeEnergyDrain))
-        {
-            SoundManager.Play(SoundManager.Sounds.NoEnergyLeft);
-            return;
-        }
-        
+        return atleastAmmoBoxLoaded;
+    }
+
+    protected virtual void UnloadAllConsoles()
+    {
         foreach (var console in allConsoles)
         {
             if (!console.isLoaded) continue;
             console.DepleteResource();
             console.EjectObject();
         }
-        mechCanon.Shoot();
-        _animator.Play("CannonShoting");
-        _particleSystem.Play();
     }
-    
+
+    protected virtual void PlayAnimation()
+    {
+        if (_playAnimationAndParticleSystem)
+        {
+            _animator.Play(_allAnimations[(int)_whichBulletUsed]); 
+            _particleSystem.Play();
+        }
+    }
     
 }

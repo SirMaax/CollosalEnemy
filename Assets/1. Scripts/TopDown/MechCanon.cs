@@ -49,13 +49,13 @@ public class MechCanon : MonoBehaviour
         transform.Rotate(Vector3.forward, turnSpeed * multiplier);
     }
 
-    public void Shoot()
+    public void Shoot(Bullet.BulletType typeFired)
     {
         Vector2 dir = transform.rotation * (new Vector2(0, 1));
         dir.Normalize();
         Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector2.up, dir))
             .GetComponent<Bullet>();
-        bullet.SetAttributes(dir,Bullet.BulletType.player,1.5f);
+        bullet.SetAttributes(dir,typeFired,1.5f, playerFired:true);
         
         SoundManager.Play(SoundManager.Sounds.EnemyHit);
     }
