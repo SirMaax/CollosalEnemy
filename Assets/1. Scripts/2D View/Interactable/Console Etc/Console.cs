@@ -109,7 +109,7 @@ public class Console : MonoBehaviour
         _isBroken = newStatus;
         if (_isBroken)
         {
-            _sign.ShowSign(Sign.SignType.IsBroken, flashing: true);
+            _sign.ShowSign(Sign.SignType.IsBroken, flashing: true,showProgressBar:true);
             StopAllAction();
         }
         else
@@ -142,6 +142,8 @@ public class Console : MonoBehaviour
         {
             yield return new WaitForSeconds(0.1f);
             _repairProgress += _amountPlayerRepairing * 0.03f;
+            Mathf.Clamp01(_repairProgress);
+            _sign.SetProgressOfBar(_repairProgress);
         }
         SetIsBrokenStatus(false);
     }

@@ -7287,7 +7287,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1364026900
 Transform:
   m_ObjectHideFlags: 0
@@ -9280,6 +9280,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ControlConsole
       objectReference: {fileID: 0}
+    - target: {fileID: 6857984617496683224, guid: bb5d6bcfb2273874c8f3cf890201b1b6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874057136415779565, guid: bb5d6bcfb2273874c8f3cf890201b1b6, type: 3}
+      propertyPath: _image
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7874057136415779565, guid: bb5d6bcfb2273874c8f3cf890201b1b6, type: 3}
       propertyPath: signSprites.Array.data[2]
       value: 
@@ -9290,7 +9298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8298288389528619143, guid: bb5d6bcfb2273874c8f3cf890201b1b6, type: 3}
       propertyPath: test
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8298288389528619143, guid: bb5d6bcfb2273874c8f3cf890201b1b6, type: 3}
       propertyPath: controlConsole
@@ -11024,6 +11032,10 @@ PrefabInstance:
     - target: {fileID: 1363424334032535924, guid: 13688d5aa048b3a4689029affb735e99, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1363424334032535925, guid: 13688d5aa048b3a4689029affb735e99, type: 3}
+      propertyPath: soundIsDisabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1363424334032535925, guid: 13688d5aa048b3a4689029affb735e99, type: 3}
       propertyPath: SerialeffectSource.Array.data[0]

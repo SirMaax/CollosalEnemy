@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Sign : MonoBehaviour
 {
@@ -12,17 +13,20 @@ public class Sign : MonoBehaviour
     
     [Header("Private")] private SignType type;
 
-    [Header("References")] [SerializeField]
-    private Sprite[] signSprites;
-
+    [Header("References")] 
+    [SerializeField]private Sprite[] signSprites;
+    [SerializeField] private GameObject _filler;
+    [SerializeField] private GameObject _progressBar;
+    
     [SerializeField] private Color[] colors;
     private SpriteRenderer spriteRenderer;
     private Coroutine routine;
-
+    private float _progressRatio;
     public void Start()
     {
         GetSpriteRenderer();
         _startFlashingIntervall = flashingIntervall;
+        if(_filler!=null)_progressRatio = _filler.transform.localScale.x;
     }
 
     public enum SignType
@@ -32,7 +36,8 @@ public class Sign : MonoBehaviour
         IsBroken,
     }
 
-    public void ShowSign(SignType type, float time = 0, bool flashing = false, bool destroyAfterwards = false,bool flashFaster = false)
+    public void ShowSign(SignType type, float time = 0, bool flashing = false, bool destroyAfterwards = false,
+        bool flashFaster = false, bool showProgressBar = false)
     {
         if (spriteRenderer == null) GetSpriteRenderer();
         if (routine != null) StopCoroutine(routine);
@@ -43,11 +48,17 @@ public class Sign : MonoBehaviour
         if (time != 0) routine = StartCoroutine(HideSignIn(time, flashing, flashFaster));
         else if (time == 0 && flashing) StartCoroutine(FlashSignOnly(flashingIntervall));
         if (destroyAfterwards) Destroy(gameObject, time);
+        if (showProgressBar)
+        {
+            _progressBar.SetActive(true);
+            SetProgressOfBar(0);
+        }
     }
 
     public void HideSign()
     {
         spriteRenderer.enabled = false;
+        if(_progressBar!=null)_progressBar.SetActive(false);
         StopAllCoroutines();
     }
 
@@ -93,5 +104,12 @@ public class Sign : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.enabled = false;
     }
-    
+
+    public void SetProgressOfBar(float percent)
+    {
+        float newScale = percent * _progressRatio;
+        Vector3 localScale = _filler.transform.localScale;
+        localScale.x = newScale;
+        _filler.transform.localScale = localScale;
+    }
 }
