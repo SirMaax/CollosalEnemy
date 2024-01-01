@@ -5,18 +5,24 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [Header("Attributes")] 
-    [SerializeField] private float speed;
-    [SerializeField] private float aoeAttackRadius;
+    [SerializeField] private float[] speeds;
+    [SerializeField] private bool[] _hasAOE;
+    [SerializeField] private float[] aoeAttackRadius;
     public BulletType type;
+    public bool firedByPlayer;
     private float timeAlive;
     private Vector2 direction;
     private bool isAboutToBeRemoved = false;
-    public bool firedByPlayer;
+
+    [Header("References")] 
+    [SerializeField] private Sprite[] _sprites;
+    
     
     public enum BulletType
     {
         explosion,
-        shieldDisrupting
+        shieldDisrupting,
+        standardEnemyShot,
     }
     
     // Start is called before the first frame update
@@ -29,7 +35,7 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         if (isAboutToBeRemoved) return;
-        Vector2 test = speed * Time.deltaTime * direction;
+        Vector2 test = speeds[(int)type] * Time.deltaTime * direction;
         Vector2 current = transform.position;
         transform.position = current + test;
     }
@@ -43,10 +49,12 @@ public class Bullet : MonoBehaviour
 
     public void SetAttributes(Vector2 dir, BulletType newType,float time, bool playerFired = false)
     {
-        direction = dir;
         type = newType;
+        direction = dir;
         timeAlive = time;
         this.firedByPlayer = playerFired;
+        
+        GetComponent<SpriteRenderer>().sprite = _sprites[(int)type];
         if (!playerFired)
         {
             transform.localScale /= 2;
@@ -58,7 +66,7 @@ public class Bullet : MonoBehaviour
     {
         if (isAboutToBeRemoved) return;
         isAboutToBeRemoved = true;
-        if (firedByPlayer && type==BulletType.explosion) AOEAttack();
+        if (firedByPlayer && _hasAOE[(int)type]) AOEAttack();
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
         GetComponentInChildren<ParticleSystem>().Play();
@@ -69,7 +77,7 @@ public class Bullet : MonoBehaviour
     public void AOEAttack()
     {
         CircleCollider2D circleCollider2D = gameObject.AddComponent<CircleCollider2D>();
-        circleCollider2D.radius = aoeAttackRadius;
+        circleCollider2D.radius = aoeAttackRadius[(int)type];
         // circleCollider2D.isTrigger = true;        
 
         ContactFilter2D filter = new ContactFilter2D();

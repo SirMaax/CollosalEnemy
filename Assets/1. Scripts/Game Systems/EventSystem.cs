@@ -20,9 +20,10 @@ public class EventSystem : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera _camera;
 
     
-    public void Attacked()
+    public void Attacked(bool environmentAttack = false, float screenShakeIntensity = -1, float duration = -1)
     {
-        if (shield.shieldActive)
+        
+        if (shield.shieldActive && !environmentAttack)
         {
             // GameMaster.ChangeScoreBy(scoreHitDeflected);
             SoundManager.Play(6) ;
@@ -32,14 +33,14 @@ public class EventSystem : MonoBehaviour
             float x = Random.Range(coordinatesLeftBottom.position.x, coordiantesRightTop.position.x);
             float y = Random.Range(coordinatesLeftBottom.position.y, coordiantesRightTop.position.y);
             _environmentController.ApplyEffectFrom(new Vector2(x, y));
-            StartScreenShake();
+            StartScreenShake(screenShakeIntensity, duration);
         }
     }
 
-    private void StartScreenShake(float intensity = -1)
+    private void StartScreenShake(float intensity = -1, float duration = -1)
     { 
         StopAllCoroutines();
-        StartCoroutine(ScreenShakeCooldown());
+        StartCoroutine(ScreenShakeCooldown(duration));
         float shakeIntensity = intensity == -1 ? _shakeIntensity : intensity;
         _camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = shakeIntensity;
     }
@@ -48,11 +49,12 @@ public class EventSystem : MonoBehaviour
     {
         _camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
     }
-    
-    private IEnumerator ScreenShakeCooldown()
+
+    private IEnumerator ScreenShakeCooldown(float duration = -1)
     {
+        float time = duration != -1 ? _screenShakeDuration : duration;
         yield return new WaitForSeconds(_screenShakeDuration);
         StopScreenShake();
     }
-    
+
 }
