@@ -8,6 +8,7 @@ public class EmpSystem : WeaponSystem
     void Start()
     {
         _playAnimationAndParticleSystem = false;
+        base.Start();
     }
     
     protected override void Shot()

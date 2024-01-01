@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -209,10 +210,15 @@ public class Enemy : BaseMech
         return false;
     }
     #endregion
-    public void GetHit()
+    public void GetHit(Bullet bullet)
     {
-        if (_isShielded) return;
-        health -= 1;
+        
+        if (_isShielded && bullet.type == Bullet.BulletType.shieldDisrupting)
+        {
+            SetShieldStatus(false);
+            return;
+        }
+        health -= bullet.GetDamage();
         if (health <= 0) Die();
     }
 
@@ -220,9 +226,9 @@ public class Enemy : BaseMech
     {
         if (!col.gameObject.CompareTag("Bullet")) return;
         Bullet bullet = col.GetComponent<Bullet>();
-        if (!bullet.firedByPlayer) return;
+        if (!bullet.WasFiredByPlayer()) return;
         bullet.HitSomething();
-        GetHit();
+        GetHit(bullet);
     }
 
     private void Die()
@@ -234,5 +240,18 @@ public class Enemy : BaseMech
     private void RotateGxTowards(Vector2 rot)
     {
         gx.transform.rotation = Quaternion.FromToRotation(Vector3.down, rot);
+    }
+
+    private void SetShieldStatus(bool status)
+    {
+        if (status)
+        {
+            _isShielded = true;
+        }
+        else
+        {
+            _isShielded = false;
+        }
+        
     }
 }

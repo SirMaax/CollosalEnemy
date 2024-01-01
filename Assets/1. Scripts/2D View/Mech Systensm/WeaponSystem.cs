@@ -17,13 +17,15 @@ public class WeaponSystem : MechSystem
     [SerializeField] private ResourceConsole[] allConsoles;
     [SerializeField] private TMP_Text[] consoleText;
     [SerializeField] private TMP_Text cannonReadyText;
-    [SerializeField] protected MechCanon mechCanon;
     [SerializeField] private Animator _animator;
     [SerializeField] private ParticleSystem _particleSystem;
+    
+    [Header("Needed")]
+    [SerializeField] protected MechCanon mechCanon;
     protected EnergyCore core;
     
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         core = GameObject.FindWithTag("Core").GetComponent<EnergyCore>();
     }

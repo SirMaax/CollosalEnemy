@@ -21,10 +21,10 @@ public class Mech : MonoBehaviour
         maxHealth = health;
     }
 
-    private void GetHit()
+    private void GetHit(Bullet bullet)
     {
         eventSystem.Attacked();
-        UpdateHealth(-1);
+        UpdateHealth(-bullet.GetDamage());
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -32,9 +32,9 @@ public class Mech : MonoBehaviour
         if (col.gameObject.CompareTag("Obstacle")) CollidedWithObstacle(); 
         if (!col.gameObject.CompareTag("Bullet")) return;
         Bullet bullet = col.GetComponent<Bullet>();
-        if (bullet.firedByPlayer) return;
+        if (bullet.WasFiredByPlayer()) return;
         bullet.HitSomething();
-        GetHit();
+        GetHit(bullet);
     }
 
     private void UpdateHealth(float value)

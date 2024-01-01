@@ -13,7 +13,7 @@ public class MechCanon : MonoBehaviour
     private int lastDirection;
     
     [Header("Refs")] 
-    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private GameObject[] bulletPrefabs;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,7 +53,7 @@ public class MechCanon : MonoBehaviour
     {
         Vector2 dir = transform.rotation * (new Vector2(0, 1));
         dir.Normalize();
-        Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector2.up, dir))
+        Bullet bullet = Instantiate(bulletPrefabs[(int)typeFired], transform.position, Quaternion.FromToRotation(Vector2.up, dir))
             .GetComponent<Bullet>();
         bullet.SetAttributes(dir,typeFired,1.5f, playerFired:true);
         

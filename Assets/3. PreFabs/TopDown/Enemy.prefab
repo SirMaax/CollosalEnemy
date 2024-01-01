@@ -133,13 +133,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 1
   movementSpeed: 1
+  _isShielded: 0
   state: 0
   allowRandomWalking: 0
   allowStanding: 0
   distanceTillNoticing: 7
   disitacneTillAttacking: 5
   timeBetweenAttacking: 7
-  bulletPrefab: {fileID: 4900820809271894702, guid: 2cb45370d18ecb14fab1aa9c8706ea03, type: 3}
+  bulletPrefab: {fileID: 4900820809271894702, guid: 3727e29983c365f4b9039e9ab695991e, type: 3}
   gx: {fileID: 8833748905839671589}
 --- !u!61 &8833748906841021466
 BoxCollider2D:

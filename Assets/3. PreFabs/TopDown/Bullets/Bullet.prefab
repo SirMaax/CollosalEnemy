@@ -48,21 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2073227f5216d8041932a94ea45832da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speeds:
-  - 0
-  - 0
-  - 0
-  _hasAOE: 010000
-  aoeAttackRadius:
-  - 0
-  - 0
-  - 0
+  _damage: 1
+  speed: 12.5
+  _aoeAttackRadius: 12
   type: 0
   firedByPlayer: 0
-  _sprites:
-  - {fileID: 21300000, guid: f40c3a08d48e28348ac5e7d571fa3720, type: 3}
-  - {fileID: 21300000, guid: 91c941317cac3574db2bc13ba97a4f5a, type: 3}
-  - {fileID: 21300000, guid: f40c3a08d48e28348ac5e7d571fa3720, type: 3}
 --- !u!212 &6917273148590867000
 SpriteRenderer:
   m_ObjectHideFlags: 0

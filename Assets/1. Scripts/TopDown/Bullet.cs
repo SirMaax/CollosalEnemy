@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [Header("Attributes")] 
-    [SerializeField] private float[] speeds;
-    [SerializeField] private bool[] _hasAOE;
-    [SerializeField] private float[] aoeAttackRadius;
+    [Header("Attributes")]
+    [SerializeField] private int _damage;
+    [SerializeField] private float speed;
+    [SerializeField] private float _aoeAttackRadius;
     public BulletType type;
-    public bool firedByPlayer;
+    private bool _firedByPlayer;
     private float timeAlive;
     private Vector2 direction;
     private bool isAboutToBeRemoved = false;
 
-    [Header("References")] 
-    [SerializeField] private Sprite[] _sprites;
     
     
     public enum BulletType
@@ -35,7 +33,7 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         if (isAboutToBeRemoved) return;
-        Vector2 test = speeds[(int)type] * Time.deltaTime * direction;
+        Vector2 test = speed * Time.deltaTime * direction;
         Vector2 current = transform.position;
         transform.position = current + test;
     }
@@ -52,21 +50,14 @@ public class Bullet : MonoBehaviour
         type = newType;
         direction = dir;
         timeAlive = time;
-        this.firedByPlayer = playerFired;
-        
-        GetComponent<SpriteRenderer>().sprite = _sprites[(int)type];
-        if (!playerFired)
-        {
-            transform.localScale /= 2;
-            GetComponentInChildren<ParticleSystem>().transform.localScale /= 3;
-        }
+        this._firedByPlayer = playerFired;
     }
 
     public void HitSomething()
     {
         if (isAboutToBeRemoved) return;
         isAboutToBeRemoved = true;
-        if (firedByPlayer && _hasAOE[(int)type]) AOEAttack();
+        if (_firedByPlayer && _aoeAttackRadius > 0) AOEAttack();
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
         GetComponentInChildren<ParticleSystem>().Play();
@@ -77,7 +68,7 @@ public class Bullet : MonoBehaviour
     public void AOEAttack()
     {
         CircleCollider2D circleCollider2D = gameObject.AddComponent<CircleCollider2D>();
-        circleCollider2D.radius = aoeAttackRadius[(int)type];
+        circleCollider2D.radius = _aoeAttackRadius;
         // circleCollider2D.isTrigger = true;        
 
         ContactFilter2D filter = new ContactFilter2D();
@@ -88,7 +79,17 @@ public class Bullet : MonoBehaviour
         {
             if (!contact.CompareTag("Enemy")) return;
             Enemy enemy = contact.GetComponent<Enemy>();
-            enemy.GetHit();
+            enemy.GetHit(this);
         }
+    }
+
+    public int GetDamage()
+    {
+        return _damage;
+    }
+
+    public bool WasFiredByPlayer()
+    {
+        return _firedByPlayer;
     }
 }
