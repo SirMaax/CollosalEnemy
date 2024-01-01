@@ -37,7 +37,8 @@ public class EnvironmentController : MonoBehaviour
         //Players
         for (int i = 0; i < GameMaster.AMOUNT_PLAYER; i++)
         {
-            Vector2 forceDirection = gm.players[i].transform.position; 
+            Vector2 forceDirection = (Vector2)gm.players[i].transform.parent.position - origin;
+            forceDirection.Normalize();
             ApplyForceInDirection(forceDirection,
                 gm.players[i].GetComponentInParent<Rigidbody2D>(),false);
         }
@@ -57,7 +58,7 @@ public class EnvironmentController : MonoBehaviour
         if (disableEnvironment) return;
         if (direction == Vector2.zero)
         {
-            float x = Random.Range(-100, 100);
+            float x = Random.Range(100, 100);
             float y = Random.Range(-100, 100);
             Vector2 dir = new Vector2(x, y);
             dir.Normalize();

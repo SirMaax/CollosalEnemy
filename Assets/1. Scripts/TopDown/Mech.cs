@@ -30,7 +30,7 @@ public class Mech : MonoBehaviour
     {
         if (!col.gameObject.CompareTag("Bullet")) return;
         Bullet bullet = col.GetComponent<Bullet>();
-        if (!bullet.firedByPlayer) return;
+        if (bullet.firedByPlayer) return;
         bullet.HitSomething();
         GetHit();
     }
