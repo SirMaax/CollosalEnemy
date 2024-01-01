@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -14,7 +15,8 @@ public class Player : MonoBehaviour
     public bool objectNearby;
     public Object carriedObject;
     private bool _isRepairing;
-    
+
+
     [Header("Interaction")] 
     private Console nearestConsole;
     private List<Object> nearestObjects;
@@ -27,11 +29,14 @@ public class Player : MonoBehaviour
     
     [Header("Refs")]
     [SerializeField] private GameObject positionForCarryObject;
-    public InputHandler inputHandler;
-    [SerializeField]private MovementController _movement;
-    public Rigidbody2D rb;
     [SerializeField] private Sprite[] sprites;
-    
+    [SerializeField]private MovementController _movement;
+    public InputHandler inputHandler;
+    public Rigidbody2D rb;
+
+    [Header("Other")] 
+    private Object _highlightedObject;
+    private Console _hightlightedConsole;
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +57,7 @@ public class Player : MonoBehaviour
         objectNearby = nearestObjects.Count > 0;
 
         if (isCarrying) UpdateObjectPosition();
+        HightlightClosestObjectOrConsole();
     }
     
     public void Use()
@@ -210,5 +216,39 @@ public class Player : MonoBehaviour
     public bool GetIsRepairing()
     {
         return _isRepairing;
+    }
+
+    private void HightlightClosestObjectOrConsole()
+    {
+        Object closestObject = null;
+        float smallestDistance = math.INFINITY;
+        foreach (var element in nearestObjects)
+        {
+            float distance = (rb.position - (Vector2)element.transform.position).magnitude;
+            if (distance < smallestDistance)
+            {
+                smallestDistance = distance;
+                closestObject = element;
+            }
+        }
+        
+        if (_hightlightedConsole != null) _hightlightedConsole.StopHighlight();
+        if (_highlightedObject != null) _highlightedObject.StopHighlight();
+
+        
+        if (consoleNearby &&((Vector2)nearestConsole.transform.position - rb.position).magnitude < smallestDistance)
+        {
+
+            nearestConsole.Highlight();
+            _hightlightedConsole = nearestConsole;
+        }
+        else if(closestObject!=null && !isCarrying)
+        {
+
+
+            closestObject.Highlight();
+            _highlightedObject = closestObject;
+        }
+
     }
 } 

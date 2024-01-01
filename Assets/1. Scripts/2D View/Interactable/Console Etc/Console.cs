@@ -12,17 +12,26 @@ public class Console : MonoBehaviour
     [SerializeField] public bool buttonConsole;
     [SerializeField] public bool controlConsole;
     [SerializeField] public bool isResourceConsole;
+    [SerializeField] private bool test;
+
+
+    [Header("Highlighting")] 
+    [SerializeField] private bool _usesHighliting = true;
+    
+    [Header("References")] 
+    [SerializeField] protected Sign _sign;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private Sprite _highlightSprite;
+
+    [Header("Other")] 
     protected bool _isBroken;
     public bool wasPressed;
+    private Sprite _startSprite;
     private EConsoleType _type;
     private float _repairProgress = 0;
     private float _amountPlayerRepairing = 0;
     private Coroutine _repairRoutine;
-    [SerializeField] private bool test;
-
-    [Header("References")] [SerializeField]
-    protected Sign _sign;
-
+    
     public enum enumResource
     {
         Energy,
@@ -36,16 +45,6 @@ public class Console : MonoBehaviour
         resourceConsole,
         repairConsole,
     }
-
-    private void Update()
-    {
-        if (test)
-        {
-            test = false;
-            SetIsBrokenStatus(true);
-        }
-    }
-
 
     // Start is called before the first frame update
     void Start()
@@ -61,8 +60,19 @@ public class Console : MonoBehaviour
             GetComponent<SpriteRenderer>().enabled = false;
             GetComponent<Rigidbody2D>().isKinematic = true;
         }
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _startSprite = _spriteRenderer.sprite;
     }
-
+    
+    private void Update()
+    {
+        if (test)
+        {
+            test = false;
+            SetIsBrokenStatus(true);
+        }
+    }
+    
     protected virtual void PlayerEntersConsole(Player player)
     {
         player.SetConsole(this);
@@ -156,5 +166,18 @@ public class Console : MonoBehaviour
     public bool GetBrokenStatus()
     {
         return _isBroken;
+    }
+    
+    public virtual void Highlight()
+    {
+        if (!_usesHighliting) return;
+        _spriteRenderer.sprite = _highlightSprite;
+    }
+    
+    public virtual void StopHighlight()
+    {
+        if (!_usesHighliting) return;
+        _spriteRenderer.sprite = _startSprite;
+        
     }
 }

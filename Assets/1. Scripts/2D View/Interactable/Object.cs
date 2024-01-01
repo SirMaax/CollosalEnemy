@@ -5,11 +5,14 @@ using UnityEngine;
 public class Object : MonoBehaviour
 {
     
-    [Header("State")] public typeObjects type;
-    
+    [Header("State")] 
+    public typeObjects type;
     public bool canBePickedUp;
-    private bool isInPickUpRange;
     public bool isCarried = false;
+    private bool isInPickUpRange;
+
+    [Header("Highlighting")]
+    [SerializeField] private bool _usesHighliting = true;
     
     [Header("Ejection Force")]
     [SerializeField] private float minSpinForce;
@@ -18,10 +21,15 @@ public class Object : MonoBehaviour
     [SerializeField] private float minForce;
 
     [Header("Refs")] 
+    [SerializeField]private SpriteRenderer _spriteRenderer;
+    [SerializeField] private Sprite _highlightSprite;
     public Rigidbody2D rb;
     private BoxCollider2D physicalBoxCollider;
     private Transform parent;
-    private SpriteRenderer _spriteRenderer;
+
+    [Header("Others")] 
+    private Sprite _startSprite;
+    
     public enum typeObjects
     {
         EnergyCell,
@@ -32,10 +40,12 @@ public class Object : MonoBehaviour
     
     public void Start()
     {
+        _usesHighliting = true;
         parent = transform.parent;
         rb = parent.GetComponent<Rigidbody2D>();
         physicalBoxCollider = parent.GetComponent<BoxCollider2D>();
         _spriteRenderer = GetComponentInParent<SpriteRenderer>();
+        _startSprite = _spriteRenderer.sprite;
         canBePickedUp = true;
     }
     
@@ -159,4 +169,17 @@ public class Object : MonoBehaviour
             _spriteRenderer.color = color;
         }
     }
+
+    public virtual void Highlight()
+    {
+        if (!_usesHighliting) return;
+        _spriteRenderer.sprite = _highlightSprite;
+    }
+    
+    public virtual void StopHighlight()
+    {
+        if (!_usesHighliting) return;
+        _spriteRenderer.sprite = _startSprite;
+    }
+    
 }
