@@ -5,44 +5,46 @@ using Random = UnityEngine.Random;
 
 public class Enemy : BaseMech
 {
-    [Header("Attributes")]
-    [SerializeField] private int health;
+    [Header("Attributes")] [SerializeField]
+    private int health;
+
     [SerializeField] private float movementSpeed;
     [SerializeField] private bool _isShielded;
-    
-    [Header("Behvaior")] 
-    public BehaviorState state;
+
+    [Header("Behvaior")] public BehaviorState state;
     private bool isMoving;
     private bool acting;
 
-    [Header("Behavior Toggling")] 
-    [SerializeField] private bool allowRandomWalking;
+    [Header("Behavior Toggling")] [SerializeField]
+    private bool allowRandomWalking;
+
     [SerializeField] private bool allowStanding;
 
-    [Header("Transition")]
-    [Tooltip("Distance till enemy notices mech and will start to attack")]
-    [SerializeField] private float distanceTillNoticing; 
+    [Header("Transition")] [Tooltip("Distance till enemy notices mech and will start to attack")] [SerializeField]
+    private float distanceTillNoticing;
+
     [SerializeField] private float disitacneTillAttacking;
     [SerializeField] private float timeBetweenAttacking;
-    
-    [Header("Refs")] 
-    private MechMovement _mech;
+
+    [Header("Refs")] private MechMovement _mech;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject gx;
-    
-    [Header("Other")] 
-    private Vector2 movementDirection;
+
+    [Header("Other")] private Vector2 movementDirection;
+    private Coroutine _routine;
+
     public enum BehaviorState
     {
         Walking,
         GoingInRange,
         Attacking,
     }
+
     // Start is called before the first frame update
     void Start()
     {
         base.Start();
-        _mech = GameObject.FindWithTag("Mech").GetComponentInChildren < MechMovement>();
+        _mech = GameObject.FindWithTag("Mech").GetComponentInChildren<MechMovement>();
     }
 
     // Update is called once per frame
@@ -50,11 +52,11 @@ public class Enemy : BaseMech
     {
         if (isMoving)
         {
-            transform.Translate( movementSpeed * Time.deltaTime* movementDirection);
+            transform.Translate(movementSpeed * Time.deltaTime * movementDirection);
         }
-        
+
         if (acting) return;
-        
+
         switch (state)
         {
             case BehaviorState.Walking:
@@ -67,11 +69,10 @@ public class Enemy : BaseMech
                 Attacking();
                 break;
         }
-
-        
     }
-    
-    #region Walking State    
+
+    #region Walking State
+
     /// <summary>
     /// Walking state
     /// - Random Movement           20%
@@ -80,11 +81,11 @@ public class Enemy : BaseMech
     /// </summary>
     private void Walking()
     {
-        if(CheckTransitionToStateGoingInRange())return;
+        if (CheckTransitionToStateGoingInRange()) return;
         int baseValue = 0;
         baseValue += !allowRandomWalking ? 20 : 0;
         baseValue += !allowStanding ? 40 : 0;
-        
+
         int whichAction = Random.Range(baseValue, 101);
         switch (whichAction)
         {
@@ -113,20 +114,22 @@ public class Enemy : BaseMech
     private IEnumerator MoveInDirectionForSeconds(float time)
     {
         acting = true;
-        isMoving = true; 
+        isMoving = true;
         yield return new WaitForSeconds(time);
         acting = false;
         isMoving = false;
     }
 
-    private void MoveTowardsTarget()
+    private void MoveTowardsTarget(bool noTime = false, int percentSpeedReduce = 1)
     {
         Vector2 dir = (_mech.position - transform.position).normalized;
         float howLongMoving = Random.Range(1f, 2f);
         movementDirection = dir;
         RotateGxTowards(movementDirection);
-        StartCoroutine(MoveInDirectionForSeconds(howLongMoving));
+        if(noTime)transform.Translate(movementSpeed/percentSpeedReduce * Time.deltaTime * movementDirection);
+        else StartCoroutine(MoveInDirectionForSeconds(howLongMoving));
     }
+
     /// <summary>
     /// Check if next state is available
     /// </summary>
@@ -137,16 +140,18 @@ public class Enemy : BaseMech
         {
             state = BehaviorState.GoingInRange;
             return true;
-        } 
+        }
+
         return false;
     }
+
     #endregion
-    
+
     #region GoingInRange
 
     private void GoingInRange()
     {
-        if(CheckTransitionToStateAttacking())return;
+        if (CheckTransitionToStateAttacking()) return;
         MoveTowardsTarget();
     }
 
@@ -162,16 +167,32 @@ public class Enemy : BaseMech
             state = BehaviorState.Walking;
             return true;
         }
+
         return false;
     }
+
     #endregion
-    
+
     #region Attacking
 
     private void Attacking()
     {
-        StartCoroutine(AttackCooldown());
+        
+        if (_routine == null) _routine = StartCoroutine(AttackCooldown());
+        float distance = (_mech.transform.position - transform.position).magnitude;
+        RotateGxTowards(_mech.transform.position - transform.position);
+        if (distance > disitacneTillAttacking && distance < disitacneTillAttacking * 1.2f)
+        {
+            MoveTowardsTarget(noTime: true, percentSpeedReduce:2/3);
+        }
+        else if (distance > disitacneTillAttacking * 1.2f)
+        {
+            state = BehaviorState.Walking;
+            StopCoroutine(_routine);
+            return;
+        }
     }
+
     /// <summary>
     /// Split into 2 phases
     /// - Attack Cooldown
@@ -180,15 +201,14 @@ public class Enemy : BaseMech
     /// <returns></returns>
     private IEnumerator AttackCooldown()
     {
-        acting = true;
-        while (!CheckTransitionToStateGoingInRangeFromAttack())
-        {
-            sign.ShowSign(Sign.SignType.Attacking,timeBetweenAttacking,flashing:true,flashFaster:true);
-            yield return new WaitForSeconds(timeBetweenAttacking);
-            Attack();
-        }
+        // acting = true;
+        // while (!CheckTransitionToStateGoingInRangeFromAttack())
+        // {
+        sign.ShowSign(Sign.SignType.Attacking, timeBetweenAttacking, flashing: true, flashFaster: true);
+        yield return new WaitForSeconds(timeBetweenAttacking);
+        Attack();
+        _routine = null;
 
-        acting = false;
     }
 
     private void Attack()
@@ -196,28 +216,31 @@ public class Enemy : BaseMech
         Vector2 dir = (_mech.transform.position - transform.position).normalized;
         Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector2.up, dir))
             .GetComponent<Bullet>();
-        bullet.SetAttributes(dir,Bullet.BulletType.explosion,1.5f);
+        bullet.SetAttributes(dir, Bullet.BulletType.explosion, 1.5f);
         SoundManager.Play(SoundManager.Sounds.EnemyHit);
     }
-    
+
     private bool CheckTransitionToStateGoingInRangeFromAttack()
     {
         if ((transform.position - _mech.position).magnitude > disitacneTillAttacking)
         {
-            state = BehaviorState.GoingInRange; 
+            state = BehaviorState.GoingInRange;
             return true;
         }
+
         return false;
     }
+
     #endregion
+
     public void GetHit(Bullet bullet)
     {
-        
         if (_isShielded && bullet.type == Bullet.BulletType.shieldDisrupting)
         {
             SetShieldStatus(false);
             return;
         }
+
         health -= bullet.GetDamage();
         if (health <= 0) Die();
     }
@@ -252,6 +275,5 @@ public class Enemy : BaseMech
         {
             _isShielded = false;
         }
-        
     }
 }

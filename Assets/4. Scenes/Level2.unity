@@ -12832,6 +12832,10 @@ PrefabInstance:
       propertyPath: eventSystem
       value: 
       objectReference: {fileID: 725244913}
+    - target: {fileID: 3514393310119447819, guid: 8e764646d2ff47142ab0210f0593fae6, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3514393310119447829, guid: 8e764646d2ff47142ab0210f0593fae6, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.x
       value: 0.5
