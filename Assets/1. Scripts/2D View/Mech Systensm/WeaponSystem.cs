@@ -22,13 +22,10 @@ public class WeaponSystem : MechSystem
     
     [Header("Needed")]
     [SerializeField] protected MechCanon mechCanon;
-    protected EnergyCore core;
+    [SerializeField] protected EnergyCore core;
     
     // Start is called before the first frame update
-    protected void Start()
-    {
-        core = GameObject.FindWithTag("Core").GetComponent<EnergyCore>();
-    }
+    
 
     public override void Trigger(int whichMethod=-1)
     {

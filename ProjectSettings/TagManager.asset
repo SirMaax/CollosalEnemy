@@ -13,6 +13,8 @@ TagManager:
   - Enemy
   - SpawnPoint
   - Obstacle
+  - MechSystem
+  - Console
   layers:
   - Default
   - TransparentFX

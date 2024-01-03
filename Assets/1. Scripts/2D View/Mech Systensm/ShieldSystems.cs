@@ -16,15 +16,14 @@ public class ShieldSystems : MechSystem
     
     
     [Header("Refs")] 
-    private GameMaster GM;
-    private EnergyCore core;
+    [SerializeField] private EnergyCore core;
     [SerializeField] private TMP_Text shieldStatus;
+    private GameMaster GM;
     private Coroutine timeTillButtonsReset;
     private List<GameObject> buttons;
     private void Awake()
     {
         shieldActive = false;
-        core = GameObject.FindWithTag("Core").GetComponent<EnergyCore>();
     }
 
     // Update is called once per frame

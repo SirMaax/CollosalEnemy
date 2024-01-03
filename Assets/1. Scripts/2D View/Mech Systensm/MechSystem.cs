@@ -38,4 +38,9 @@ public class MechSystem : MonoBehaviour
     }
 
     protected virtual void StopAllAction(){}
+
+    public bool GetIsBroken()
+    {
+        return _isBroken;
+    }
 }

@@ -6,9 +6,12 @@ using UnityEngine.UI;
 
 public class Mech : MonoBehaviour
 {
-    [Header("Attributes")] [SerializeField]
-    private float health;
+    [Header("Attributes")] 
+    [SerializeField] private float health;
 
+    [Header("Test")] 
+    [SerializeField] private bool _infiniteHealth;
+    
     [Header("Private")] private float maxHealth;
 
     [Header("References")] [SerializeField]
@@ -37,8 +40,9 @@ public class Mech : MonoBehaviour
         GetHit(bullet);
     }
 
-    private void UpdateHealth(float value)
+    public void UpdateHealth(float value)
     {
+        if (_infiniteHealth) return;
         health += value;
         slider.fillAmount = health / maxHealth;
         if (health <= 0) Die();
@@ -58,4 +62,6 @@ public class Mech : MonoBehaviour
         //Maybe take health dmg
         eventSystem.Attacked(environmentAttack:true,screenShakeIntensity:1);
     }
+
+    
 }
