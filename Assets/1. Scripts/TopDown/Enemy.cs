@@ -23,15 +23,15 @@ public class Enemy : BaseMech
     [Header("Transition")] [Tooltip("Distance till enemy notices mech and will start to attack")] [SerializeField]
     private float distanceTillNoticing;
 
-    [SerializeField] private float disitacneTillAttacking;
-    [SerializeField] private float timeBetweenAttacking;
+    [SerializeField] protected float disitacneTillAttacking;
+    [SerializeField] protected float timeBetweenAttacking;
 
-    [Header("Refs")] private MechMovement _mech;
+    [Header("Refs")] protected MechMovement _mech;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject gx;
 
     [Header("Other")] private Vector2 movementDirection;
-    private Coroutine _routine;
+    protected Coroutine _routine;
 
     public enum BehaviorState
     {
@@ -41,22 +41,26 @@ public class Enemy : BaseMech
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
-        base.Start();
         _mech = GameObject.FindWithTag("Mech").GetComponentInChildren<MechMovement>();
+        base.Start();
     }
 
     // Update is called once per frame
     void Update()
     {
+        State();
+    }
+
+    protected virtual void State()
+    {
         if (isMoving)
         {
             transform.Translate(movementSpeed * Time.deltaTime * movementDirection);
         }
-
+        
         if (acting) return;
-
         switch (state)
         {
             case BehaviorState.Walking:
@@ -79,7 +83,7 @@ public class Enemy : BaseMech
     /// - Standing                  40%
     /// - Movement towards target   40%
     /// </summary>
-    private void Walking()
+    protected virtual void Walking()
     {
         if (CheckTransitionToStateGoingInRange()) return;
         int baseValue = 0;
@@ -101,7 +105,7 @@ public class Enemy : BaseMech
         }
     }
 
-    private void RandomMovement()
+    protected virtual void RandomMovement()
     {
         float howLongMoving = Random.Range(3f, 3f);
         float x = Random.Range(-1f, 1f);
@@ -120,7 +124,7 @@ public class Enemy : BaseMech
         isMoving = false;
     }
 
-    private void MoveTowardsTarget(bool noTime = false, int percentSpeedReduce = 1)
+    protected virtual void MoveTowardsTarget(bool noTime = false, int percentSpeedReduce = 1)
     {
         Vector2 dir = (_mech.position - transform.position).normalized;
         float howLongMoving = Random.Range(1f, 2f);
@@ -134,7 +138,7 @@ public class Enemy : BaseMech
     /// Check if next state is available
     /// </summary>
     /// <returns>If state was changed</returns>
-    private bool CheckTransitionToStateGoingInRange()
+    protected virtual bool CheckTransitionToStateGoingInRange()
     {
         if ((transform.position - _mech.position).magnitude < distanceTillNoticing)
         {
@@ -149,13 +153,13 @@ public class Enemy : BaseMech
 
     #region GoingInRange
 
-    private void GoingInRange()
+    protected virtual void GoingInRange()
     {
         if (CheckTransitionToStateAttacking()) return;
         MoveTowardsTarget();
     }
 
-    private bool CheckTransitionToStateAttacking()
+    protected virtual bool CheckTransitionToStateAttacking()
     {
         if ((transform.position - _mech.position).magnitude < disitacneTillAttacking)
         {
@@ -175,13 +179,13 @@ public class Enemy : BaseMech
 
     #region Attacking
 
-    private void Attacking()
+    protected virtual void Attacking(bool moveToTarget = false)
     {
         
         if (_routine == null) _routine = StartCoroutine(AttackCooldown());
         float distance = (_mech.transform.position - transform.position).magnitude;
         RotateGxTowards(_mech.transform.position - transform.position);
-        if (distance > disitacneTillAttacking && distance < disitacneTillAttacking * 1.2f)
+        if (distance > disitacneTillAttacking && distance < disitacneTillAttacking * 1.2f && moveToTarget)
         {
             MoveTowardsTarget(noTime: true, percentSpeedReduce:2/3);
         }
@@ -189,7 +193,6 @@ public class Enemy : BaseMech
         {
             state = BehaviorState.Walking;
             StopCoroutine(_routine);
-            return;
         }
     }
 
@@ -199,7 +202,7 @@ public class Enemy : BaseMech
     /// - Attacking
     /// </summary>
     /// <returns></returns>
-    private IEnumerator AttackCooldown()
+    protected IEnumerator AttackCooldown()
     {
         // acting = true;
         // while (!CheckTransitionToStateGoingInRangeFromAttack())
@@ -211,7 +214,7 @@ public class Enemy : BaseMech
 
     }
 
-    private void Attack()
+    protected virtual void Attack()
     {
         Vector2 dir = (_mech.transform.position - transform.position).normalized;
         Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.FromToRotation(Vector2.up, dir))
@@ -220,7 +223,7 @@ public class Enemy : BaseMech
         SoundManager.Play(SoundManager.Sounds.EnemyHit);
     }
 
-    private bool CheckTransitionToStateGoingInRangeFromAttack()
+    protected virtual bool CheckTransitionToStateGoingInRangeFromAttack()
     {
         if ((transform.position - _mech.position).magnitude > disitacneTillAttacking)
         {
@@ -233,7 +236,7 @@ public class Enemy : BaseMech
 
     #endregion
 
-    public void GetHit(Bullet bullet)
+    public virtual void GetHit(Bullet bullet)
     {
         if (_isShielded && bullet.type == Bullet.BulletType.shieldDisrupting)
         {
@@ -245,7 +248,7 @@ public class Enemy : BaseMech
         if (health <= 0) Die();
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    protected virtual void OnTriggerEnter2D(Collider2D col)
     {
         if (!col.gameObject.CompareTag("Bullet")) return;
         Bullet bullet = col.GetComponent<Bullet>();
@@ -254,18 +257,18 @@ public class Enemy : BaseMech
         GetHit(bullet);
     }
 
-    private void Die()
+    protected  virtual void Die()
     {
         //TriggerAnimation
         Destroy(gameObject);
     }
 
-    private void RotateGxTowards(Vector2 rot)
+    protected void RotateGxTowards(Vector2 rot)
     {
         gx.transform.rotation = Quaternion.FromToRotation(Vector3.down, rot);
     }
 
-    private void SetShieldStatus(bool status)
+    protected void SetShieldStatus(bool status)
     {
         if (status)
         {
