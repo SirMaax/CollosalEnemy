@@ -24,10 +24,11 @@ public class Mech : MonoBehaviour
         maxHealth = health;
     }
 
-    private void GetHit(Bullet bullet)
+    public void GetHit(Bullet bullet = null, int damage = 0 )
     {
         eventSystem.Attacked();
-        UpdateHealth(-bullet.GetDamage());
+        if(bullet!=null) UpdateHealth(-bullet.GetDamage());
+        else UpdateHealth(damage);
     }
 
     private void OnTriggerEnter2D(Collider2D col)

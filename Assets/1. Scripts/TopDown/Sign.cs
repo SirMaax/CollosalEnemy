@@ -34,11 +34,13 @@ public class Sign : MonoBehaviour
         EnemyAppearing,
         Attacking,
         IsBroken,
+        AirStrike,
     }
 
     public void ShowSign(SignType type, float time = 0, bool flashing = false, bool destroyAfterwards = false,
         bool flashFaster = false, bool showProgressBar = false)
     {
+        if (flashFaster) flashing = true;
         if (spriteRenderer == null) GetSpriteRenderer();
         if (routine != null) StopCoroutine(routine);
 

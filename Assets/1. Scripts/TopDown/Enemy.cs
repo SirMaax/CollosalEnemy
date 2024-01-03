@@ -236,7 +236,7 @@ public class Enemy : BaseMech
 
     #endregion
 
-    public virtual void GetHit(Bullet bullet)
+    public virtual void GetHit(Bullet bullet = null, int damage = 0)
     {
         if (_isShielded && bullet.type == Bullet.BulletType.shieldDisrupting)
         {
@@ -244,7 +244,9 @@ public class Enemy : BaseMech
             return;
         }
 
-        health -= bullet.GetDamage();
+        if (bullet != null) health -= bullet.GetDamage();
+        else health -= damage;
+        
         if (health <= 0) Die();
     }
 

@@ -17,7 +17,7 @@ public class TopdownEvent : MonoBehaviour
     }
     
 
-    public void TriggerEvent(EEvent eEvent, bool delteThisAfterwards = false)
+    public void TriggerEvent(EEvent eEvent, bool deleteThisAfterwards = false)
     {
         switch (eEvent)
         {
@@ -34,9 +34,12 @@ public class TopdownEvent : MonoBehaviour
                 _openDoor.SetActive(false);
                 _closeDoor.SetActive(true);
                 break;
+            
         }
-        if (delteThisAfterwards) Destroy(gameObject);
+        if (deleteThisAfterwards) Destroy(gameObject);
 
 
     }
+
+    
 }
