@@ -22,7 +22,6 @@ public class Enemy : BaseMech
 
     [Header("Transition")] [Tooltip("Distance till enemy notices mech and will start to attack")] [SerializeField]
     private float distanceTillNoticing;
-
     [SerializeField] protected float disitacneTillAttacking;
     [SerializeField] protected float timeBetweenAttacking;
 
@@ -30,7 +29,9 @@ public class Enemy : BaseMech
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject gx;
 
-    [Header("Other")] private Vector2 movementDirection;
+    [Header("Other")] 
+    private Vector2 movementDirection;
+    private float _startMovementSpeed;
     protected Coroutine _routine;
 
     public enum BehaviorState
@@ -44,6 +45,7 @@ public class Enemy : BaseMech
     protected void Start()
     {
         _mech = GameObject.FindWithTag("Mech").GetComponentInChildren<MechMovement>();
+        _startMovementSpeed = movementSpeed;
         base.Start();
     }
 
@@ -280,5 +282,19 @@ public class Enemy : BaseMech
         {
             _isShielded = false;
         }
+    }
+
+    public void ApplyEffect(bool resetEffect = false, float slowDownPercent = -1)
+    {
+        if (resetEffect) ResetEffects();
+        if (slowDownPercent != -1)
+        {
+            movementSpeed = _startMovementSpeed/ slowDownPercent;
+        }
+    }
+    
+    public void ResetEffects()
+    {
+        movementSpeed = _startMovementSpeed;
     }
 }

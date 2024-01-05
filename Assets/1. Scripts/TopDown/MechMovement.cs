@@ -17,18 +17,21 @@ public class MechMovement : MonoBehaviour
     private bool isUsingTranslateForMovement = false;
     
     [Header("Vars")] 
+    public Vector3 position;
+    public Vector2 move;
     private Quaternion rotation;
     private Vector2 lastInput;
     private Vector2 slowDownInput;
-    public Vector2 move;
     private int slowDown;
-    public Vector3 position;
+    private float _startMaxMovementSpeed;
+    
     [Header("Refs")] 
     private MechCanon _mechCanon;
 // Start is called before the first frame update
     void Start()
     {
         _mechCanon = transform.parent.GetComponentInChildren<MechCanon>();
+        _startMaxMovementSpeed = maxMovementSpeed;
     }
 
     // Update is called once per frame
@@ -119,4 +122,19 @@ public class MechMovement : MonoBehaviour
         // transform.Rotate(Vector3.forward, direction *_rotationSpeed * Time.deltaTime);
         transform.rotation = Quaternion.Euler(0, 0, newRotation);
     }
+
+    public void ApplyEffects(bool resetEffectsBefore = false,float slowDownPercent = -1)
+    {
+        if (resetEffectsBefore) ResetEffects();
+        if (slowDownPercent != -1)
+        {
+            maxMovementSpeed = _startMaxMovementSpeed/ slowDownPercent;
+        }
+    }
+
+    public void ResetEffects()
+    {
+        maxMovementSpeed = _startMaxMovementSpeed;
+    }
+    
 }
