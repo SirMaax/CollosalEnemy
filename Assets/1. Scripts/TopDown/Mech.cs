@@ -9,14 +9,15 @@ public class Mech : MonoBehaviour
     [Header("Attributes")] 
     [SerializeField] private float health;
 
+    
     [Header("Test")] 
     [SerializeField] private bool _infiniteHealth;
     
-    [Header("Private")] private float maxHealth;
-
-    [Header("References")] [SerializeField]
-    private EventSystem eventSystem;
-
+    [Header("Private")] 
+    private float maxHealth;
+    
+    [Header("References")] 
+    [SerializeField] private EventSystem eventSystem;
     [SerializeField] private Image slider;
 
     private void Start()

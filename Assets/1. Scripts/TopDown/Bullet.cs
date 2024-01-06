@@ -45,11 +45,12 @@ public class Bullet : MonoBehaviour
         HitSomething();
     }
 
-    public void SetAttributes(Vector2 dir, BulletType newType,float time, bool playerFired = false)
+    public void SetAttributes(Vector2 dir, BulletType newType,float time, bool playerFired = false, int damage = -1)
     {
         type = newType;
         direction = dir;
         timeAlive = time;
+        if (damage != -1) _damage = damage;
         this._firedByPlayer = playerFired;
     }
 

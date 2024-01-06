@@ -76,15 +76,21 @@ public class Sign : MonoBehaviour
         }
         else
         {
-            for (float i = 0; i < time; i += flashingIntervall)
+            float before = Time.time;
+            for (float i = 0; i <= time; i += flashingIntervall)
             {
+                Debug.Log("flashing intervall is: " + flashingIntervall.ToString());
+                Debug.Log("total time is: " + i.ToString());
                 yield return new WaitForSeconds(flashingIntervall);
                 if(flashFaster) flashingIntervall=Mathf.Lerp(_startFlashingIntervall,0.01f, i / time);
                 if (spriteActive) spriteRenderer.enabled = false;
                 else spriteRenderer.enabled = true;
                 spriteActive = !spriteActive;
             }
+            Debug.Log(Time.time - before);
         }
+
+        
         spriteRenderer.enabled = false;
     }
     

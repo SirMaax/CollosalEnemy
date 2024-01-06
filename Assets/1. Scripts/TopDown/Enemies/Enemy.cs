@@ -5,26 +5,27 @@ using Random = UnityEngine.Random;
 
 public class Enemy : BaseMech
 {
-    [Header("Attributes")] [SerializeField]
-    private int health;
-
+    [Header("Attributes")]
+    [SerializeField] private int health;
     [SerializeField] private float movementSpeed;
     [SerializeField] private bool _isShielded;
+    [SerializeField] protected int _damage;
 
     [Header("Behvaior")] public BehaviorState state;
     private bool isMoving;
     private bool acting;
 
-    [Header("Behavior Toggling")] [SerializeField]
-    private bool allowRandomWalking;
-
+    [Header("Behavior Toggling")] 
+    [SerializeField] private bool allowRandomWalking;
     [SerializeField] private bool allowStanding;
 
-    [Header("Transition")] [Tooltip("Distance till enemy notices mech and will start to attack")] [SerializeField]
-    private float distanceTillNoticing;
+    [Header("Transition")] 
+    [Tooltip("Distance till enemy notices mech and will start to attack")] 
+    [SerializeField] private float distanceTillNoticing;
     [SerializeField] protected float disitacneTillAttacking;
-    [SerializeField] protected float timeBetweenAttacking;
-
+    [SerializeField] protected float _attackChargeUpTime;
+    [SerializeField] protected float _timeBetweenAttacking;
+    
     [Header("Refs")] protected MechMovement _mech;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private GameObject gx;
@@ -126,7 +127,7 @@ public class Enemy : BaseMech
         isMoving = false;
     }
 
-    protected virtual void MoveTowardsTarget(bool noTime = false, int percentSpeedReduce = 1)
+    protected virtual void MoveTowardsTarget(bool noTime = false, float percentSpeedReduce = 1)
     {
         Vector2 dir = (_mech.position - transform.position).normalized;
         float howLongMoving = Random.Range(1f, 2f);
@@ -209,8 +210,10 @@ public class Enemy : BaseMech
         // acting = true;
         // while (!CheckTransitionToStateGoingInRangeFromAttack())
         // {
-        sign.ShowSign(Sign.SignType.Attacking, timeBetweenAttacking, flashing: true, flashFaster: true);
-        yield return new WaitForSeconds(timeBetweenAttacking);
+        float time = Time.time;
+        sign.ShowSign(Sign.SignType.Attacking, _attackChargeUpTime - 0.5f, flashing: true, flashFaster: true);
+        yield return new WaitForSeconds(_attackChargeUpTime);
+        Debug.Log(Time.time - time );
         Attack();
         _routine = null;
 
@@ -223,6 +226,7 @@ public class Enemy : BaseMech
             .GetComponent<Bullet>();
         bullet.SetAttributes(dir, Bullet.BulletType.explosion, 1.5f);
         SoundManager.Play(SoundManager.Sounds.EnemyHit);
+        StartCoroutine(Cooldown());
     }
 
     protected virtual bool CheckTransitionToStateGoingInRangeFromAttack()
@@ -296,5 +300,18 @@ public class Enemy : BaseMech
     public void ResetEffects()
     {
         movementSpeed = _startMovementSpeed;
+    }
+
+    protected float GetDistanceToMech()
+    {
+        return (transform.position - _mech.position).magnitude;
+    }
+
+    protected IEnumerator Cooldown(float waitTime = -1)
+    {
+        acting = true;
+        float time = waitTime == -1 ? _timeBetweenAttacking : waitTime;
+        yield return new WaitForSeconds(time);
+        acting = false;
     }
 }
