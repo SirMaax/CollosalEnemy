@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
 
 
 public class MechMovement : MonoBehaviour
@@ -24,8 +25,10 @@ public class MechMovement : MonoBehaviour
     private Vector2 slowDownInput;
     private int slowDown;
     private float _startMaxMovementSpeed;
+    private Vector2 _lastPosition;
     
     [Header("Refs")] 
+    [SerializeField] private Animator _animatior;
     private MechCanon _mechCanon;
 // Start is called before the first frame update
     void Start()
@@ -38,7 +41,13 @@ public class MechMovement : MonoBehaviour
     void Update()
     {
         position = transform.parent.position;
+        float speed = (_lastPosition - (Vector2)position).magnitude;
+        _animatior.speed = Mathf.Clamp01(speed * 300);
+        _lastPosition = position;
+        
+
         MoveInDirection(move);
+        
     }
 
     public void MoveInDirection(Vector2 input)

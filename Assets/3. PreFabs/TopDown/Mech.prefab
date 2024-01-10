@@ -133,8 +133,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   StepSpeed: 0.001
   maxTurningSpeed: 0.75
-  move: {x: 0, y: 0}
+  _rotationSpeed: 0
+  _isTurningInMoveDirection: 0
   position: {x: 0, y: 0, z: 0}
+  move: {x: 0, y: 0}
+  _animatior: {fileID: 7619266543748727665}
 --- !u!1 &3514393308787238790
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,7 +189,7 @@ MonoBehaviour:
   move:
   - {x: 2.2562046e-21, y: 6.63e-43}
   - {x: 0.00017471383, y: 0.00000021253878}
-  bulletPrefab: {fileID: 4900820809271894702, guid: 2cb45370d18ecb14fab1aa9c8706ea03, type: 3}
+  bulletPrefabs: []
 --- !u!1 &3514393309140519538
 GameObject:
   m_ObjectHideFlags: 0
@@ -281,6 +284,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3514393309628678325}
   - component: {fileID: 3514393309628678324}
+  - component: {fileID: 7619266543748727665}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -355,6 +359,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &7619266543748727665
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3514393309628678314}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3c2a18d9171a47246967d253a78351c0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3514393309942629807
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,6 +513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
+  _infiniteHealth: 0
   eventSystem: {fileID: 0}
   slider: {fileID: 0}
 --- !u!50 &3514393310119447819
