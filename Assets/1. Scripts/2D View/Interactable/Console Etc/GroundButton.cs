@@ -35,6 +35,8 @@ public class GroundButton : Console
         Shield,
         JumpPad,
         Activation,
+        ResourceAmmo,
+        ResourceEnergy,
     }
     
     protected override void OnTriggerEnter2D(Collider2D col)

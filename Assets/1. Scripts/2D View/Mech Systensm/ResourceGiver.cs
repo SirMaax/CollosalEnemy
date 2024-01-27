@@ -49,7 +49,9 @@ public class ResourceGiver : MechSystem
     
     public override void Trigger(int whichMethod = -1)
     {
-        CheckLever();
+        if(whichMethod==(int)GroundButton.typeGroundButton.ResourceAmmo)GiveResource(Object.typeObjects.AmmoCrate);
+        else if(whichMethod==(int)GroundButton.typeGroundButton.ResourceEnergy)GiveResource(Object.typeObjects.EnergyCell);
+        else CheckLever();
     }
 
     private void CheckLever()
