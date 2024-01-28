@@ -9,7 +9,6 @@ public class EnergyCore : MechSystem
     [SerializeField] private float energyLevel;
     [SerializeField] private float energyDrain;
     [SerializeField] private float energyRefillAmount;
-    
     private int maxEnergy;
     
     [Header("Settings")] 
@@ -20,8 +19,6 @@ public class EnergyCore : MechSystem
     [SerializeField] private float scoreNoEnergy;
     
     [Header("Refs")] 
-    [SerializeField] GroundButton buttonFillEnergy;
-    [SerializeField] GroundButton buttonEjectShell;
     [SerializeField] protected ResourceConsole console;
     [SerializeField] private TMP_Text text; 
     [SerializeField] private TMP_Text text2; 
@@ -89,8 +86,6 @@ public class EnergyCore : MechSystem
             return;
         }
         console.EjectObject();
-        Debug.Log("Shell ejceted");
-
     }
     
     protected IEnumerator DrainEnergy()

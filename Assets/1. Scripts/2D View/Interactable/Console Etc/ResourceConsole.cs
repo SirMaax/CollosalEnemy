@@ -3,18 +3,17 @@ using UnityEngine;
 
 public class ResourceConsole : Console
 {
-    [Header("Attributes")] [SerializeField]
-    private Object.typeObjects typeConsole;
+    [Header("Attributes")] 
+    [SerializeField] private Object.typeObjects typeConsole;
+    [SerializeField] private Vector2 ejectDirection;
+    [SerializeField] private bool ejectAfterDeplete;
     public bool isLoaded;
     public bool isEjectingResource = true;
-    public bool sameLoadingSpace;
-    [SerializeField] private Vector2 ejectDirection;
     public bool canTakeResource;
 
     [Header("Refs")] 
     [SerializeField] public GameObject resourcePlace;
     private Resource _holdedObject;
-
 
     public override void Interact(Player player)
     {
@@ -67,7 +66,9 @@ public class ResourceConsole : Console
 
     public bool DepleteResource()
     {
-        return _holdedObject.UseAndCheckIfDepleted();
+        bool result = _holdedObject.UseAndCheckIfDepleted();
+        if (result && ejectAfterDeplete) EjectObject();
+        return result;
     }
 
     public void EjectObject()
