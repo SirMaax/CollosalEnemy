@@ -5,11 +5,10 @@ using UnityEngine;
 
 public class GroundButton : Console
 {
-
-
     [Header("Attributes")] 
+    [SerializeField] private MechSystem activatedSystem;
+    [SerializeField] private MechSystem[] activatedSystems;
     [SerializeField] private float _buttonAnimationSpeed;
-    [SerializeField] private int whichTriggeredMethod = -1;
     [SerializeField] private float activationForce;
     [SerializeField] private float buttonCooldown;
     [SerializeField] private float buttonMovement;
@@ -23,18 +22,17 @@ public class GroundButton : Console
     private bool buttonCaBePressed = true;
     public bool buttonWasPressed;
 
-    [Header("Refs")] 
+    [Header("Button References")] 
     [SerializeField] private GameObject _buttonHead;
-    [SerializeField] private MechSystem activatedSystem;
     protected Player _player;
     
     public enum typeGroundButton
     {
+        Activation,
         Elevator,
         Energy,
         Shield,
         JumpPad,
-        Activation,
         ResourceAmmo,
         ResourceEnergy,
     }
@@ -72,7 +70,14 @@ public class GroundButton : Console
             ShieldSystems shields = (ShieldSystems)activatedSystem;
             shields.Trigger(transform.gameObject);
         }
-        else activatedSystem.Trigger(whichTriggeredMethod);
+        else
+        {
+            activatedSystem.Trigger((int)type);
+            foreach (var system in activatedSystems)
+            {
+                system.Trigger((int)type);
+            }
+        }
         
     }
     
