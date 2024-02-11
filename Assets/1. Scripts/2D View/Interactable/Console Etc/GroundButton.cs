@@ -43,7 +43,7 @@ public class GroundButton : Console
         if (col.gameObject.CompareTag("Player"))
         {
             Player player = col.gameObject.GetComponent<Player>();
-            if (-1 * player.rb.velocity.y >= activationForce && buttonCaBePressed) ButtonPressed(player);
+            if (Math.Abs(player.rb.velocity.y) >= activationForce && buttonCaBePressed) ButtonPressed(player);
         }
         else if (col.gameObject.CompareTag("Object"))
         {

@@ -9,6 +9,7 @@ public class ShieldSystems : MechSystem
 {
     [Header("Attributes")] 
     [SerializeField] private float activeEnergyDrain;
+    [SerializeField] private bool _usesOnlyOneButton;
     
     [Header("State")] 
     public bool shieldActive;
@@ -18,6 +19,7 @@ public class ShieldSystems : MechSystem
     [Header("Refs")] 
     [SerializeField] private EnergyCore core;
     [SerializeField] private TMP_Text shieldStatus;
+    [SerializeField] private ParticleSystem _particleSystem;
     private GameMaster GM;
     private Coroutine timeTillButtonsReset;
     private List<GameObject> buttons;
@@ -39,17 +41,24 @@ public class ShieldSystems : MechSystem
         {
             if(shieldStatus!=null) shieldStatus.SetText("Shield off");
             shieldActive = false;
+            _particleSystem.Stop();
         }
         else
         {
             if(shieldStatus!=null) shieldStatus.SetText("Shield on");
             shieldActive = true;
+            _particleSystem.Play();
         }
         
     }
     
     public void Trigger(GameObject gameObject)
     {
+        if (_usesOnlyOneButton)
+        {
+            ToggleShield();
+            return;
+        }
         if (buttons.Contains(gameObject)) return;
         buttons.Add(gameObject);
         if (timeTillButtonsReset != null)
@@ -82,5 +91,6 @@ public class ShieldSystems : MechSystem
     {
         shieldActive = false;
         if(shieldStatus!=null) shieldStatus.SetText("Shield off");
+        _particleSystem.Stop();
     }
 }
